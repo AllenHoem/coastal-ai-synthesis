@@ -3,10 +3,14 @@
 # Bandwidth figures for T0/T1/T3 come from PRD §2 and are used ONLY as
 # projection targets. Measured nodes below carry their own probed values.
 #
-# Power: the operator elected to model from spec sheets rather than meter
-# (ADR-0008). Every record therefore stamps cost.energy_source so a modeled
-# figure is never silently compared against the PRD §2 baseline table, which
-# is quoted in SYSTEM watts.
+# Power: modeled from spec sheets (ADR-0008), and DEMOTED from a headline metric
+# to a sensitivity footnote (ADR-0011) — energy is ~2% of the local arm's cost and
+# ~0.08% of the arm-to-arm delta, so a 5x error still leaves the result 26x cheaper
+# than cloud. Records still stamp cost.energy_source for provenance.
+#
+# The one place power is still load-bearing is the ENVELOPE CHECK below: a binary
+# pass/fail on whether sustained draw fits a tier's thermal and battery budget.
+# IT blocks inference on active employee laptops regardless of economics.
 
 [[tier]]
 id = "T0"
@@ -87,6 +91,12 @@ bandwidth_gb_s_measured = 0.0             # filled by `make probe-node NODE=mac`
 # `utilization` is FITTED from measurements, never assumed. With two measured
 # nodes an octave apart in bandwidth (ADR-0010) the fit is falsifiable rather
 # than tautological.
+
+# Binary envelope check — PRD §11 "operational tolerability". Not a metric, a gate.
+[envelope]
+enforce                = true
+t0_t1_sustained_watts_max = 65    # above this, a per-user deployment is not tolerable
+battery_drain_check    = true     # T0/T1 only — does a batch run survive unplugged?
 
 [projection]
 bandwidth_derate      = 0.83     # empirical: 218/256 on Strix Halo (PRD §2)

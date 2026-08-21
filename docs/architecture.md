@@ -175,6 +175,12 @@ The requirement was "a simple means to review and extract results." Three artifa
 make report RUN=<run_id>
 ```
 
+This emits **two HTML renderings from the same DuckDB views** ([ADR-0012](decisions/ADR-0012-report-composition.md)):
+`report-operator.html` for running the experiment and defending it to a technical reviewer,
+and `report-executive.html` for the client-side decision maker Coastal is pursuing an SOW with.
+Neither computes anything — both read the same SQL, so they cannot disagree. The composition
+rules for the executive rendering are specified in [`report-composition.md`](report-composition.md).
+
 ```mermaid
 flowchart LR
     J[("runs/&lt;run_id&gt;/<br/>trajectory.jsonl")]
@@ -190,7 +196,7 @@ flowchart LR
     R --> V3["cost per successful record"]
     R --> V4["capability-vs-size curve"]
     R --> V5["projection: predicted vs measured"]
-    R --> V6["tokens/joule vs §2 baseline"]
+    R --> V6["throughput per device →<br/>fleet sizing"]
 ```
 
 Design rules for the report:
@@ -317,27 +323,56 @@ Three consequences baked into the design:
 
 ---
 
-## 7. Energy Accounting Under C5
+## 7. Energy Is a Rounding Error — and Proving That Is Worth More Than Measuring It
 
-The operator elected to model power from spec sheets rather than meter it. Scoping precisely what that does and does not affect:
+**Revised.** Tokens per joule was a P0-12 headline. It is now a sensitivity footnote.
+See [ADR-0011](decisions/ADR-0011-energy-demoted.md); the reasoning is short enough to restate here.
 
-| Affected | Not affected |
-|---|---|
-| Tokens-per-joule row of P0-12 | Everything in PRD §7 (bandwidth projection is unitless w.r.t. power) |
-| The §2 baseline comparison | Confusion matrix, silent-failure rate |
-| `local_energy_usd` in cost-per-record | Cloud cost (billed, exact) |
-| | Minimum viable model size |
-| | Every primary metric in PRD §9 except cost-per-record's local component |
+Tokens per joule is not a forcing function for a buyer choosing between edge and cloud.
+The harness's own arithmetic shows why. On a representative Arm A run — 300 invoices,
+Qwen3-8B, cascade arm:
 
-So: **one row of P0-12 and one component of one PRD §9 metric.** The projection model — the thing a CFO will actually interrogate — is untouched.
+| Line | Amount | Share of arm cost |
+|---|---|---|
+| Cloud escalation (20 × R2 field, 7 × R3 document) | $0.3965 | 97.9% |
+| Local energy, modeled at 310W over 620 GPU-seconds | $0.0085 | **2.1%** |
+| **Cascade total** | **$0.4050** | |
+| Cloud-only comparison | $11.5500 | |
 
-Three mitigations, all cheap:
+Electricity is 2.1% of the local arm's cost and **0.077% of the gap between the arms**.
+The sensitivity is what settles it:
 
-1. **`cost.energy_source` is a required field** on every trajectory record: `modeled` | `measured_gpu` | `measured_wall`. Provenance survives into the report as a visible badge. Without this field the distinction is lost the moment someone opens a CSV.
-2. **The MacBook is metered for free.** `powermetrics` reports real package power on Apple Silicon. The T1 anchor's tok/J is therefore *measured*, giving one honest calibration point against the modeled figures.
-3. **The seam is a 30-line interface.** `PowerSource` has `ModeledPower` (default), `LibreHardwareMonitorPower` (GPU rail via its JSON endpoint, ~20 min), and `SmartPlugPower` (wall watts, ~$20 + 30 min). Swapping is a config line. No rework is required to upgrade this later.
+| Power model error | Cost per successful record | Advantage vs cloud-only |
+|---|---|---|
+| Exact | $0.00137 | 28.3× |
+| 3× wrong | $0.00143 | 27.1× |
+| **5× wrong** | **$0.00149** | **26.1×** |
 
-Everything modeled must be labelled modeled in the report. The §2 baseline table is quoted in *system* watts; a modeled figure derived from GPU TDP is not the same quantity, and the report says so on the chart, not in a footnote.
+A five-fold error moves the headline from 28× to 26×. The PRD's success target is ≥5×.
+**No plausible energy error changes a decision**, so precision here buys nothing.
+
+### What replaces it
+
+**Throughput per device** — documents per hour per machine, at each concurrency. That
+is what sizes a fleet, and fleet size is what a CFO budgets. It is the procurement-legible
+form of the same batching finding the §2 baseline table was reaching for, and Pass B
+already measures it. Only the units of the headline changed; no measurement left the harness.
+
+### Where energy still appears
+
+1. **One line in the cost breakdown, with the sensitivity band shown.** Demonstrating
+   that electricity is a rounding error retires the "but you pay for the power" objection
+   permanently, in one row. This is worth more than a tokens-per-joule chart, which invites
+   the objection rather than closing it.
+2. **A binary envelope check, not a curve.** Does sustained draw fit the tier's thermal
+   and battery budget? That is PRD §11's *operational tolerability* dimension, where power
+   is a constraint — IT will block inference on active employee laptops regardless of
+   economics — and a constraint is a pass/fail, not a metric.
+
+`cost.energy_source` stays a required field: one enum on a record already being written,
+and provenance for a figure that still appears is cheaper to keep than to reconstruct.
+The `PowerSource` interface stays because it is already specified. **The smart-plug
+recommendation is withdrawn** — it is no longer on any critical path.
 
 ---
 
@@ -387,7 +422,7 @@ gantt
     Model-size sweep, Pass A accuracy         :crit, p2b, after p2a, 3d
     Pass B throughput + Pass C invariance     :crit, p2c, after p2b, 2d
     Projection fit + two-anchor validation    :crit, p2d, after p2c, 2d
-    Report generator + exports                :crit, p2e, after p2d, 2d
+    Report generator, both renderings         :crit, p2e, after p2d, 3d
     EXIT — MINIMUM PUBLISHABLE RESULT         :milestone, crit, m2, after p2e, 0d
 
     section Phase 3 — Extend (cuttable)
@@ -431,7 +466,8 @@ coastal-ai-synthesis/
 │  ├─ runner/      # orchestrate.py  resume.py  config.py
 │  ├─ telemetry/   # power.py  timing.py
 │  ├─ projection/  # fit.py  validate.py  tiers.py
-│  └─ analysis/    # views.sql  report.py  charts.py  export.py
+│  └─ analysis/    # views.sql  charts.py  export.py
+│                  # report_operator.py  report_executive.py  translate.py
 ├─ runs/<run_id>/  # trajectory.jsonl  report.html  summary.csv  *.parquet
 └─ tests/
 ```

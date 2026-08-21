@@ -21,17 +21,30 @@ Legend: 🔴 threatens a headline claim · 🟠 needs an explicit caveat in the 
 
 ---
 
-## T2 · Energy modeled from spec sheets, not metered 🔴→🟠
+## T2 · Energy modeled from spec sheets, not metered 🟡
+
+*Downgraded from 🟠. See [ADR-0011](decisions/ADR-0011-energy-demoted.md).*
 
 **Bought:** Zero setup, zero hardware purchase.
 
-**Cost:** Tokens-per-joule becomes an estimate. The PRD §2 baseline table is quoted in **system watts**; a figure derived from GPU TDP is a different quantity, and comparing them directly is not defensible without saying so.
+**Cost:** Tokens-per-joule is an estimate — and that no longer matters, because
+tokens-per-joule is no longer a headline. Energy is **2.1% of the local arm's cost** and
+**0.077% of the gap between arms**. A 5× error in the power model moves cost-per-record
+from 28.3× to 26.1× cheaper than cloud; the PRD's success target is ≥5×. Nothing the
+scorecard decides is sensitive to it.
 
-**Scope, precisely:** one row of P0-12, and the local-energy component of cost-per-record. **Nothing in PRD §7** (bandwidth projection is independent of power) and no other PRD §9 primary metric.
+**What changed:** the metric was demoted, not the measurement. Energy now appears as one
+line in the cost breakdown — shown *with* its sensitivity band, because proving electricity
+is a rounding error closes the "but you pay for the power" objection permanently — and as a
+binary thermal/battery envelope check against the tier ladder.
 
-**Why it drops to 🟠:** three mitigations in the design — `cost.energy_source` provenance on every record; the MacBook's `powermetrics` giving one genuinely measured T1 anchor; and a `PowerSource` interface that upgrades to real metering by config line.
+**The smart-plug recommendation is withdrawn.** The `PowerSource` interface stays because
+it is already specified and costs nothing; the MacBook's free `powermetrics` anchor stays
+for the same reason. Neither is on a critical path.
 
-**Reverses for ~$20 and 30 minutes:** a Kasa KP115 or Shelly Plus PlugS exposes wall watts over a local HTTP API. That is the exact quantity the §2 table uses. If the tokens-per-joule comparison ends up load-bearing in a client conversation, buy the plug before the conversation, not after.
+**Reverses if:** a buyer scores energy directly — sustainability reporting, a data-center
+power cap, or IT objecting to battery drain on employee laptops. The third is the most
+likely, and it is an envelope check, not a curve.
 
 ---
 
@@ -156,7 +169,7 @@ Constrained decoding (GBNF / JSON schema) masks invalid tokens before the softma
 | # | Tradeoff | Severity | Reversible? |
 |---|---|---|---|
 | T1 | llama.cpp over vLLM | 🟠 | With different hardware |
-| T2 | Modeled energy | 🟠 | ~$20, 30 min |
+| T2 | Modeled energy | 🟡 | Metric demoted — ADR-0011 |
 | T3 | Accuracy at c=1 | 🟡 | Pass C mitigates |
 | T4 | Cloud concurrency capped | 🟠 | ~$40 spend |
 | T5 | Windows/WSL split | 🟡 | No — and no need |
@@ -168,4 +181,14 @@ Constrained decoding (GBNF / JSON schema) masks invalid tokens before the softma
 | T11 | Anthropic-only cloud | 🟡 | Config swap |
 | T12 | Rate card drift | 🟠 | Handled by design |
 
-**The two that would actually damage a client conversation if mishandled are T10 and T2.** T10 is handled structurally. T2 is handled by labelling, and by a $20 purchase whenever tokens-per-joule stops being a supporting figure and becomes an argument.
+**The one that would actually damage a client conversation if mishandled is T10.** It is
+handled structurally, by a required field the calibration analysis segments on.
+
+T2 was the other candidate until the arithmetic retired it: energy is 2.1% of the local
+arm's cost, so a metric nobody weighs was carrying an unpriced hardware dependency. Demoting
+it removed the dependency and produced a better exhibit — a sensitivity table that closes
+the power objection instead of inviting it.
+
+The remaining 🟠 entries are all disclosure problems rather than measurement problems. Each
+is handled by saying the thing out loud in the report: what the runtime understates, what
+the account tier prevented, which rate card applied, how clean the corpus is.

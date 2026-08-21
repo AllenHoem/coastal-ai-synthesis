@@ -1,6 +1,14 @@
 # ADR-0008 — Energy accounting: modeled from spec sheets, with a measured seam
 
-**Status:** Accepted (operator decision) · **Date:** 2026-08-21
+**Status:** Accepted, **superseded in part by [ADR-0011](ADR-0011-energy-demoted.md)** · **Date:** 2026-08-21
+
+> **ADR-0011 supersedes this decision's framing.** The energy *accounting* below
+> stands — modeled power, the required `cost.energy_source` field, the `PowerSource`
+> interface. What no longer stands is energy's status as a P0-12 headline or the
+> comparison against the PRD §2 baseline table. Electricity is 2.1% of the local
+> arm's cost and 0.077% of the arm-to-arm delta; a 5× error in the power model moves
+> the result from 28× to 26× cheaper than cloud. The "Revisit if" section below —
+> buy the smart plug before the client conversation — **is withdrawn.**
 
 ## Context
 

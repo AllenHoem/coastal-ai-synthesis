@@ -66,7 +66,10 @@ offered_concurrency = [1, 8, 32, 128]
 kv_cache_dtype      = "q8_0"     # required to reach the higher slot counts
 documents           = 100
 score_outputs       = true       # scored, but never headline
-# Produces: aggregate t/s, p50/p95 latency, TTFT, tokens per joule.
+# Produces: aggregate t/s, p50/p95 latency, TTFT, and DOCS PER HOUR PER DEVICE —
+# the headline. Tokens per joule is computed but appendix-only (ADR-0011): energy
+# is ~2% of local arm cost, so no plausible power error changes a decision.
+headline_metric     = "docs_per_hour_per_device"
 
 [passes.C_invariance]
 enabled             = true
