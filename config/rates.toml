@@ -1,0 +1,59 @@
+# Cloud rate cards — DATED.
+#
+# Never hardcode a rate in logic (PRD §5). Every trajectory record pins the
+# `id` of the card it was costed against, and cross-run cost comparisons
+# assert matching ids before plotting.
+#
+# LIVE ISSUE: claude-sonnet-5 introductory pricing expires 2026-08-31, which
+# falls inside this project's build window. Two runs a week apart would
+# otherwise produce different cost-per-record for identical behavior with
+# nothing recording why. See tradeoff T12.
+
+[[card]]
+id              = "anthropic-2026-08-intro"
+provider        = "anthropic"
+effective_from  = "2026-08-01"
+effective_until = "2026-08-31"
+source          = "Anthropic published API pricing"
+
+  [card.models.mid]
+  model            = "claude-sonnet-5"
+  input_per_mtok   = 2.00      # introductory
+  output_per_mtok  = 10.00     # introductory
+  context_window   = 1000000
+
+  [card.models.frontier]
+  model            = "claude-opus-5"
+  input_per_mtok   = 5.00
+  output_per_mtok  = 25.00
+  context_window   = 1000000
+
+[[card]]
+id              = "anthropic-2026-09-standard"
+provider        = "anthropic"
+effective_from  = "2026-09-01"
+effective_until = "2099-12-31"
+source          = "Anthropic published API pricing, post-introductory"
+
+  [card.models.mid]
+  model            = "claude-sonnet-5"
+  input_per_mtok   = 3.00      # standard rate resumes
+  output_per_mtok  = 15.00
+  context_window   = 1000000
+
+  [card.models.frontier]
+  model            = "claude-opus-5"
+  input_per_mtok   = 5.00
+  output_per_mtok  = 25.00
+  context_window   = 1000000
+
+# Message Batches API halves both input and output rates. Records costed this
+# way carry via_batch_api = true and are excluded from every latency chart,
+# because batch latency is not a property of the model. See ADR-0007.
+[batch_api]
+multiplier = 0.5
+
+# Local electricity. Marginal cost only; amortized hardware is separate
+# (PRD §12 asks for both, always).
+[energy]
+usd_per_kwh = 0.16   # set to the operator's actual utility rate
