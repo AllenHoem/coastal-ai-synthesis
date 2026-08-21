@@ -521,12 +521,39 @@ footer{border-top:1px solid var(--rule);background:var(--surface);padding:30px 0
 </section>
 
 <section id="cuts">
-  <div class="sec-h"><span class="sec-n">04</span><h2>Three other cuts of the same data</h2></div>
-  <p class="sub">Same views, different question. The first one I would promote into the executive rendering.</p>
+  <div class="sec-h"><span class="sec-n">04</span><h2>Three more exhibits worth adding</h2></div>
+  <p class="sub">Not alternatives to each other — three additional charts the same views can already produce. Each answers a different person's question.</p>
 
-  <h3>Cut A — Cumulative cost over 24 months <span style="font-size:13px;color:var(--accent);font-weight:600">← recommend promoting</span></h3>
-  <p>Cost per document is an engineer's unit. A CFO thinks in a budget line over a horizon, and in
-  payback. This is the same numbers on the axes they already use.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Exhibit</th><th>The question it answers</th><th>Who asks it</th><th>Add it?</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Payback timeline</b></td>
+          <td>"When does this pay for itself?"</td>
+          <td>Whoever signs for the hardware</td>
+          <td style="color:var(--accent);font-weight:600">Yes — promote into the executive report</td>
+        </tr>
+        <tr>
+          <td><b>Hardware placement</b></td>
+          <td>"Which tier do we actually need, and what are we <em>not</em> buying?"</td>
+          <td>IT / infrastructure lead</td>
+          <td>Only once the conversation has moved to procurement</td>
+        </tr>
+        <tr>
+          <td><b>Assumption sensitivity</b></td>
+          <td>"What would have to be true for this to be wrong?"</td>
+          <td>The skeptic in the room</td>
+          <td style="color:var(--accent);font-weight:600">Yes — it is what makes the other exhibits credible</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Payback timeline <span style="font-size:13px;color:var(--accent);font-weight:600">← recommend promoting</span></h3>
+  <p><b>Answers:</b> when does this pay for itself? Cost per document is an engineer's unit. Whoever
+  signs for the hardware thinks in a budget line over a horizon, and in months to payback. Same
+  numbers, plotted on the axes they already use.</p>
   <div class="paper"><div class="paper-body" style="padding:26px 28px">
     <div class="chartbox">
       <svg viewBox="0 0 720 290" role="img" aria-label="Cumulative cost at 40,000 invoices a month over 24 months. Cloud-only reaches 37,258 dollars. Local, including a 2,400 dollar workstation, reaches 3,715 dollars. The workstation pays for itself at 1.6 months and the two-year saving is 33,542 dollars.">
@@ -558,9 +585,10 @@ footer{border-top:1px solid var(--rule);background:var(--surface);padding:30px 0
     </div>
   </div></div>
 
-  <h3>Cut B — The tier ladder as a qualification strip</h3>
-  <p>Useful when the conversation is about <em>which</em> hardware rather than whether. Places the
-  workload on the ladder and shows the headroom above it.</p>
+  <h3>Hardware placement</h3>
+  <p><b>Answers:</b> which tier do we actually need, and what are we <em>not</em> buying? For the
+  conversation about <em>which</em> hardware rather than whether. Places the workload on the ladder
+  and shows the headroom above it as something they can decline to purchase.</p>
   <div class="paper"><div class="paper-body" style="padding:26px 28px">
     <div class="chartbox">
       <svg viewBox="0 0 720 178" role="img" aria-label="The workload qualifies at tier T1, refresh-cycle business laptops. Tier T0 existing 16GB fleet is insufficient because 4B silent failure is 2.9 percent. Tiers T2 and T3 are headroom, not requirements.">
@@ -593,9 +621,9 @@ footer{border-top:1px solid var(--rule);background:var(--surface);padding:30px 0
     </div>
   </div></div>
 
-  <h3>Cut C — What would change this answer</h3>
-  <p>The exhibit for a skeptical room. It shows the conclusion is not fragile, and names the one
-  assumption that actually is.</p>
+  <h3>Assumption sensitivity</h3>
+  <p><b>Answers:</b> what would have to be true for this to be wrong? The exhibit for a skeptical
+  room. It shows the conclusion is not fragile, and names the one assumption that actually is.</p>
   <div class="paper"><div class="paper-body" style="padding:26px 28px">
     <div class="chartbox">
       <svg viewBox="0 0 720 246" role="img" aria-label="Sensitivity of the 28 times cost advantage. Lower volume: no change. Power model 5 times wrong: 26 times. Tighter silent-failure tolerance: 24 times. Cloud prices halve: 14 times. All scans heavily degraded: 11 times, the only assumption that materially moves the answer.">
@@ -638,9 +666,9 @@ footer{border-top:1px solid var(--rule);background:var(--surface);padding:30px 0
 <section id="calls">
   <div class="sec-h"><span class="sec-n">05</span><h2>What I'd change before building</h2></div>
   <div class="cols">
-    <div class="card"><div class="card-h">Promote Cut A into the executive rendering</div>
-      <p>Cumulative cost with a payback marker is the single most CFO-legible exhibit here, and it costs nothing extra — same views, different axes. It probably belongs at position 3, ahead of the fleet-sizing bar.</p></div>
-    <div class="card"><div class="card-h">Cut C earns its place too</div>
+    <div class="card"><div class="card-h">Promote the payback timeline</div>
+      <p>Cumulative cost with a payback marker is the most budget-legible exhibit here, and it costs nothing extra — same views, different axes. It belongs at position 3, ahead of the fleet-sizing bar.</p></div>
+    <div class="card"><div class="card-h">Assumption sensitivity earns its place too</div>
       <p>Showing that only document quality moves the answer is what makes the other exhibits credible. It also sets up the ask — send us 30 real invoices — without it sounding like a stall.</p></div>
     <div class="card"><div class="card-h">The four tiles need your baseline</div>
       <p>"14 wrong per 1,000" only lands next to <em>their</em> current manual error rate. That number comes from discovery, not from the harness, and there should be a slot for it in the template.</p></div>

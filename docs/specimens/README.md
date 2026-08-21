@@ -10,12 +10,23 @@ counts, and the throughput numbers all derive from one hypothetical 300-invoice 
 it reads correctly, which is exactly why it carries a persistent warning banner and must
 never reach a client.
 
+## Naming
+
+Exhibits are named for **the question they answer**, never by letter or by an internal
+label. "Payback timeline" and "Assumption sensitivity" tell a reader what they are looking
+at; "Cut A" and "Cut B" require them to hold a key in their head, and analyst shorthand
+like *cut* or *slice* does not survive contact with an executive audience. Any exhibit
+added later inherits this rule.
+
 ## What to reuse when building `analysis/report_executive.py`
 
 - Block order and the two-screen budget
 - The four-tile translation (rate → count per 1,000, throughput → machine-hours)
 - Provenance badge treatment: measured filled, projected dashed-outline-no-fill
 - The methodology strip, including the "not triggered" and "not tested" rows
+- Exhibit names that state the question, plus the comparison table pattern used for the
+  candidate exhibits — when several charts sit together, say what distinguishes them rather
+  than leaving the reader to infer it
 - Chart palette: validated categorical slots 1–3 plus the status ramp for state
   segments, both stepped for light and dark surfaces
 
