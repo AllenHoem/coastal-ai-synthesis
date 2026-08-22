@@ -1,0 +1,115 @@
+# Experiment sweep definition.
+#
+# Everything here folds into `run_id` (ADR-0006), so changing any value
+# produces a distinct, resumable run rather than silently contaminating an
+# existing one.
+
+[run]
+name        = "phase2-arm-a-baseline"
+seed        = 12345
+corpus_id   = "invoices-v1-seed12345"
+description = "Arm A minimum-viable-model-size sweep. PRD Phase 2 exit gate."
+
+# ---------------------------------------------------------------------------
+# Corpus (P0-1, P0-2)
+# ---------------------------------------------------------------------------
+[corpus]
+document_count       = 300
+templates            = 8
+line_items_range     = [1, 40]
+currencies           = ["USD", "EUR", "GBP", "CAD"]
+tax_rates            = [0.0, 0.05, 0.0825, 0.20]
+include_discounts    = true
+include_credit_memos = true
+digital_native_share = 0.4      # P0-1: do NOT overstate the OCR burden
+degradation_levels   = ["L0", "L1", "L2", "L3", "L4"]
+raster_dpi           = 200
+
+# ---------------------------------------------------------------------------
+# Model ladder (PRD D7) — a size ladder within one family, not a leaderboard
+# ---------------------------------------------------------------------------
+[models]
+family = "qwen3"
+quant  = "Q4_K_M"                                    # PRD D8, one quantization
+sizes  = ["1.7B", "4B", "8B", "14B", "30B-A3B"]
+
+# ---------------------------------------------------------------------------
+# Arms (P0-10)
+# ---------------------------------------------------------------------------
+[arms]
+enabled = ["local_only", "cascade", "cloud_only"]
+
+[arms.local_only]
+rung_ceiling = "R1"        # local-only means no cloud rungs
+
+[arms.cascade]
+rung_ceiling = "R3"
+
+[arms.cloud_only]
+rung_ceiling = "R3"
+tier         = "frontier"
+
+# ---------------------------------------------------------------------------
+# Measurement passes (ADR-0009)
+# ---------------------------------------------------------------------------
+[passes.A_accuracy]
+enabled             = true
+offered_concurrency = [1]
+kv_cache_dtype      = "f16"
+temperature         = 0.0
+documents           = "all"
+# Produces: confusion matrix, standalone SILENT_FAILURE rate, min viable size.
+
+[passes.B_throughput]
+enabled             = true
+offered_concurrency = [1, 8, 32, 128]
+kv_cache_dtype      = "q8_0"     # required to reach the higher slot counts
+documents           = 100
+score_outputs       = true       # scored, but never headline
+# Produces: aggregate t/s, p50/p95 latency, TTFT, and DOCS PER HOUR PER DEVICE —
+# the headline. Tokens per joule is computed but appendix-only (ADR-0011): energy
+# is ~2% of local arm cost, so no plausible power error changes a decision.
+headline_metric     = "docs_per_hour_per_device"
+
+[passes.C_invariance]
+enabled             = true
+offered_concurrency = [32]
+kv_cache_dtype      = "f16"      # matches Pass A
+documents           = 50
+# Either outcome rates match Pass A within noise, or the divergence is a
+# finding. No losing branch. Report the DETECTABLE EFFECT SIZE, never claim
+# equivalence from n=50.
+
+# ---------------------------------------------------------------------------
+# Cloud tier (ADR-0007)
+# ---------------------------------------------------------------------------
+[cloud]
+provider              = "anthropic"
+rate_card_id          = "anthropic-2026-08-intro"   # EXPIRES 2026-08-31
+mid_tier_role         = "mid"
+frontier_role         = "frontier"
+max_offered_concurrency = 8      # above this a personal account 429s; see T4
+use_batch_api_for     = ["cloud_only"]              # 50% cost, no RPM pressure
+spend_ceiling_usd     = 150.0    # HARD abort. A runaway retry loop is bounded.
+
+# ---------------------------------------------------------------------------
+# Escalation ladder (P0-7)
+# ---------------------------------------------------------------------------
+[ladder]
+r1_samples          = 3          # k=3 self-consistency
+r0_max_reprompts    = 1
+escalate_field_only = true       # R2 escalates the failing field, not the doc
+
+# ---------------------------------------------------------------------------
+# Serving
+# ---------------------------------------------------------------------------
+[serving]
+nodes                = ["win-7900xtx", "mac-m4"]    # see config/hardware.toml
+grammar_constrained  = true      # JSON-schema masked decoding for the tool layer
+# NOTE: masked logprobs are POST-MASK and over-confident. P1-2 calibration
+# must segment on attempts[].grammar_constrained, and where the reliability
+# diagram is the point, run an unconstrained decode alongside.
+unconstrained_shadow_decode = false   # enable for the P1-2 calibration arm
+
+[serving.probe]
+sizes_for_projection_fit = ["1.7B", "8B", "30B-A3B"]   # ≥3 per PRD §7 step 1

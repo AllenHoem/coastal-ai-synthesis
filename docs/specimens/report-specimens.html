@@ -1,0 +1,690 @@
+<title>Edge-First Report Specimens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --ground:#F3F6F6; --surface:#FFFFFF; --surface-2:#EAF0F0; --sunk:#E2EAEA;
+  --ink:#101718; --ink-2:#33474A; --muted:#5A6C6E; --rule:#CFDCDC; --rule-soft:#E1EAEA;
+  --accent:#0D6C79; --accent-wash:#DDEFF1;
+  --sev-hi:#9E2B2B; --sev-hi-wash:#F6E2E2;
+
+  /* mock-report paper — deliberately NOT the page chrome, so specimen ≠ commentary */
+  --paper:#FFFFFF; --paper-2:#F4F5F6; --paper-ink:#0B0B0B; --paper-ink-2:#52514E;
+  --paper-muted:#7B7A75; --paper-rule:#E1E0D9; --paper-axis:#C3C2B7;
+
+  /* validated chart palette — light steps */
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s8:#e34948;
+  --st-good:#0ca30c; --st-warn:#fab219; --st-serious:#ec835a; --st-crit:#d03b3b;
+  --shadow:0 1px 2px rgba(16,23,24,.05),0 10px 30px -14px rgba(16,23,24,.22);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1113; --surface:#121B1D; --surface-2:#182325; --sunk:#0E1618;
+    --ink:#E3ECEC; --ink-2:#B6C7C8; --muted:#8A9C9E; --rule:#2A3B3E; --rule-soft:#1E2C2E;
+    --accent:#54C3D2; --accent-wash:#10333A;
+    --sev-hi:#EE9494; --sev-hi-wash:#3A1C1C;
+    --paper:#121B1D; --paper-2:#182325; --paper-ink:#FFFFFF; --paper-ink-2:#C3C2B7;
+    --paper-muted:#898781; --paper-rule:#2C2C2A; --paper-axis:#383835;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s8:#e66767;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -16px rgba(0,0,0,.75);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1113; --surface:#121B1D; --surface-2:#182325; --sunk:#0E1618;
+  --ink:#E3ECEC; --ink-2:#B6C7C8; --muted:#8A9C9E; --rule:#2A3B3E; --rule-soft:#1E2C2E;
+  --accent:#54C3D2; --accent-wash:#10333A;
+  --sev-hi:#EE9494; --sev-hi-wash:#3A1C1C;
+  --paper:#121B1D; --paper-2:#182325; --paper-ink:#FFFFFF; --paper-ink-2:#C3C2B7;
+  --paper-muted:#898781; --paper-rule:#2C2C2A; --paper-axis:#383835;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s8:#e66767;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -16px rgba(0,0,0,.75);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Serif",Georgia,serif;font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.ui{font-family:"IBM Plex Sans",system-ui,sans-serif}
+code,.mono,.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:0 26px}
+p{max-width:68ch;margin:0 0 16px}
+a{color:var(--accent)}
+
+/* ---- sim banner ---- */
+.simbar{position:sticky;top:0;z-index:50;background:var(--sev-hi);color:#fff;
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.09em;
+  text-transform:uppercase;text-align:center;padding:8px 16px;font-weight:500}
+
+.mast{border-bottom:1px solid var(--rule);background:var(--surface)}
+.mast-in{max-width:1080px;margin:0 auto;padding:40px 26px 32px}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+h1{font-size:clamp(28px,4.4vw,46px);line-height:1.06;letter-spacing:-.022em;font-weight:600;
+  margin:0 0 14px;text-wrap:balance;max-width:22ch}
+.dek{font-size:clamp(16px,1.7vw,19px);color:var(--ink-2);max-width:62ch;margin:0;line-height:1.5}
+
+main{padding:44px 0 80px}
+section{margin:0 0 62px}
+.sec-h{display:flex;gap:13px;align-items:baseline;margin:0 0 6px}
+.sec-n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);padding-top:4px}
+h2{font-size:clamp(21px,2.5vw,28px);letter-spacing:-.015em;font-weight:600;margin:0;text-wrap:balance}
+h3{font-size:17px;font-weight:600;margin:32px 0 10px}
+.sub{color:var(--muted);font-size:15.5px;margin:0 0 24px;max-width:64ch;font-style:italic}
+
+.tw{overflow-x:auto;margin:24px 0;border:1px solid var(--rule);border-radius:3px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:"IBM Plex Sans",sans-serif;font-size:14px}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);font-weight:500;padding:12px 14px;
+  border-bottom:1px solid var(--rule);background:var(--surface-2);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--rule-soft);vertical-align:top;line-height:1.5}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+code{font-size:13.5px;background:var(--sunk);padding:1.5px 5px;border-radius:2px}
+
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:16px 20px;margin:24px 0;border-radius:0 3px 3px 0}
+.note.warn{border-left-color:var(--sev-hi)}
+.note-h{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:7px;font-weight:500}
+.note.warn .note-h{color:var(--sev-hi)}
+.note p{margin:0;font-size:15px;line-height:1.6}
+.note p+p{margin-top:10px}
+
+/* ================= MOCK REPORT PAPER ================= */
+.paper{background:var(--paper);border:1px solid var(--rule);border-radius:4px;
+  box-shadow:var(--shadow);margin:26px 0;overflow:hidden;
+  font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--paper-ink)}
+.paper-tab{background:var(--surface-2);border-bottom:1px solid var(--rule);
+  padding:8px 18px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--muted);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.paper-body{padding:30px 32px 32px}
+.paper p{font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--paper-ink-2);max-width:70ch}
+
+.verdict{border:2px solid var(--st-good);border-radius:4px;padding:20px 24px;margin-bottom:26px;
+  background:color-mix(in srgb,var(--st-good) 8%,transparent)}
+.verdict-tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--st-good);font-weight:600;margin-bottom:9px}
+.verdict-line{font-size:clamp(19px,2.4vw,25px);line-height:1.28;font-weight:600;
+  color:var(--paper-ink);letter-spacing:-.014em;margin:0;text-wrap:balance}
+.verdict-sub{font-size:14.5px;color:var(--paper-ink-2);margin:11px 0 0;line-height:1.5}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;
+  background:var(--paper-rule);border:1px solid var(--paper-rule);border-radius:3px;margin:26px 0}
+.tile{background:var(--paper);padding:17px 18px}
+.tile-k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--paper-muted);margin-bottom:8px;line-height:1.35}
+.tile-v{font-size:29px;font-weight:600;letter-spacing:-.028em;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--paper-ink)}
+.tile-v.crit{color:var(--st-crit)}
+.tile-n{font-size:12.5px;color:var(--paper-muted);margin-top:7px;line-height:1.4}
+
+.ex-h{font-size:15.5px;font-weight:600;margin:34px 0 4px;color:var(--paper-ink);
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.ex-n{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--paper-muted);font-weight:500}
+.ex-d{font-size:13.5px;color:var(--paper-muted);margin:0 0 16px;max-width:66ch;line-height:1.5}
+.paper svg{display:block;max-width:100%;height:auto;overflow:visible}
+.chartbox{overflow-x:auto;margin:6px 0 2px}
+
+.pv{display:inline-flex;align-items:center;gap:4px;font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:2px;
+  font-weight:500;white-space:nowrap;vertical-align:1px}
+.pv-m{background:color-mix(in srgb,var(--s1) 14%,transparent);color:var(--s1);border:1px solid var(--s1)}
+.pv-p{background:transparent;color:var(--paper-muted);border:1px dashed var(--paper-muted)}
+.pv-mod{background:color-mix(in srgb,var(--st-warn) 18%,transparent);color:var(--paper-ink-2);border:1px solid var(--st-warn)}
+
+.legend-row{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0 0;
+  font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--paper-ink-2)}
+.lg{display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:2px;flex:none}
+
+.ptab{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px;
+  font-family:"IBM Plex Sans",sans-serif}
+.ptab th{background:var(--paper-2);color:var(--paper-muted);border-bottom:1px solid var(--paper-rule);
+  padding:9px 11px;font-size:10px}
+.ptab td{padding:9px 11px;border-bottom:1px solid var(--paper-rule);color:var(--paper-ink-2)}
+.ptab td.num{text-align:right;font-family:"IBM Plex Mono",monospace}
+.ptab tr:last-child td{border-bottom:none}
+
+.method{border-top:2px solid var(--paper-rule);margin-top:34px;padding-top:18px}
+.method-h{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--paper-muted);margin-bottom:12px}
+.method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px 22px}
+.method-k{font-size:11px;color:var(--paper-muted);font-family:"IBM Plex Mono",monospace;margin-bottom:3px}
+.method-v{font-size:13px;color:var(--paper-ink-2);line-height:1.45}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:20px;margin:24px 0}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:17px 19px}
+.card-h{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:14.5px;margin-bottom:7px}
+.card p{font-size:13.5px;line-height:1.55;color:var(--ink-2);margin:0;max-width:none}
+ul,ol{max-width:68ch;padding-left:22px;margin:0 0 18px} li{margin-bottom:7px}
+footer{border-top:1px solid var(--rule);background:var(--surface);padding:30px 0 40px;
+  font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="simbar">⚠ Every number on this page is simulated — plausible placeholders for layout review. Nothing here has been measured. Do not show a client.</div>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="kicker">Report design review · Edge-First Agentic Inference</div>
+    <h1>What the output looks like before it exists</h1>
+    <p class="dek">Two renderings from one JSONL — one for running the experiment, one for the
+    person on the other side of an SOW. Plus the arithmetic that retires tokens-per-joule as a
+    headline metric.</p>
+  </div>
+</header>
+
+<div class="wrap"><main>
+
+<section id="energy">
+  <div class="sec-h"><span class="sec-n">01</span><h2>Agreed — and the harness proves it rather than conceding it</h2></div>
+  <p class="sub">Tokens per joule is not a forcing function for a buyer. But "I agree" is a weaker answer than a sensitivity table.</p>
+
+  <p>A buyer weighing edge against cloud is deciding on four things: what it costs per outcome,
+  where the data sits, what they have to buy, and how often it will be wrong in a way nobody
+  catches. Electricity is not on that list — and the run's own numbers show why it can't be.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Cost line, one representative Arm A run</th><th class="num">Amount</th><th class="num">Share</th></tr></thead>
+      <tbody>
+        <tr><td>Cloud escalation — 20 field-level, 7 whole-document</td><td class="num">$0.3965</td><td class="num">97.9%</td></tr>
+        <tr><td>Local energy — modeled, 310W over 620 GPU-seconds</td><td class="num">$0.0085</td><td class="num"><b>2.1%</b></td></tr>
+        <tr><td><b>Cascade total, 300 invoices</b></td><td class="num"><b>$0.4050</b></td><td class="num"></td></tr>
+        <tr><td>Cloud-only comparison</td><td class="num">$11.5500</td><td class="num"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Electricity is 2.1% of the local arm's cost and <strong>0.077% of the gap between the two
+  arms</strong>. So the question isn't whether the power model is accurate — it's whether any
+  plausible error in it could change an answer:</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>If the power model is wrong by…</th><th class="num">Cost per successful record</th><th class="num">Advantage vs cloud-only</th></tr></thead>
+      <tbody>
+        <tr><td>nothing</td><td class="num">$0.00137</td><td class="num">28.3×</td></tr>
+        <tr><td>2×</td><td class="num">$0.00140</td><td class="num">27.7×</td></tr>
+        <tr><td>3×</td><td class="num">$0.00143</td><td class="num">27.1×</td></tr>
+        <tr><td><b>5×</b></td><td class="num"><b>$0.00149</b></td><td class="num"><b>26.1×</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>A five-fold error moves the headline from 28× to 26×, against a PRD success target of 5×
+  and a stretch of 15×. <strong>Nothing the scorecard decides is sensitive to energy.</strong></p>
+
+  <div class="note">
+    <div class="note-h">Why this is better than deleting the metric</div>
+    <p>Showing that electricity is a rounding error <em>closes</em> the "but you'll pay for the
+    power" objection. Publishing a tokens-per-joule chart invites it, then loses the argument on
+    a technicality about whose watts you measured. One row and a sensitivity band beats a chart.</p>
+  </div>
+
+  <h3>What takes the headline slot</h3>
+  <p><strong>Throughput per device</strong> — documents per hour per machine, at each concurrency.
+  It sizes a fleet, and fleet size is what gets budgeted. It's the procurement-legible form of the
+  same batching finding the PRD's performance-per-watt table was reaching for, and Pass B already
+  measures it. Only the units of the headline changed; no measurement left the harness.</p>
+
+  <p>Energy survives in two places: one line in the cost breakdown shown with the band above, and a
+  <strong>binary envelope check</strong> — does sustained draw fit the tier's thermal and battery
+  budget? That's a constraint, not a metric. IT blocks inference on active employee laptops
+  regardless of economics, and that's a pass/fail, not a curve.</p>
+</section>
+
+<section id="exec">
+  <div class="sec-h"><span class="sec-n">02</span><h2>Rendering B — the executive report</h2></div>
+  <p class="sub">For the decision maker on the other side of an SOW. Blocks 1–4 are the two-screen budget; the rest is for the reader who keeps going, and for whoever they forward it to.</p>
+
+  <div class="paper">
+    <div class="paper-tab"><span>report-executive.html</span><span>run 4f2a91c · 21 Aug 2026 · simulated</span></div>
+    <div class="paper-body">
+
+      <div class="verdict">
+        <div class="verdict-tag">✓ Qualifies — Tier T1</div>
+        <p class="verdict-line">Invoice intake runs on the laptops already on your refresh cycle. No new hardware is required to start, and no document leaves your network unless the system knows it needs help.</p>
+        <p class="verdict-sub">Tested across 300 invoices spanning five scan-quality levels and eight layouts. The smallest model that clears the safety threshold is an 8-billion-parameter model — it fits comfortably in a 32GB business laptop.</p>
+      </div>
+
+      <div class="tiles">
+        <div class="tile"><div class="tile-k">Cost per 1,000 invoices</div><div class="tile-v">$1.37</div><div class="tile-n">versus $38.81 sending every document to a cloud model — 28× cheaper</div></div>
+        <div class="tile"><div class="tile-k">Wrong &amp; unflagged, per 1,000</div><div class="tile-v crit">14</div><div class="tile-n">posted with a wrong value and nothing caught it. Your current manual-entry rate is the comparison.</div></div>
+        <div class="tile"><div class="tile-k">Never touch a model</div><div class="tile-v">58%</div><div class="tile-n">handled by arithmetic checks alone — no AI, no cost, no risk</div></div>
+        <div class="tile"><div class="tile-k">Machine time needed</div><div class="tile-v">5.8 h</div><div class="tile-n">per night, on one laptop, for 40,000 invoices a month</div></div>
+      </div>
+
+      <div class="ex-h"><span class="ex-n">Exhibit 1</span> Where the money goes <span class="pv pv-m">Measured</span></div>
+      <p class="ex-d">Per 1,000 invoices successfully posted. The bar you can barely see is the point.</p>
+      <div class="chartbox">
+        <svg viewBox="0 0 720 200" role="img" aria-label="Cost per thousand successfully posted invoices: cloud-only costs 38 dollars 81 cents, the cascade approach costs 1 dollar 37 cents, about 28 times less.">
+          <g stroke="var(--paper-rule)" stroke-width="1">
+            <line x1="272.5" y1="14" x2="272.5" y2="150"/><line x1="415" y1="14" x2="415" y2="150"/>
+            <line x1="557.5" y1="14" x2="557.5" y2="150"/><line x1="700" y1="14" x2="700" y2="150"/>
+          </g>
+          <line x1="130" y1="14" x2="130" y2="150" stroke="var(--paper-axis)" stroke-width="1.5"/>
+          <text x="118" y="42" text-anchor="end" font-size="13" font-weight="600" fill="var(--paper-ink)">Cloud-only</text>
+          <text x="118" y="58" text-anchor="end" font-size="11" fill="var(--paper-muted)">every doc to a frontier model</text>
+          <rect x="130" y="24" width="553" height="34" rx="4" fill="var(--s1)"><title>Cloud-only: $38.81 per 1,000 successful records</title></rect>
+          <text x="671" y="46" text-anchor="end" font-size="14" font-weight="600" fill="#fff" font-family="IBM Plex Mono, monospace">$38.81</text>
+          <text x="118" y="98" text-anchor="end" font-size="13" font-weight="600" fill="var(--paper-ink)">Local + escalation</text>
+          <text x="118" y="114" text-anchor="end" font-size="11" fill="var(--paper-muted)">cloud only when checks fail</text>
+          <rect x="130" y="80" width="20" height="34" rx="4" fill="var(--s3)"><title>Cascade: $1.37 per 1,000 successful records</title></rect>
+          <text x="162" y="102" font-size="14" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">$1.37</text>
+          <text x="232" y="102" font-size="12" fill="var(--paper-muted)">— 28× less</text>
+          <g font-size="11" fill="var(--paper-muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">
+            <text x="130" y="168">$0</text><text x="272.5" y="168">$10</text><text x="415" y="168">$20</text>
+            <text x="557.5" y="168">$30</text><text x="700" y="168">$40</text>
+          </g>
+          <text x="415" y="190" text-anchor="middle" font-size="11" fill="var(--paper-muted)">cost per 1,000 invoices successfully posted</text>
+        </svg>
+      </div>
+
+      <p class="ex-d" style="margin-top:18px"><b>The same $1.37 bar, magnified 25×,</b> so its composition is visible:</p>
+      <div class="chartbox">
+        <svg viewBox="0 0 720 108" role="img" aria-label="Breaking down the 1 dollar 37 cent cascade cost: 1 dollar 34 cents is cloud escalation, and under 3 cents is electricity.">
+          <line x1="130" y1="12" x2="130" y2="62" stroke="var(--paper-axis)" stroke-width="1.5"/>
+          <rect x="130" y="20" width="511" height="34" rx="4" fill="var(--s2)"><title>Cloud escalation: $1.344 — 97.9%</title></rect>
+          <rect x="643" y="20" width="11" height="34" rx="2" fill="var(--s3)"><title>Local electricity, modeled: $0.029 — 2.1%</title></rect>
+          <text x="140" y="42" font-size="12.5" font-weight="600" fill="#fff">Cloud escalation · $1.344 · 97.9%</text>
+          <text x="666" y="34" font-size="11.5" font-weight="600" fill="var(--paper-ink)">$0.029</text>
+          <text x="666" y="49" font-size="11" fill="var(--paper-muted)">electricity · 2.1%</text>
+          <text x="130" y="82" font-size="11.5" fill="var(--paper-muted)">The 58% of invoices handled by arithmetic checks alone contribute $0.00 and do not appear on this bar.</text>
+          <text x="130" y="99" font-size="11.5" fill="var(--paper-muted)">Even if the electricity estimate were wrong by 5×, the comparison above moves from 28× to 26×.</text>
+        </svg>
+      </div>
+
+      <div class="ex-h"><span class="ex-n">Exhibit 2</span> What happens to 1,000 invoices <span class="pv pv-m">Measured</span></div>
+      <p class="ex-d">The fourth segment is the one that matters. It is small on purpose and shown anyway.</p>
+      <div class="chartbox">
+        <svg viewBox="0 0 720 176" role="img" aria-label="Of 1000 invoices: 842 correct with no escalation, 132 caught and correctly escalated, 12 escalated unnecessarily, and 14 posted wrong with nothing flagging them.">
+          <line x1="694" y1="18" x2="694" y2="44" stroke="var(--st-crit)" stroke-width="1.5"/>
+          <text x="688" y="16" text-anchor="end" font-size="19" font-weight="700" fill="var(--st-crit)" font-family="IBM Plex Mono, monospace">14</text>
+          <text x="688" y="32" text-anchor="end" font-size="10.5" fill="var(--st-crit)">wrong, unflagged</text>
+          <rect x="20" y="48" width="567.5" height="40" rx="4" fill="var(--st-good)"><title>842 correct, no escalation needed</title></rect>
+          <rect x="589.5" y="48" width="89" height="40" fill="var(--st-warn)"><title>132 caught by the checks and correctly escalated</title></rect>
+          <rect x="680.5" y="48" width="8.1" height="40" fill="var(--st-serious)"><title>12 escalated unnecessarily — paid for cloud that was not needed</title></rect>
+          <rect x="690.6" y="48" width="9.4" height="40" rx="2" fill="var(--st-crit)"><title>14 SILENT FAILURES — posted wrong with nothing flagging them</title></rect>
+          <text x="30" y="73" font-size="14" font-weight="600" fill="#fff">842</text>
+          <text x="599" y="73" font-size="13" font-weight="600" fill="#3a2c00">132</text>
+          <g font-size="11.5" font-family="IBM Plex Sans, sans-serif">
+            <rect x="20" y="106" width="11" height="11" rx="2" fill="var(--st-good)"/>
+            <text x="38" y="116" fill="var(--paper-ink-2)">✓ 842 straight through, correct</text>
+            <rect x="250" y="106" width="11" height="11" rx="2" fill="var(--st-warn)"/>
+            <text x="268" y="116" fill="var(--paper-ink-2)">▲ 132 caught, escalated, correct</text>
+            <rect x="20" y="130" width="11" height="11" rx="2" fill="var(--st-serious)"/>
+            <text x="38" y="140" fill="var(--paper-ink-2)">◆ 12 escalated unnecessarily</text>
+            <rect x="250" y="130" width="11" height="11" rx="2" fill="var(--st-crit)"/>
+            <text x="268" y="140" font-weight="600" fill="var(--st-crit)">✕ 14 wrong and NOT flagged</text>
+          </g>
+          <text x="20" y="167" font-size="11.5" fill="var(--paper-muted)">The 12 unnecessary escalations cost money. The 14 silent failures cost trust — they are the number to hold us to.</text>
+        </svg>
+      </div>
+
+      <div class="ex-h"><span class="ex-n">Exhibit 3</span> How many machines you need</div>
+      <p class="ex-d">Throughput per machine at production batch size. Your 40,000 invoices a month is 1,818 a working day.</p>
+      <div class="chartbox">
+        <svg viewBox="0 0 720 214" role="img" aria-label="Documents per hour per machine: a workstation with a discrete GPU does 2480, an edge appliance is projected at 1620, and a business laptop does 312. Forty thousand invoices a month needs one laptop for under six hours a night.">
+          <g stroke="var(--paper-rule)" stroke-width="1">
+            <line x1="255" y1="10" x2="255" y2="140"/><line x1="360" y1="10" x2="360" y2="140"/>
+            <line x1="465" y1="10" x2="465" y2="140"/><line x1="570" y1="10" x2="570" y2="140"/><line x1="675" y1="10" x2="675" y2="140"/>
+          </g>
+          <line x1="150" y1="10" x2="150" y2="140" stroke="var(--paper-axis)" stroke-width="1.5"/>
+          <text x="138" y="32" text-anchor="end" font-size="12.5" font-weight="600" fill="var(--paper-ink)">Workstation</text>
+          <rect x="150" y="18" width="521" height="26" rx="4" fill="var(--s1)"><title>Workstation with discrete GPU: 2,480 docs/hour — measured</title></rect>
+          <text x="661" y="36" text-anchor="end" font-size="12.5" font-weight="600" fill="#fff" font-family="IBM Plex Mono, monospace">2,480</text>
+          <text x="138" y="78" text-anchor="end" font-size="12.5" font-weight="600" fill="var(--paper-ink)">Edge appliance</text>
+          <rect x="150" y="64" width="340" height="26" rx="4" fill="none" stroke="var(--paper-muted)" stroke-width="1.5" stroke-dasharray="5 3"><title>Edge appliance: 1,620 docs/hour — PROJECTED, not measured</title></rect>
+          <text x="502" y="82" font-size="12.5" font-weight="600" fill="var(--paper-ink-2)" font-family="IBM Plex Mono, monospace">1,620</text>
+          <text x="556" y="82" font-size="10.5" fill="var(--paper-muted)">projected</text>
+          <text x="138" y="124" text-anchor="end" font-size="12.5" font-weight="600" fill="var(--paper-ink)">Business laptop</text>
+          <rect x="150" y="110" width="66" height="26" rx="4" fill="var(--s1)"><title>Business laptop, tier T1: 312 docs/hour — measured</title></rect>
+          <text x="228" y="128" font-size="12.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">312</text>
+          <g font-size="11" fill="var(--paper-muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">
+            <text x="150" y="158">0</text><text x="255" y="158">500</text><text x="360" y="158">1,000</text>
+            <text x="465" y="158">1,500</text><text x="570" y="158">2,000</text><text x="675" y="158">2,500</text>
+          </g>
+          <text x="415" y="177" text-anchor="middle" font-size="11" fill="var(--paper-muted)">invoices processed per hour, per machine</text>
+          <rect x="150" y="188" width="525" height="22" rx="3" fill="var(--paper-2)"/>
+          <text x="162" y="203" font-size="12" fill="var(--paper-ink-2)">40,000 / month = 1,818 / working day = <tspan font-weight="600" fill="var(--paper-ink)">5.8 hours a night on one laptop</tspan></text>
+        </svg>
+        <div class="legend-row">
+          <span class="lg"><span class="sw" style="background:var(--s1)"></span>Measured on hardware</span>
+          <span class="lg"><span class="sw" style="border:1.5px dashed var(--paper-muted);background:none"></span>Projected from the bandwidth model, never measured</span>
+        </div>
+      </div>
+
+      <div class="ex-h"><span class="ex-n">Exhibit 4</span> What you would buy</div>
+      <table class="ptab">
+        <thead><tr><th>Option</th><th>Hardware</th><th class="num">Capex</th><th class="num">Cost / month at 40k</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><b>Do nothing</b></td><td>—</td><td class="num">$0</td><td class="num">current manual cost</td><td>The comparison baseline, not a recommendation</td></tr>
+          <tr><td><b>Existing fleet</b></td><td>Laptops you already own</td><td class="num">$0</td><td class="num">$55</td><td>Runs off-hours on designated machines</td></tr>
+          <tr><td><b>One shared workstation</b></td><td>32GB + discrete GPU</td><td class="num">$2,400</td><td class="num">$121</td><td>Pays for itself in <b>7 weeks</b>; 8× the headroom</td></tr>
+          <tr><td><b>Cloud-only</b></td><td>None</td><td class="num">$0</td><td class="num">$1,552</td><td>Every document leaves your network</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ex-h"><span class="ex-n">Exhibit 5</span> "But our scans are worse than that"</div>
+      <p class="ex-d">Escalation rate against scan quality. This is the honest answer to the objection, and where the cost sits if your documents are worse than the test set.</p>
+      <div class="chartbox">
+        <svg viewBox="0 0 720 232" role="img" aria-label="Escalation rate rises with scan degradation: 8 percent for digital-native PDFs, 12 percent for clean scans, 24 percent with skew and noise, 41 percent with compression loss, and 68 percent for heavy noise with occlusion.">
+          <g stroke="var(--paper-rule)" stroke-width="1">
+            <line x1="90" y1="190" x2="690" y2="190"/><line x1="90" y1="152" x2="690" y2="152"/>
+            <line x1="90" y1="115" x2="690" y2="115"/><line x1="90" y1="77" x2="690" y2="77"/><line x1="90" y1="40" x2="690" y2="40"/>
+          </g>
+          <g font-size="10.5" fill="var(--paper-muted)" text-anchor="end" font-family="IBM Plex Mono, monospace">
+            <text x="80" y="194">0%</text><text x="80" y="156">20%</text><text x="80" y="119">40%</text><text x="80" y="81">60%</text><text x="80" y="44">80%</text>
+          </g>
+          <polygon points="90,175 237.5,167.5 385,145 532.5,113 680,62.5 680,190 90,190" fill="var(--s1)" opacity="0.13"/>
+          <polyline points="90,175 237.5,167.5 385,145 532.5,113 680,62.5" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linejoin="round"/>
+          <g fill="var(--s1)">
+            <circle cx="90" cy="175" r="5"><title>Digital-native PDF: 8% escalate</title></circle>
+            <circle cx="237.5" cy="167.5" r="5"><title>Clean scan: 12% escalate</title></circle>
+            <circle cx="385" cy="145" r="5"><title>Skew and scan noise: 24% escalate</title></circle>
+            <circle cx="532.5" cy="113" r="5"><title>Compression artifacts and resolution loss: 41% escalate</title></circle>
+            <circle cx="680" cy="62.5" r="6" stroke="var(--paper)" stroke-width="2"><title>Heavy noise with partial occlusion: 68% escalate</title></circle>
+          </g>
+          <text x="96" y="166" font-size="11.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">8%</text>
+          <text x="674" y="52" text-anchor="end" font-size="13" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">68%</text>
+          <g font-size="11" fill="var(--paper-muted)" text-anchor="middle">
+            <text x="90" y="210">Digital PDF</text><text x="237.5" y="210">Clean scan</text><text x="385" y="210">Skew + noise</text>
+            <text x="532.5" y="210">Compressed</text><text x="680" y="210">Heavy damage</text>
+          </g>
+          <text x="385" y="228" text-anchor="middle" font-size="11" fill="var(--paper-muted)">share of invoices that need a cloud model, by scan quality</text>
+        </svg>
+      </div>
+      <p class="ex-d" style="margin-top:14px">Send us 30 of your real invoices and we will place them on this curve before you commit to anything.</p>
+
+      <div class="method">
+        <div class="method-h">How this was measured</div>
+        <div class="method-grid">
+          <div><div class="method-k">sample</div><div class="method-v">300 invoices · 8 layouts · 1–40 line items · 4 currencies · 5 degradation levels</div></div>
+          <div><div class="method-k">ground truth</div><div class="method-v">Generated before rendering, so labels are exact rather than annotated</div></div>
+          <div><div class="method-k">measured</div><div class="method-v">Accuracy, cost, throughput on two machines</div></div>
+          <div><div class="method-k">projected</div><div class="method-v">Edge-appliance throughput only — from a bandwidth model validated within ±15% on both measured machines</div></div>
+          <div><div class="method-k">modeled</div><div class="method-v">Electricity, from spec sheets. 2.1% of local cost; a 5× error moves the headline 28× → 26×</div></div>
+          <div><div class="method-k">not triggered</div><div class="method-v">Three predefined disqualification criteria. Any one would have ended this study with a negative finding</div></div>
+          <div><div class="method-k">reproducible</div><div class="method-v">Seed 12345 · config 4f2a91c · regenerable end to end</div></div>
+          <div><div class="method-k">not tested</div><div class="method-v">Your document types, your volumes, your network. That is what a pilot is for</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="note-h">Why the methodology strip stays, even though it makes the page longer</div>
+    <p>It is the only part a client's own technical reviewer will read closely, and it is the
+    difference between evidence and a vendor deck. The "not triggered" and "not tested" rows do
+    more work than any chart above them — they show the study could have failed and says where it
+    doesn't apply.</p>
+  </div>
+</section>
+
+<section id="operator">
+  <div class="sec-h"><span class="sec-n">03</span><h2>Rendering A — the operator report</h2></div>
+  <p class="sub">Same views, different composition. Two blocks that appear here and nowhere in the executive version.</p>
+
+  <div class="paper">
+    <div class="paper-tab"><span>report-operator.html</span><span>run 4f2a91c · seed 12345 · simulated</span></div>
+    <div class="paper-body">
+
+      <div class="ex-h"><span class="ex-n">Block 4</span> Capability against model size</div>
+      <p class="ex-d">The chart the whole study exists to produce — and the one an executive never sees, because model size is not a variable they control. Two panels, one x-axis, separate scales. Never a second y-axis.</p>
+      <div class="chartbox">
+        <svg viewBox="0 0 720 410" role="img" aria-label="Task success rises from 91.3 percent at 1.7B to 99.1 percent at 30B-A3B, approaching the cloud-only reference of 99.2 percent. Silent failure falls from 6.8 percent to 0.9 percent, crossing the 2 percent threshold between 4B and 8B, which makes 8B the minimum viable model size.">
+          <text x="90" y="22" font-size="12" font-weight="600" fill="var(--paper-ink)">Task success</text>
+          <g stroke="var(--paper-rule)" stroke-width="1">
+            <line x1="110" y1="160" x2="690" y2="160"/><line x1="110" y1="120" x2="690" y2="120"/>
+            <line x1="110" y1="80" x2="690" y2="80"/><line x1="110" y1="40" x2="690" y2="40"/>
+          </g>
+          <g font-size="10" fill="var(--paper-muted)" text-anchor="end" font-family="IBM Plex Mono, monospace">
+            <text x="102" y="164">88%</text><text x="102" y="124">92%</text><text x="102" y="84">96%</text><text x="102" y="44">100%</text>
+          </g>
+          <line x1="110" y1="48" x2="690" y2="48" stroke="var(--paper-muted)" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="686" y="42" text-anchor="end" font-size="10.5" fill="var(--paper-muted)">cloud-only 99.2%</text>
+          <polyline points="110,127 247.5,79 385,56 522.5,51 660,49" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linejoin="round"/>
+          <g fill="var(--s1)">
+            <circle cx="110" cy="127" r="5"><title>1.7B — 91.3% task success</title></circle>
+            <circle cx="247.5" cy="79" r="5"><title>4B — 96.1% task success</title></circle>
+            <circle cx="385" cy="56" r="6" stroke="var(--paper)" stroke-width="2"><title>8B — 98.4% task success</title></circle>
+            <circle cx="522.5" cy="51" r="5"><title>14B — 98.9% task success</title></circle>
+            <circle cx="660" cy="49" r="5"><title>30B-A3B — 99.1% task success</title></circle>
+          </g>
+          <text x="110" y="145" font-size="11" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">91.3</text>
+          <text x="385" y="42" text-anchor="middle" font-size="11" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">98.4</text>
+
+          <text x="90" y="216" font-size="12" font-weight="600" fill="var(--paper-ink)">Silent failure — gate passed, answer wrong</text>
+          <g stroke="var(--paper-rule)" stroke-width="1">
+            <line x1="110" y1="360" x2="690" y2="360"/><line x1="110" y1="311" x2="690" y2="311"/>
+            <line x1="110" y1="262" x2="690" y2="262"/>
+          </g>
+          <g font-size="10" fill="var(--paper-muted)" text-anchor="end" font-family="IBM Plex Mono, monospace">
+            <text x="102" y="364">0%</text><text x="102" y="315">3%</text><text x="102" y="266">6%</text>
+          </g>
+          <rect x="110" y="230" width="580" height="97.5" fill="var(--st-crit)" opacity="0.07"/>
+          <line x1="110" y1="327.5" x2="690" y2="327.5" stroke="var(--st-crit)" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="686" y="322" text-anchor="end" font-size="10.5" font-weight="600" fill="var(--st-crit)">2% threshold — above this, disqualified</text>
+          <polyline points="110,249.5 247.5,312.9 385,337.3 522.5,342.1 660,345.4" fill="none" stroke="var(--s8)" stroke-width="2.5" stroke-linejoin="round"/>
+          <g fill="var(--s8)">
+            <circle cx="110" cy="249.5" r="5"><title>1.7B — 6.8% silent failure, disqualified</title></circle>
+            <circle cx="247.5" cy="312.9" r="5"><title>4B — 2.9% silent failure, still above threshold</title></circle>
+            <circle cx="385" cy="337.3" r="7" stroke="var(--paper)" stroke-width="2"><title>8B — 1.4% silent failure, clears the threshold. Minimum viable size.</title></circle>
+            <circle cx="522.5" cy="342.1" r="5"><title>14B — 1.1% silent failure</title></circle>
+            <circle cx="660" cy="345.4" r="5"><title>30B-A3B — 0.9% silent failure</title></circle>
+          </g>
+          <text x="110" y="242" font-size="11" font-weight="600" fill="var(--s8)" font-family="IBM Plex Mono, monospace">6.8</text>
+          <text x="247.5" y="305" text-anchor="middle" font-size="11" font-weight="600" fill="var(--s8)" font-family="IBM Plex Mono, monospace">2.9</text>
+          <text x="385" y="358" text-anchor="middle" font-size="11" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">1.4</text>
+          <line x1="316" y1="230" x2="316" y2="360" stroke="var(--paper-ink)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="322" y="245" font-size="11" font-weight="600" fill="var(--paper-ink)">crossing → minimum viable size = 8B</text>
+          <g font-size="11" fill="var(--paper-muted)" text-anchor="middle">
+            <text x="110" y="384">1.7B</text><text x="247.5" y="384">4B</text><text x="385" y="384">8B</text>
+            <text x="522.5" y="384">14B</text><text x="660" y="384">30B-A3B</text>
+          </g>
+          <text x="400" y="404" text-anchor="middle" font-size="11" fill="var(--paper-muted)">Qwen3 family, Q4_K_M — a size ladder, not a leaderboard</text>
+        </svg>
+      </div>
+      <table class="ptab">
+        <thead><tr><th>Model</th><th class="num">Task success</th><th class="num">Silent failure</th><th class="num">Peak VRAM</th><th>Tier</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Qwen3-1.7B</td><td class="num">91.3%</td><td class="num" style="color:var(--st-crit);font-weight:600">6.8%</td><td class="num">2.1 GB</td><td>T0</td><td style="color:var(--st-crit)">✕ above threshold</td></tr>
+          <tr><td>Qwen3-4B</td><td class="num">96.1%</td><td class="num" style="color:var(--st-crit);font-weight:600">2.9%</td><td class="num">3.6 GB</td><td>T0</td><td style="color:var(--st-crit)">✕ above threshold</td></tr>
+          <tr style="background:color-mix(in srgb,var(--st-good) 9%,transparent)"><td><b>Qwen3-8B</b></td><td class="num">98.4%</td><td class="num" style="font-weight:600">1.4%</td><td class="num">6.2 GB</td><td><b>T1</b></td><td style="color:var(--st-good);font-weight:600">✓ minimum viable</td></tr>
+          <tr><td>Qwen3-14B</td><td class="num">98.9%</td><td class="num">1.1%</td><td class="num">10.4 GB</td><td>T1</td><td>✓ marginal gain</td></tr>
+          <tr><td>Qwen3-30B-A3B</td><td class="num">99.1%</td><td class="num">0.9%</td><td class="num">18.7 GB</td><td>T2</td><td>✓ not worth the tier</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ex-h" style="margin-top:38px"><span class="ex-n">Block 7</span> Projection model validation</div>
+      <p class="ex-d">The gate that licenses every projected number in either report. The model must predict both measured machines within ±15% before it is allowed to describe hardware nobody owns.</p>
+      <table class="ptab">
+        <thead><tr><th>Node</th><th>Bandwidth</th><th>Model</th><th class="num">Predicted t/s</th><th class="num">Measured t/s</th><th class="num">Residual</th></tr></thead>
+        <tbody>
+          <tr><td>win-7900xtx</td><td>958 GB/s</td><td>1.7B</td><td class="num">412</td><td class="num">388</td><td class="num">+6.2%</td></tr>
+          <tr><td>win-7900xtx</td><td>958 GB/s</td><td>8B</td><td class="num">186</td><td class="num">194</td><td class="num">−4.1%</td></tr>
+          <tr><td>win-7900xtx</td><td>958 GB/s</td><td>30B-A3B</td><td class="num">268</td><td class="num">249</td><td class="num">+7.6%</td></tr>
+          <tr><td>mac-m4</td><td>118 GB/s</td><td>1.7B</td><td class="num">51.5</td><td class="num">48.9</td><td class="num">+5.3%</td></tr>
+          <tr><td>mac-m4</td><td>118 GB/s</td><td>8B</td><td class="num">23.3</td><td class="num">24.6</td><td class="num">−5.3%</td></tr>
+          <tr><td>mac-m4</td><td>118 GB/s</td><td>30B-A3B</td><td class="num">33.5</td><td class="num">30.2</td><td class="num" style="font-weight:600">+10.9%</td></tr>
+        </tbody>
+      </table>
+      <p class="ex-d" style="margin-top:12px"><b style="color:var(--st-good)">✓ PASS</b> — worst residual 10.9%, inside the ±15% gate, across an 8× bandwidth range. Fitted utilization 0.81. Projections to T0 and T3 are licensed.</p>
+
+    </div>
+  </div>
+</section>
+
+<section id="cuts">
+  <div class="sec-h"><span class="sec-n">04</span><h2>Three more exhibits worth adding</h2></div>
+  <p class="sub">Not alternatives to each other — three additional charts the same views can already produce. Each answers a different person's question.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Exhibit</th><th>The question it answers</th><th>Who asks it</th><th>Add it?</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Payback timeline</b></td>
+          <td>"When does this pay for itself?"</td>
+          <td>Whoever signs for the hardware</td>
+          <td style="color:var(--accent);font-weight:600">Yes — promote into the executive report</td>
+        </tr>
+        <tr>
+          <td><b>Hardware placement</b></td>
+          <td>"Which tier do we actually need, and what are we <em>not</em> buying?"</td>
+          <td>IT / infrastructure lead</td>
+          <td>Only once the conversation has moved to procurement</td>
+        </tr>
+        <tr>
+          <td><b>Assumption sensitivity</b></td>
+          <td>"What would have to be true for this to be wrong?"</td>
+          <td>The skeptic in the room</td>
+          <td style="color:var(--accent);font-weight:600">Yes — it is what makes the other exhibits credible</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Payback timeline <span style="font-size:13px;color:var(--accent);font-weight:600">← recommend promoting</span></h3>
+  <p><b>Answers:</b> when does this pay for itself? Cost per document is an engineer's unit. Whoever
+  signs for the hardware thinks in a budget line over a horizon, and in months to payback. Same
+  numbers, plotted on the axes they already use.</p>
+  <div class="paper"><div class="paper-body" style="padding:26px 28px">
+    <div class="chartbox">
+      <svg viewBox="0 0 720 290" role="img" aria-label="Cumulative cost at 40,000 invoices a month over 24 months. Cloud-only reaches 37,258 dollars. Local, including a 2,400 dollar workstation, reaches 3,715 dollars. The workstation pays for itself at 1.6 months and the two-year saving is 33,542 dollars.">
+        <g stroke="var(--paper-rule)" stroke-width="1">
+          <line x1="90" y1="250" x2="690" y2="250"/><line x1="90" y1="194.7" x2="690" y2="194.7"/>
+          <line x1="90" y1="139.5" x2="690" y2="139.5"/><line x1="90" y1="84.2" x2="690" y2="84.2"/>
+        </g>
+        <g font-size="10.5" fill="var(--paper-muted)" text-anchor="end" font-family="IBM Plex Mono, monospace">
+          <text x="82" y="254">$0</text><text x="82" y="199">$10k</text><text x="82" y="143">$20k</text><text x="82" y="88">$30k</text>
+        </g>
+        <line x1="90" y1="44.1" x2="690" y2="44.1" stroke="none"/>
+        <polyline points="90,250 690,44.1" fill="none" stroke="var(--s2)" stroke-width="2.5"/>
+        <polyline points="90,236.7 690,229.5" fill="none" stroke="var(--s1)" stroke-width="2.5"/>
+        <circle cx="130" cy="236.6" r="6" fill="var(--st-good)" stroke="var(--paper)" stroke-width="2"><title>Payback: the workstation pays for itself at 1.6 months</title></circle>
+        <line x1="130" y1="236.6" x2="130" y2="196" stroke="var(--st-good)" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="138" y="190" font-size="11.5" font-weight="600" fill="var(--st-good)">payback · 1.6 months</text>
+        <line x1="676" y1="44.1" x2="676" y2="229.5" stroke="var(--paper-ink)" stroke-width="1.5"/>
+        <line x1="670" y1="44.1" x2="682" y2="44.1" stroke="var(--paper-ink)" stroke-width="1.5"/>
+        <line x1="670" y1="229.5" x2="682" y2="229.5" stroke="var(--paper-ink)" stroke-width="1.5"/>
+        <text x="666" y="130" text-anchor="end" font-size="15" font-weight="700" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">$33,542</text>
+        <text x="666" y="147" text-anchor="end" font-size="11" fill="var(--paper-muted)">saved over two years</text>
+        <text x="300" y="66" font-size="12.5" font-weight="600" fill="var(--s2)">Cloud-only · $37,258</text>
+        <text x="300" y="222" font-size="12.5" font-weight="600" fill="var(--s1)">Local + one workstation · $3,715</text>
+        <g font-size="10.5" fill="var(--paper-muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">
+          <text x="90" y="270">0</text><text x="240" y="270">6</text><text x="390" y="270">12</text><text x="540" y="270">18</text><text x="690" y="270">24</text>
+        </g>
+        <text x="390" y="286" text-anchor="middle" font-size="11" fill="var(--paper-muted)">months, at 40,000 invoices per month</text>
+      </svg>
+    </div>
+  </div></div>
+
+  <h3>Hardware placement</h3>
+  <p><b>Answers:</b> which tier do we actually need, and what are we <em>not</em> buying? For the
+  conversation about <em>which</em> hardware rather than whether. Places the workload on the ladder
+  and shows the headroom above it as something they can decline to purchase.</p>
+  <div class="paper"><div class="paper-body" style="padding:26px 28px">
+    <div class="chartbox">
+      <svg viewBox="0 0 720 178" role="img" aria-label="The workload qualifies at tier T1, refresh-cycle business laptops. Tier T0 existing 16GB fleet is insufficient because 4B silent failure is 2.9 percent. Tiers T2 and T3 are headroom, not requirements.">
+        <rect x="20" y="30" width="160" height="70" rx="4" fill="none" stroke="var(--st-crit)" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="100" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="var(--paper-ink)">T0</text>
+        <text x="100" y="70" text-anchor="middle" font-size="11" fill="var(--paper-muted)">16GB fleet today</text>
+        <text x="100" y="86" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--st-crit)">✕ 4B misses by 0.9pp</text>
+
+        <rect x="192" y="24" width="160" height="82" rx="4" fill="color-mix(in srgb,var(--st-good) 12%,transparent)" stroke="var(--st-good)" stroke-width="2.5"/>
+        <text x="272" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="var(--paper-ink)">T1</text>
+        <text x="272" y="66" text-anchor="middle" font-size="11" fill="var(--paper-ink-2)">32GB refresh cycle</text>
+        <text x="272" y="83" text-anchor="middle" font-size="11" font-weight="600" fill="var(--st-good)">✓ YOU ARE HERE</text>
+        <text x="272" y="98" text-anchor="middle" font-size="10.5" fill="var(--paper-muted)">8B · 1.4% · $0 capex</text>
+
+        <rect x="364" y="30" width="160" height="70" rx="4" fill="none" stroke="var(--paper-rule)" stroke-width="1.5"/>
+        <text x="444" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="var(--paper-muted)">T2</text>
+        <text x="444" y="70" text-anchor="middle" font-size="11" fill="var(--paper-muted)">shared workstation</text>
+        <text x="444" y="86" text-anchor="middle" font-size="10.5" fill="var(--paper-muted)">8× headroom, $2.4k</text>
+
+        <rect x="536" y="30" width="160" height="70" rx="4" fill="none" stroke="var(--paper-rule)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="616" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="var(--paper-muted)">T3</text>
+        <text x="616" y="70" text-anchor="middle" font-size="11" fill="var(--paper-muted)">edge appliance</text>
+        <text x="616" y="86" text-anchor="middle" font-size="10.5" fill="var(--paper-muted)">per-site · projected</text>
+
+        <line x1="20" y1="122" x2="696" y2="122" stroke="var(--paper-axis)" stroke-width="1"/>
+        <text x="20" y="142" font-size="11" fill="var(--paper-muted)">insufficient</text>
+        <text x="696" y="142" text-anchor="end" font-size="11" fill="var(--paper-muted)">headroom you do not need to buy</text>
+        <text x="20" y="166" font-size="11.5" fill="var(--paper-ink-2)">The gap between T0 and T1 is 0.9 percentage points of silent failure. That is the entire capex question.</text>
+      </svg>
+    </div>
+  </div></div>
+
+  <h3>Assumption sensitivity</h3>
+  <p><b>Answers:</b> what would have to be true for this to be wrong? The exhibit for a skeptical
+  room. It shows the conclusion is not fragile, and names the one assumption that actually is.</p>
+  <div class="paper"><div class="paper-body" style="padding:26px 28px">
+    <div class="chartbox">
+      <svg viewBox="0 0 720 246" role="img" aria-label="Sensitivity of the 28 times cost advantage. Lower volume: no change. Power model 5 times wrong: 26 times. Tighter silent-failure tolerance: 24 times. Cloud prices halve: 14 times. All scans heavily degraded: 11 times, the only assumption that materially moves the answer.">
+        <g stroke="var(--paper-rule)" stroke-width="1">
+          <line x1="403" y1="16" x2="403" y2="196"/><line x1="546" y1="16" x2="546" y2="196"/><line x1="690" y1="16" x2="690" y2="196"/>
+        </g>
+        <line x1="260" y1="16" x2="260" y2="196" stroke="var(--paper-axis)" stroke-width="1.5"/>
+        <line x1="665.6" y1="10" x2="665.6" y2="200" stroke="var(--st-good)" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="661" y="212" text-anchor="end" font-size="10.5" font-weight="600" fill="var(--st-good)">baseline 28.3×</text>
+
+        <text x="248" y="40" text-anchor="end" font-size="12" fill="var(--paper-ink)">Volume is 5,000/mo, not 40,000</text>
+        <rect x="260" y="26" width="405.6" height="22" rx="3" fill="var(--s3)"><title>No change to the ratio — but workstation payback stretches to 14 months</title></rect>
+        <text x="676" y="41" font-size="11.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">28.3×</text>
+
+        <text x="248" y="76" text-anchor="end" font-size="12" fill="var(--paper-ink)">Power model wrong by 5×</text>
+        <rect x="260" y="62" width="374.1" height="22" rx="3" fill="var(--s3)"><title>26.1x — the energy assumption barely registers</title></rect>
+        <text x="645" y="77" font-size="11.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">26.1×</text>
+
+        <text x="248" y="112" text-anchor="end" font-size="12" fill="var(--paper-ink)">Tolerance tightened to 0.5%</text>
+        <rect x="260" y="98" width="344" height="22" rx="3" fill="var(--s1)"><title>24.0x — forces 14B, still tier T1</title></rect>
+        <text x="614" y="113" font-size="11.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">24.0×</text>
+
+        <text x="248" y="148" text-anchor="end" font-size="12" fill="var(--paper-ink)">Cloud prices halve</text>
+        <rect x="260" y="134" width="203.5" height="22" rx="3" fill="var(--s1)"><title>14.2x — still an order of magnitude</title></rect>
+        <text x="473" y="149" font-size="11.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">14.2×</text>
+
+        <text x="248" y="184" text-anchor="end" font-size="12" font-weight="600" fill="var(--paper-ink)">Every scan is heavily degraded</text>
+        <rect x="260" y="170" width="157.7" height="22" rx="3" fill="var(--s2)"><title>11.0x — the only assumption that materially moves the answer</title></rect>
+        <text x="427" y="185" font-size="11.5" font-weight="600" fill="var(--paper-ink)" font-family="IBM Plex Mono, monospace">11.0×</text>
+
+        <g font-size="10.5" fill="var(--paper-muted)" text-anchor="middle" font-family="IBM Plex Mono, monospace">
+          <text x="260" y="212">0×</text><text x="403" y="212">10×</text><text x="546" y="212">20×</text><text x="690" y="212">30×</text>
+        </g>
+        <text x="260" y="238" font-size="11.5" fill="var(--paper-ink-2)">Only document quality moves the answer materially — which is why we ask for 30 of your real invoices.</text>
+      </svg>
+    </div>
+  </div></div>
+</section>
+
+<section id="calls">
+  <div class="sec-h"><span class="sec-n">05</span><h2>What I'd change before building</h2></div>
+  <div class="cols">
+    <div class="card"><div class="card-h">Promote the payback timeline</div>
+      <p>Cumulative cost with a payback marker is the most budget-legible exhibit here, and it costs nothing extra — same views, different axes. It belongs at position 3, ahead of the fleet-sizing bar.</p></div>
+    <div class="card"><div class="card-h">Assumption sensitivity earns its place too</div>
+      <p>Showing that only document quality moves the answer is what makes the other exhibits credible. It also sets up the ask — send us 30 real invoices — without it sounding like a stall.</p></div>
+    <div class="card"><div class="card-h">The four tiles need your baseline</div>
+      <p>"14 wrong per 1,000" only lands next to <em>their</em> current manual error rate. That number comes from discovery, not from the harness, and there should be a slot for it in the template.</p></div>
+    <div class="card"><div class="card-h">Exhibit 5 is the sales motion</div>
+      <p>The degradation curve plus "send us 30 invoices" is a qualification step that costs a day and disqualifies bad-fit prospects early. Worth designing the intake path for it now.</p></div>
+  </div>
+
+  <div class="note warn">
+    <div class="note-h">Standing constraint on this template</div>
+    <p>Every number above is invented. When the harness fills these in for real, the provenance
+    badges and the methodology strip are what stop a projected figure from being read as a measured
+    one in a room where that distinction decides a contract. They are load-bearing, not decoration —
+    do not let a later pass tidy them away for looking cleaner.</p>
+  </div>
+</section>
+
+</main></div>
+
+<footer><div class="wrap">Simulated report specimens · Edge-First Agentic Inference · <a href="https://github.com/AllenHoem/coastal-ai-synthesis/pull/1">architecture package →</a></div></footer>

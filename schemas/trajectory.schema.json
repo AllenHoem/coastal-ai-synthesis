@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AllenHoem/coastal-ai-synthesis/schemas/trajectory.schema.json",
+  "title": "Trajectory Record",
+  "description": "One record per document, per arm, per configuration. PRD v0.2 section 8 contract plus additive extensions required by the architecture (see docs/architecture.md section 8). ADDITIVE ONLY: no field from the v0.2 contract is renamed, retyped, or removed, so any record written against v0.2 still validates here.",
+  "type": "object",
+  "required": ["run_id", "doc_id", "arm", "config", "document", "extraction", "attempts", "final", "truth", "outcome", "cost"],
+  "additionalProperties": false,
+
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Bump only on a breaking change. Additive extensions do not bump this."
+    },
+    "run_id": {
+      "type": "string",
+      "description": "blake2b over seed, config, uv.lock, model SHA256s, llama.cpp build hash, corpus SHA. See ADR-0006."
+    },
+    "doc_id": { "type": "string" },
+    "arm": { "enum": ["local_only", "cascade", "cloud_only"] },
+
+    "config": {
+      "type": "object",
+      "required": ["model_family", "model_size", "quant", "rung_ceiling", "seed", "offered_concurrency"],
+      "additionalProperties": false,
+      "properties": {
+        "model_family": { "type": "string", "examples": ["qwen3"] },
+        "model_size": { "type": "string", "examples": ["1.7B", "4B", "8B", "14B", "30B-A3B"] },
+        "quant": { "type": "string", "examples": ["Q4_K_M"] },
+        "concurrency": {
+          "type": "integer",
+          "description": "DEPRECATED alias retained for v0.2 compatibility. Prefer offered_concurrency. Writers SHOULD emit both with the same value."
+        },
+        "rung_ceiling": { "enum": ["R0", "R1", "R2", "R3"] },
+        "seed": { "type": "integer" },
+
+        "offered_concurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "ADDITIVE. Requests in flight from the client. This is the P0-9 axis. Above server_slots, load QUEUES rather than batches."
+        },
+        "server_slots": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "ADDITIVE. llama.cpp --parallel N actually resident: the real batching width. Reporting a queued-128 result as a batched-128 result is the easiest serious error available here."
+        },
+        "ctx_per_slot": {
+          "type": "integer",
+          "description": "ADDITIVE. --ctx-size divided by server_slots. Concurrency is KV-bound, not compute-bound."
+        },
+        "kv_cache_dtype": {
+          "enum": ["f16", "q8_0", "q4_0"],
+          "description": "ADDITIVE. KV quantization is an accuracy confound; Pass A uses f16, Pass B may use q8_0. Records are not separable without this."
+        },
+        "measurement_pass": {
+          "enum": ["A_accuracy", "B_throughput", "C_invariance"],
+          "description": "ADDITIVE. See ADR-0009."
+        },
+        "host": {
+          "type": "object",
+          "description": "ADDITIVE. Two serving nodes write to this schema (ADR-0010).",
+          "required": ["node_id", "tier"],
+          "additionalProperties": false,
+          "properties": {
+            "node_id": { "type": "string", "examples": ["win-7900xtx", "mac-m4"] },
+            "tier": { "enum": ["T0", "T1", "T2", "T3"] },
+            "backend": { "enum": ["vulkan", "metal", "rocm", "cuda", "cpu"] },
+            "bandwidth_gb_s_measured": { "type": "number" },
+            "vram_cap_gb": { "type": "number", "description": "20 on the test rig per PRD D11, asserted at runtime." },
+            "runtime_build": { "type": "string", "description": "llama.cpp build hash." }
+          }
+        }
+      }
+    },
+
+    "document": {
+      "type": "object",
+      "required": ["degradation_level", "template_id", "line_item_count", "is_digital_native"],
+      "additionalProperties": false,
+      "properties": {
+        "degradation_level": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+        "template_id": { "type": "string" },
+        "line_item_count": { "type": "integer", "minimum": 1, "maximum": 40 },
+        "is_digital_native": { "type": "boolean" },
+        "page_count": { "type": "integer", "minimum": 1, "description": "ADDITIVE. Normalizes cost-per-page against cost-per-document." }
+      }
+    },
+
+    "extraction": {
+      "type": "object",
+      "description": "Deterministic tier. Cost, latency, and success logged SEPARATELY from inference (P0-3).",
+      "required": ["method", "latency_ms", "succeeded"],
+      "additionalProperties": false,
+      "properties": {
+        "method": { "enum": ["text_layer", "ocr"] },
+        "latency_ms": { "type": "number", "minimum": 0 },
+        "field_confidences": { "type": "object", "additionalProperties": { "type": "number" } },
+        "succeeded": { "type": "boolean" },
+        "fully_satisfied_schema": {
+          "type": "boolean",
+          "description": "ADDITIVE. True when NO LLM call was needed at all. Drives the P0-12 headline: share of work absorbed by the deterministic tier."
+        },
+        "confidence_aggregation": {
+          "type": "string",
+          "description": "ADDITIVE. Field confidence is derived, not native (ADR-0002). Name the function so it can be audited."
+        }
+      }
+    },
+
+    "attempts": {
+      "type": "array",
+      "description": "One entry per rung fired.",
+      "items": {
+        "type": "object",
+        "required": ["rung", "tier", "model", "prompt_tokens", "completion_tokens", "latency_ms", "gate_result"],
+        "additionalProperties": false,
+        "properties": {
+          "rung": { "enum": ["R0", "R1", "R2", "R3"] },
+          "tier": { "enum": ["local", "cloud"] },
+          "model": { "type": "string" },
+          "prompt_tokens": { "type": "integer", "minimum": 0 },
+          "completion_tokens": { "type": "integer", "minimum": 0 },
+          "latency_ms": { "type": "number", "minimum": 0 },
+          "field_logprobs": { "type": "object", "additionalProperties": { "type": "number" } },
+          "tool_calls": { "type": "array", "items": { "type": "object" } },
+          "gate_result": {
+            "type": "object",
+            "required": ["passed"],
+            "additionalProperties": false,
+            "properties": {
+              "passed": { "type": "boolean" },
+              "failed_checks": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+
+          "ttft_ms": {
+            "type": "number",
+            "minimum": 0,
+            "description": "ADDITIVE. Prefill is compute-bound and modeled separately (PRD section 7). TTFT is the batch-vs-interactive scorecard dimension; v0.2 carried only total latency."
+          },
+          "grammar_constrained": {
+            "type": "boolean",
+            "description": "ADDITIVE, LOAD-BEARING. Logprobs under a GBNF/JSON-schema mask are POST-MASK and systematically over-confident: a token can show near-certainty only because the grammar forbade every alternative. P1-2 calibration is INVALID if it mixes constrained and unconstrained decodes without segmenting on this."
+          },
+          "sampler": {
+            "enum": ["greedy", "k3_vote"],
+            "description": "ADDITIVE. R1 resamples k=3; those records must be separable from greedy R0 records."
+          },
+          "via_batch_api": {
+            "type": "boolean",
+            "description": "ADDITIVE. Cloud bulk passes run through the Batch API at 50% cost. Latency from these records is NOT reportable and is excluded from every latency chart."
+          },
+          "retries": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "ADDITIVE. Transport-level retries (429/5xx). Distinct from a rung transition. Without this, rate-limit backoff is indistinguishable from real latency."
+          }
+        }
+      }
+    },
+
+    "final": {
+      "type": "object",
+      "required": ["rung_reached", "gate_passed"],
+      "additionalProperties": false,
+      "properties": {
+        "rung_reached": { "enum": ["NONE", "R0", "R1", "R2", "R3"] },
+        "gate_passed": { "type": "boolean" },
+        "record_written": { "type": "object" }
+      }
+    },
+
+    "truth": {
+      "type": "object",
+      "description": "Computed INDEPENDENTLY of the gate. The two axes are never collapsed.",
+      "required": ["ground_truth_record", "is_correct"],
+      "additionalProperties": false,
+      "properties": {
+        "ground_truth_record": { "type": "object" },
+        "is_correct": { "type": "boolean" },
+        "field_level_errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "outcome": {
+      "enum": ["correct_no_escalation", "wasted_escalation", "SILENT_FAILURE", "caught_correctly"],
+      "description": "Derived from final.gate_passed x truth.is_correct. SILENT_FAILURE = gate passed, answer wrong. Reported standalone, never averaged into aggregate success (PRD D9)."
+    },
+
+    "cost": {
+      "type": "object",
+      "required": ["cloud_usd", "local_energy_wh", "local_energy_usd", "wall_clock_ms", "energy_source"],
+      "additionalProperties": false,
+      "properties": {
+        "cloud_usd": { "type": "number", "minimum": 0 },
+        "local_energy_wh": { "type": "number", "minimum": 0 },
+        "local_energy_usd": { "type": "number", "minimum": 0 },
+        "gpu_watts_mean": { "type": "number", "minimum": 0 },
+        "wall_clock_ms": { "type": "number", "minimum": 0 },
+
+        "energy_source": {
+          "enum": ["modeled", "measured_gpu", "measured_wall"],
+          "description": "ADDITIVE, REQUIRED, HIGHEST PRIORITY of the extensions. The test rig models power from spec sheets while the Mac node measures it via powermetrics (ADR-0008). Without this field that distinction is unrecoverable the moment anyone opens the CSV, and a modeled figure gets compared to the PRD section 2 baseline's SYSTEM watts as though it were the same quantity."
+        },
+        "rate_card_id": {
+          "type": "string",
+          "description": "ADDITIVE. Claude Sonnet 5 introductory pricing expires 2026-08-31, inside the build window. Cost comparisons across runs must assert matching rate_card_id and refuse to plot otherwise."
+        },
+        "amortized_hardware_usd": {
+          "type": ["number", "null"],
+          "description": "ADDITIVE. PRD section 12 asks for both marginal energy and amortized hardware cost, always. Marginal wins technical arguments; amortized is what a CFO budgets."
+        }
+      }
+    }
+  }
+}

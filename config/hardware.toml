@@ -1,0 +1,106 @@
+# Hardware tier ladder and power model.
+#
+# Bandwidth figures for T0/T1/T3 come from PRD §2 and are used ONLY as
+# projection targets. Measured nodes below carry their own probed values.
+#
+# Power: modeled from spec sheets (ADR-0008), and DEMOTED from a headline metric
+# to a sensitivity footnote (ADR-0011) — energy is ~2% of the local arm's cost and
+# ~0.08% of the arm-to-arm delta, so a 5x error still leaves the result 26x cheaper
+# than cloud. Records still stamp cost.energy_source for provenance.
+#
+# The one place power is still load-bearing is the ENVELOPE CHECK below: a binary
+# pass/fail on whether sustained draw fits a tier's thermal and battery budget.
+# IT blocks inference on active employee laptops regardless of economics.
+
+[[tier]]
+id = "T0"
+name = "Installed business fleet — 16GB DDR5, integrated graphics"
+usable_model_memory_gb = [4, 8]
+bandwidth_gb_s = [60, 90]
+sustained_watts = [35, 65]
+topology = "per_user_existing_asset"
+
+[[tier]]
+id = "T1"
+name = "Refresh-cycle AI PC — 32GB LPDDR5X, NPU"
+usable_model_memory_gb = [12, 16]
+bandwidth_gb_s = [110, 135]
+sustained_watts = [30, 55]
+topology = "per_user_planned_capex"
+
+[[tier]]
+id = "T2"
+name = "Workstation w/ discrete GPU (the test rig)"
+usable_model_memory_gb = [16, 24]
+bandwidth_gb_s = [500, 960]
+sustained_watts = [300, 450]
+topology = "per_user_or_shared"
+
+[[tier]]
+id = "T3"
+name = "Edge appliance — Strix Halo / DGX Spark"
+usable_model_memory_gb = [96, 120]
+bandwidth_gb_s = [212, 273]
+sustained_watts = [120, 170]
+topology = "per_site_or_department"
+
+# ---------------------------------------------------------------------------
+# Measured nodes
+# ---------------------------------------------------------------------------
+
+[[node]]
+id            = "win-7900xtx"
+tier          = "T2"
+role          = "primary"
+base_url      = "http://localhost:8080"   # WSL mirrored networking (runbook Step 0)
+backend       = "vulkan"
+vram_cap_gb   = 20.0                      # PRD D11 — asserted at runtime, not assumed
+bandwidth_gb_s_spec = 960.0
+bandwidth_gb_s_measured = 0.0             # filled by `make probe-node NODE=win`
+
+  [node.power]
+  source        = "modeled"               # ADR-0008
+  idle_watts    = 90.0                    # whole-system idle, spec-sheet derived
+  tdp_watts     = 355.0                   # GPU board power
+  system_overhead_watts = 95.0            # CPU + platform under inference load
+  duty_cycle    = 0.85                    # fraction of TDP sustained during decode
+  # => modeled load ≈ idle + (tdp × duty) + overhead. Labelled "modeled" everywhere.
+
+[[node]]
+id            = "mac-m4"
+tier          = "T1"                      # VERIFY: M4 base ≈120 GB/s = T1.
+                                          # M4 Pro ≈273 GB/s = T3 bandwidth, T1 capacity.
+role          = "projection_anchor"
+base_url      = "http://192.168.1.50:8080"   # DHCP RESERVATION required (constraint C4)
+backend       = "metal"
+vram_cap_gb   = 20.0                      # via `sudo sysctl iogpu.wired_limit_mb=20480`
+bandwidth_gb_s_spec = 120.0
+bandwidth_gb_s_measured = 0.0             # filled by `make probe-node NODE=mac`
+
+  [node.power]
+  source  = "measured_wall"               # `powermetrics` — the project's only free real metering
+  sampler = "powermetrics"
+  interval_ms = 1000
+
+# ---------------------------------------------------------------------------
+# Projection model (PRD §7 — NORMATIVE)
+# ---------------------------------------------------------------------------
+#   decode_tps ≈ (bandwidth_effective × utilization) / active_bytes_per_token
+#   bandwidth_effective = bandwidth_theoretical × bandwidth_derate
+#
+# `utilization` is FITTED from measurements, never assumed. With two measured
+# nodes an octave apart in bandwidth (ADR-0010) the fit is falsifiable rather
+# than tautological.
+
+# Binary envelope check — PRD §11 "operational tolerability". Not a metric, a gate.
+[envelope]
+enforce                = true
+t0_t1_sustained_watts_max = 65    # above this, a per-user deployment is not tolerable
+battery_drain_check    = true     # T0/T1 only — does a batch run survive unplugged?
+
+[projection]
+bandwidth_derate      = 0.83     # empirical: 218/256 on Strix Halo (PRD §2)
+validation_tolerance  = 0.15     # PRD §7 step 3 — must hold on BOTH anchors before projecting
+stretch_tolerance     = 0.08
+fit_from_nodes        = ["win-7900xtx", "mac-m4"]
+min_sizes_for_fit     = 3        # PRD §7 step 1: at least three model sizes
