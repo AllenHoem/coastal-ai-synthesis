@@ -86,13 +86,34 @@ likely, and it is an envelope check, not a curve.
 
 ---
 
-## T6 · 24GB card reported as 20GB (PRD D11) 🟡
+## T6 · 20GB ceiling excludes the MoE rung from the accuracy sweep 🟡
 
-**Bought:** Consistency with the PRD's conservative reporting assumption; forces T0/T1-relevant model sizes to the foreground, which is the actual research question.
+*Rewritten. The original entry covered capping a 24GB card to 20GB for reporting. The card is an
+RX 7900 XT with 20GB physically, so D11's conservative assumption is now exactly the hardware and
+that tradeoff no longer exists. What replaced it is a real ceiling.*
 
-**Cost:** 4GB of real headroom goes unused. Configurations that would fit in 24GB but not 20GB are untested.
+**The constraint:** Qwen3-30B-A3B at Q4_K_M is ~18.6GB of weights. With a monitor attached to the
+card, Windows reserves ~1.5GB and the model does not load at all. With the display moved to the
+CPU's integrated graphics — free, and the machine has one — about 19.5GB is usable, leaving under
+1GB for KV cache. That is two to four slots at short context.
 
-**Handling:** enforced as an assertion, not a hope — the harness records peak resident VRAM and fails the run if it exceeds the configured cap. An assumption that isn't checked is a footnote; one that fails the build is a constraint.
+**Cost:** the MoE rung cannot participate in the accuracy sweep or in Pass B above c≈4.
+
+**Why it is minor:** D12 puts 30B-A3B in the ladder as a *MoE bandwidth reference* so the §7
+projection transfers to T3-class hardware, not as an accuracy-sweep participant. Concurrency 1
+throughput is the whole of what it owes. The 1.7B–14B rungs carry the accuracy work, and the
+minimum-viable-size question lives well below 30B anyway.
+
+**What is not acceptable:** dropping it to Q4_K_S or IQ4_XS to make it fit. D8 fixes one
+quantization across the ladder; changing it for one rung converts a size comparison into a
+size-and-quant comparison and quietly invalidates the curve.
+
+**Related, and also now concrete:** batched concurrency tops out near 32 for the 1.7B–8B rungs and
+near 8 for 14B, at 4096 tokens per slot with q8 KV. The P0-9 axis asks for 128. Offering 128 is
+still correct — the surplus queues, aggregate throughput still rises — but the report must show
+`server_slots` beside `offered_concurrency` so a queued result is never read as a batched one.
+
+**Reverses if:** a card with more VRAM appears. Nothing else changes.
 
 ---
 
@@ -173,7 +194,7 @@ Constrained decoding (GBNF / JSON schema) masks invalid tokens before the softma
 | T3 | Accuracy at c=1 | 🟡 | Pass C mitigates |
 | T4 | Cloud concurrency capped | 🟠 | ~$40 spend |
 | T5 | Windows/WSL split | 🟡 | No — and no need |
-| T6 | 20GB cap on a 24GB card | 🟡 | Config line |
+| T6 | 20GB ceiling excludes the MoE rung | 🟡 | More VRAM |
 | T7 | Synthetic corpus | 🟠 | P1-5 holdout |
 | T8 | Static report | 🟡 | Afternoon's work |
 | T9 | No agent framework | 🟡 | Wouldn't want to |

@@ -26,7 +26,7 @@ Implements `Edge-First Agentic Inference PRD v0.2`.
 ## Deployment shape
 
 ```
-Windows 11 host          llama-server (llama.cpp, Vulkan, RX 7900 XTX)  :8080
+Windows 11 host          llama-server (llama.cpp, Vulkan, RX 7900 XT)   :8080
      │                   ← ROCm-in-WSL does not support consumer RDNA3
      │  loopback
 WSL2 Ubuntu              corpus · extraction · orchestrator · analysis
