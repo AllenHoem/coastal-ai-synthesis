@@ -4,28 +4,74 @@ Target: **~4 hours of hands-on time**, spread across reboots. Do the steps in or
 
 Notation: `[WIN]` = Windows PowerShell · `[WSL]` = Ubuntu shell in WSL2 · `[MAC]` = macOS Terminal
 
+**Every fenced block is meant to be run as-is.** Comment lines inside them explain, they are never
+something to type. File paths appear in prose, never as a bare comment above a command.
+
 ---
 
 ## Step 0 — WSL mirrored networking (do this first; it needs a restart)
 
-```powershell
-# [WIN]  %USERPROFILE%\.wslconfig
-@"
-[wsl2]
-networkingMode=mirrored
-memory=24GB
-processors=12
-"@ | Set-Content $env:USERPROFILE\.wslconfig
+This writes `.wslconfig` in your Windows user profile, then restarts WSL. It makes `localhost` mean
+the same thing on both sides of the boundary — no host-IP lookups, no firewall rules, no
+`/etc/hosts` upkeep. It removes more friction than any other single setting in this project.
 
+**First, confirm mirrored mode is even available.** It needs WSL 2.0.0 or later *and* Windows 11
+22H2 or later. On Windows 10 it does not exist. Run in PowerShell:
+
+```powershell
+wsl --version
+```
+
+If that errors, you are on the inbox WSL and the setting will be **silently ignored** no matter how
+correctly you write the file — run `wsl --update` first. If you are on Windows 10, skip to the NAT
+fallback below.
+
+**Check whether you already have a config** (the next command overwrites it):
+
+```powershell
+Get-Content "$env:USERPROFILE\.wslconfig" -ErrorAction SilentlyContinue
+```
+
+**Write it.** One line, no escaping, safe to paste:
+
+```powershell
+Set-Content -Path "$env:USERPROFILE\.wslconfig" -Value '[wsl2]','networkingMode=mirrored'
+```
+
+`Set-Content` writes each array element on its own line. The single quotes matter: unquoted,
+PowerShell reads `[wsl2]` as a *type literal* and fails with `Unable to find type [wsl2]`.
+
+> **Do not substitute a here-string** (`@"` … `"@`). It is correct PowerShell but fragile when
+> pasted — if the opening `@"` does not register as a continuation, `[wsl2]` executes as its own
+> statement and you get the type-literal error above.
+>
+> **Do not substitute `Out-File` or `>`.** Windows PowerShell 5.1 writes those as UTF-16LE, which
+> WSL cannot parse — it ignores the whole file and gives no error. `Set-Content` writes ANSI, which
+> is fine.
+
+**Verify the file, then restart WSL:**
+
+```powershell
+Get-Content "$env:USERPROFILE\.wslconfig"
 wsl --shutdown
 ```
 
-Requires Windows 11 22H2+. This makes `localhost` mean the same thing on both sides of the boundary — no host-IP lookups, no firewall rules, no `/etc/hosts` upkeep. It is the single configuration line that removes the most friction from this project.
+You want exactly two lines: `[wsl2]` and `networkingMode=mirrored`.
 
-**Verify after WSL restarts:**
+**Confirm it took effect** — under mirrored mode WSL sees the Windows host's own interfaces, so the
+host IP appears inside WSL:
+
 ```bash
 # [WSL]
-cat /etc/resolv.conf   # mirrored mode changes this; if DNS breaks see Troubleshooting
+ip -4 addr show | grep inet
+```
+
+**Optional resource caps.** Not required, and not part of the networking fix. Add them only if WSL
+is actually starving the host, and size them to your machine — `memory` above roughly half your RAM
+will cause swapping, and `processors` above your logical core count is ignored:
+
+```powershell
+Set-Content -Path "$env:USERPROFILE\.wslconfig" -Value '[wsl2]','networkingMode=mirrored','memory=16GB','processors=8'
 ```
 
 **If mirrored mode is unavailable** (Windows 10, or it breaks your VPN): fall back to NAT mode and resolve the host each boot —
@@ -209,6 +255,16 @@ Prints a table and refuses to pass until every row is green:
 ---
 
 ## Troubleshooting
+
+**`Unable to find type [wsl2]` / `invalid argument: ([wsl2])` when writing `.wslconfig`.** The
+here-string broke apart and PowerShell evaluated `[wsl2]` as a type literal. Use the single-line
+`Set-Content -Value '[wsl2]','networkingMode=mirrored'` form in Step 0, or edit the file in
+Notepad. Also check you gave `Set-Content` a `-Path` — with none, it has no destination.
+
+**`.wslconfig` looks right but WSL ignores it.** Two usual causes. Either the file is UTF-16
+(written with `Out-File` or `>` under Windows PowerShell 5.1) — rewrite it with `Set-Content`;
+or `wsl --version` errors, meaning you are on the inbox WSL, which predates mirrored networking
+and discards the setting without complaint. `wsl --update`, then `wsl --shutdown`.
 
 **`llama-server` starts but offloads zero layers.** Vulkan didn't find the device. Re-check `vulkaninfo --summary`; confirm the Adrenalin install completed and the machine was rebooted.
 
