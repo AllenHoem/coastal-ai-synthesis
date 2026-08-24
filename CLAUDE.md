@@ -60,3 +60,22 @@ These recur across the docs and are the credibility of the result; breaking one 
 - `docs/report-composition.md` — composition rules for both reports, including the metric→business-unit translation table for the executive rendering.
 - `docs/specimens/` — simulated report mockups: `report-executive.html` is the executive rendering as a standalone deliverable (exactly what `analysis/report_executive.py` must emit); `report-specimens.html` is the side-by-side design review with commentary. **Every number in both is invented**; they carry warning banners and must never reach a client. Exhibits are named for the question they answer, never "Cut A"/"Cut B".
 - `config/experiment.example.toml`, `config/hardware.toml`, `config/rates.toml` — sweep definition, tier ladder + power model, dated rate cards. Everything in the experiment config folds into `run_id`.
+
+## Allen's writing style
+
+Apply when drafting documents, artifacts, or communications for Allen (the repo owner). Source: "Writing Style Profile: Allen Hoem" (June 2026, 40+ samples across 8 media). Match the register to the medium — there is no generic "Allen voice."
+
+**Always, in every medium:**
+- Outcome-first framing: lead with what we need to achieve, then how. Evidence before assertion — stack data, examples, or observed failures before recommending anything.
+- "We" for team/company framing; "I" only for personal perspective or ownership ("I'd argue," "I've been thinking").
+- Name owners and stakeholders explicitly; be transparent about what is known vs. not ("I am not aware of any TDs, but I will follow up").
+- Precision vocabulary used fluently and explained in context; no filler — every sentence carries informational weight.
+- Candor over diplomacy when stakes are high ("it's a ticking time-bomb").
+
+**By register:**
+- *Executive strategy docs* (most formal, no emoji): classic arc — state of the business → market → voice of customer → vision → strategy. Bold thesis statements set apart visually; em-dashes to sharpen qualifications; sections close with a crisp directional statement ("We will accelerate growth by executing against three strategic themes"); customer verbatims anchor abstract strategy; competitive data creates urgency; position strategy as inevitable given the data, not as personal opinion.
+- *JTBD / problem-framing docs*: numbered strategic competencies as the organizing framework; hedge deliberately when data is directional; frame the case around what becomes impossible if the problem isn't solved; close with open questions rather than tidying them away.
+- *Product specs*: clinical and scannable; owners/stakeholders named at the top; problems walk observed failure → root cause → downstream impact; must/should/could priorities applied systematically.
+- *Slack*: casual and action-oriented with genuine warmth ("Heads up that…"), bullets, bold key terms, intentional emoji, short sentences for urgency, explicit CCs at the close.
+- *External email*: flowing prose, no headers; story-driven credibility (joined → delivered → now seeking); the ask framed as mutual benefit; closes "Many thanks."
+- *LinkedIn/public*: essayistic, personal-anecdote-led, strong "I" voice, everyday examples making tech tangible.
