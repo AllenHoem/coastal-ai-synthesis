@@ -28,7 +28,7 @@ Packaging is **uv with a src layout** (`src/edgefirst/`), config is **TOML + Pyd
 
 Deployment spans three machines plus a cloud tier; everything is LAN-local and the deliverable is a file, not a hosted service:
 
-- **Windows 11 host** runs `llama-server` (llama.cpp, Vulkan) on the RX 7900 XTX — ROCm does not support consumer RDNA3 under WSL, so serving is Windows-native and reached over loopback HTTP (ADR-0001).
+- **Windows 11 host** runs `llama-server` (llama.cpp, Vulkan) on the RX 7900 XT (20GB, ~800 GB/s) — ROCm does not support consumer RDNA3 under WSL, so serving is Windows-native and reached over loopback HTTP (ADR-0001).
 - **WSL2 Ubuntu** runs everything else: corpus generation (Jinja2→WeasyPrint→pypdfium2, seeded NumPy degradations), extraction (text-layer first, RapidOCR fallback), the hand-rolled asyncio orchestrator, verifier gate, and analysis. No agent framework — the R0→R3 escalation ladder *is* the experiment, and a framework's retry logic would contaminate rung accounting.
 - **MacBook Pro M4** is a second measured anchor (llama-server/Metal) for the projection model, with real power via `powermetrics` (ADR-0010).
 - **Anthropic API** (Sonnet 5 mid-tier, Opus 5 frontier) is used only for R2/R3 escalation, with a hard spend guard and the Batch API for bulk accuracy passes (ADR-0007).
@@ -58,5 +58,5 @@ These recur across the docs and are the credibility of the result; breaking one 
 - `docs/tradeoffs.md` — 12 severity-rated tradeoffs, each with its reversal condition and any caveat text the report must carry.
 - `docs/decisions/ADR-00NN-*.md` — 12 ADRs; treat as binding. ADR-0011 supersedes ADR-0008's framing (energy), ADR-0012 extends ADR-0004 (two renderings).
 - `docs/report-composition.md` — composition rules for both reports, including the metric→business-unit translation table for the executive rendering.
-- `docs/specimens/report-specimens.html` — design reference for the reports. **Every number in it is invented**; it carries a warning banner and must never reach a client. Exhibits are named for the question they answer, never "Cut A"/"Cut B".
+- `docs/specimens/` — simulated report mockups: `report-executive.html` is the executive rendering as a standalone deliverable (exactly what `analysis/report_executive.py` must emit); `report-specimens.html` is the side-by-side design review with commentary. **Every number in both is invented**; they carry warning banners and must never reach a client. Exhibits are named for the question they answer, never "Cut A"/"Cut B".
 - `config/experiment.example.toml`, `config/hardware.toml`, `config/rates.toml` — sweep definition, tier ladder + power model, dated rate cards. Everything in the experiment config folds into `run_id`.
