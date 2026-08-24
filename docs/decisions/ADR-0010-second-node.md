@@ -14,8 +14,8 @@ Run a second `llama-server` (Metal backend) on the MacBook and treat it as a **m
 
 | | Test rig | MacBook |
 |---|---|---|
-| Bandwidth | ~960 GB/s | ~120 GB/s (M4 base) |
-| Usable model memory | 20GB (capped per D11) | ~20GB of 24GB unified, via `iogpu.wired_limit_mb` |
+| Bandwidth | ~800 GB/s | ~120 GB/s (M4 base) |
+| Usable model memory | 20GB physical, ~18.5GB usable | ~20GB of 24GB unified, via `iogpu.wired_limit_mb` |
 | Tier | T2 | **lands on T1** (ladder says ~110–135 GB/s) |
 | Power metering | modeled (ADR-0008) | **measured** via `powermetrics` |
 
@@ -23,7 +23,7 @@ The M4 runs the 1.7B, 4B, 8B, and 14B rungs of the D7 ladder comfortably; 30B-A3
 
 ## Why this matters more than it looks
 
-Two anchors spanning an 8x bandwidth range is a qualitatively different claim from one. A model fitted to one point and extrapolated is a line through a single dot. Fitted to two points an octave apart, it has been **falsifiable at least once** — and survived. This is the largest available credibility upgrade in the project for roughly half a day of work.
+Two anchors spanning a ~7x bandwidth range is a qualitatively different claim from one. A model fitted to one point and extrapolated is a line through a single dot. Fitted to two points an octave apart, it has been **falsifiable at least once** — and survived. This is the largest available credibility upgrade in the project for roughly half a day of work.
 
 It also converts T1 from projected to measured, which is the tier the PRD's central question most often lands on (§9 target: minimum viable model size ≤ 8B = T1).
 

@@ -13,7 +13,7 @@ These came from the operator, not from the PRD. Every major choice below traces 
 
 | # | Constraint | Architectural consequence |
 |---|---|---|
-| C1 | GPU is an AMD RX 7900 XTX (RDNA3) | vLLM is out. Serving runs **natively on Windows** under llama.cpp/Vulkan; WSL is the client. |
+| C1 | GPU is an AMD RX 7900 XT (RDNA3, 20GB, ~800 GB/s) | vLLM is out. Serving runs **natively on Windows** under llama.cpp/Vulkan; WSL is the client. |
 | C2 | Cloud tier uses pay-as-you-go API keys | Real `usage` counts, real dated rates. Introduces a **rate-limit ceiling** on the cloud arm (§6.4). |
 | C3 | Review surface must be simple | DuckDB over JSONL + a **single self-contained HTML file**. No server, no ports, no database to administer. |
 | C4 | Home network, DHCP, no external tunnel | Everything is LAN-local. The deliverable is a **file**, not a hosted dashboard. Static IPs via router reservation. |
@@ -221,7 +221,7 @@ The PRD asks the projection model to predict the test rig within ±15% before pr
 ```mermaid
 flowchart LR
     subgraph M["MEASURED"]
-        T2["RX 7900 XTX<br/>~960 GB/s · 20GB cap<br/>= T2"]
+        T2["RX 7900 XT<br/>~800 GB/s · 20GB<br/>= T2"]
         T1["MacBook Pro M4<br/>~120 GB/s · 24GB unified<br/>= lands on T1"]
     end
     subgraph P["PROJECTED"]
@@ -237,7 +237,7 @@ flowchart LR
     style STOP fill:#8b2c2c,color:#fff
 ```
 
-Two anchors spanning an 8x bandwidth range is a qualitatively different claim from one anchor. A model fitted to a single point and then extrapolated is a line through one dot; fitted to two points an octave apart, it has been *falsifiable at least once*. This is the strongest single upgrade available to the project for half a day of work.
+Two anchors spanning a ~7x bandwidth range is a qualitatively different claim from one anchor. A model fitted to a single point and then extrapolated is a line through one dot; fitted to two points an octave apart, it has been *falsifiable at least once*. This is the strongest single upgrade available to the project for half a day of work.
 
 > **Verify before relying on it:** an M4 *base* chip is ~120 GB/s (T1 territory); an M4 *Pro* is ~273 GB/s (T3 bandwidth, T1 capacity). The harness fits from measurement either way, but which tier the anchor lands on changes the story. `make probe-node NODE=mac` reports it.
 

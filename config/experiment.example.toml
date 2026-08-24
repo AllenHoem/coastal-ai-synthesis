@@ -63,6 +63,10 @@ documents           = "all"
 [passes.B_throughput]
 enabled             = true
 offered_concurrency = [1, 8, 32, 128]
+# On a 20GB card, batched concurrency tops out near 32 for 1.7B-8B and near 8 for
+# 14B at 4096 tokens/slot with q8 KV. Offer 128 anyway — the surplus QUEUES rather
+# than batching, and both offered_concurrency and server_slots are recorded so the
+# two are never conflated. See the runbook's slot-budget table.
 kv_cache_dtype      = "q8_0"     # required to reach the higher slot counts
 documents           = 100
 score_outputs       = true       # scored, but never headline
@@ -104,7 +108,7 @@ escalate_field_only = true       # R2 escalates the failing field, not the doc
 # Serving
 # ---------------------------------------------------------------------------
 [serving]
-nodes                = ["win-7900xtx", "mac-m4"]    # see config/hardware.toml
+nodes                = ["win-7900xt", "mac-m4"]    # see config/hardware.toml
 grammar_constrained  = true      # JSON-schema masked decoding for the tool layer
 # NOTE: masked logprobs are POST-MASK and over-confident. P1-2 calibration
 # must segment on attempts[].grammar_constrained, and where the reliability
