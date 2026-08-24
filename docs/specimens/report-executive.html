@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Invoice Intake — Workload Qualification (SIMULATED)</title>
+<style>
+/* ============================================================================
+   report-executive.html — SPECIMEN
+   Standalone template for the executive rendering (docs/report-composition.md).
+   Self-contained by design: no CDN, no external font, no script. Matches what
+   analysis/report_executive.py must emit — see ADR-0004 and ADR-0012.
+   ========================================================================== */
+:root{
+  color-scheme: light;
+  --plane:#F4F5F6; --paper:#FFFFFF; --paper-2:#F4F5F6;
+  --ink:#0B0B0B; --ink-2:#52514E; --muted:#7B7A75;
+  --rule:#E1E0D9; --axis:#C3C2B7;
+
+  /* categorical slots — validated for CVD separation and contrast on #FFFFFF */
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  /* status ramp — always paired with an icon and a label, never hue alone */
+  --st-good:#0ca30c; --st-warn:#fab219; --st-serious:#ec835a; --st-crit:#d03b3b;
+
+  --sim:#9E2B2B;
+  --shadow:0 1px 2px rgba(11,11,11,.05),0 10px 30px -16px rgba(11,11,11,.20);
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --plane:#0D0D0D; --paper:#1A1A19; --paper-2:#232322;
+    --ink:#FFFFFF; --ink-2:#C3C2B7; --muted:#898781;
+    --rule:#2C2C2A; --axis:#383835;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+    --sim:#EE9494;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0D0D0D; --paper:#1A1A19; --paper-2:#232322;
+  --ink:#FFFFFF; --ink-2:#C3C2B7; --muted:#898781;
+  --rule:#2C2C2A; --axis:#383835;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --sim:#EE9494;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -18px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--plane);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ---- simulation banner: sticky on screen, retained in print ---- */
+.simbar{position:sticky;top:0;z-index:100;background:#9E2B2B;color:#fff;
+  font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-align:center;
+  padding:10px 16px;font-weight:500;line-height:1.45;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.sheet{max-width:920px;margin:26px auto 60px;background:var(--paper);
+  border:1px solid var(--rule);border-radius:4px;box-shadow:var(--shadow);
+  padding:38px 44px 44px}
+@media(max-width:700px){.sheet{margin:14px 10px 40px;padding:26px 20px 32px}}
+
+.rpt-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  border-bottom:1px solid var(--rule);padding-bottom:16px;margin-bottom:26px}
+.rpt-title{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0}
+.rpt-sub{font-size:13px;color:var(--muted);margin:5px 0 0}
+.rpt-meta{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;line-height:1.6}
+
+/* 1 — verdict */
+.verdict{border:2px solid var(--st-good);border-radius:4px;padding:22px 26px;margin-bottom:26px;
+  background:color-mix(in srgb,var(--st-good) 8%,transparent)}
+.verdict-tag{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--st-good);font-weight:600;margin-bottom:10px}
+.verdict-line{font-size:clamp(19px,2.6vw,26px);line-height:1.28;font-weight:600;
+  letter-spacing:-.015em;margin:0;text-wrap:balance}
+.verdict-sub{font-size:14.5px;color:var(--ink-2);margin:12px 0 0}
+
+/* 2 — four numbers */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:3px;margin:26px 0}
+.tile{background:var(--paper);padding:18px}
+.tile-k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:9px;line-height:1.35}
+.tile-v{font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.tile-v.crit{color:var(--st-crit)}
+.tile-n{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+
+/* exhibits */
+.ex-h{font-size:16px;font-weight:600;margin:38px 0 4px;display:flex;align-items:baseline;
+  gap:10px;flex-wrap:wrap}
+.ex-n{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:500}
+.ex-d{font-size:13.5px;color:var(--muted);margin:0 0 16px;max-width:66ch;line-height:1.55}
+.chartbox{overflow-x:auto;margin:6px 0 2px}
+svg{display:block;max-width:100%;height:auto;overflow:visible}
+
+.pv{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:2px;
+  font-weight:500;white-space:nowrap;vertical-align:2px}
+.pv-m{background:color-mix(in srgb,var(--s1) 14%,transparent);color:var(--s1);border:1px solid var(--s1)}
+.pv-p{background:transparent;color:var(--muted);border:1px dashed var(--muted)}
+
+.legend-row{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0 0;font-size:12.5px;color:var(--ink-2)}
+.lg{display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:2px;flex:none}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
+th{background:var(--paper-2);color:var(--muted);border-bottom:1px solid var(--rule);
+  padding:10px 12px;font-size:10px;font-family:var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;font-weight:500;text-align:left;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+
+.method{border-top:2px solid var(--rule);margin-top:40px;padding-top:20px}
+.method-h{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px}
+.method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px 24px}
+.method-k{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:3px}
+.method-v{font-size:13px;color:var(--ink-2);line-height:1.5}
+
+.colophon{max-width:920px;margin:0 auto 50px;padding:0 44px;font-size:12px;color:var(--muted);
+  font-family:var(--mono);line-height:1.7}
+@media(max-width:700px){.colophon{padding:0 20px}}
+
+@media print{
+  body{background:#fff}
+  .simbar{position:static}
+  .sheet{box-shadow:none;border:none;margin:0;padding:0 0 20px;max-width:none}
+  .colophon{padding:0}
+  .ex-h{break-after:avoid}
+  figure,.chartbox,table,.tiles,.verdict,.method{break-inside:avoid}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="simbar">⚠ Every number on this page is simulated — plausible placeholders for layout review. Nothing here has been measured. Do not show a client.</div>
+
+<div class="sheet">
+
+  <div class="rpt-head">
+    <div>
+      <h1 class="rpt-title">Invoice intake — workload qualification</h1>
+      <p class="rpt-sub">Can this run on hardware you already own, and what does it cost?</p>
+    </div>
+    <div class="rpt-meta">run 4f2a91c · seed 12345<br>21 Aug 2026 · 300 documents<br><b>SPECIMEN — simulated data</b></div>
+  </div>
+
+  <!-- 1 · VERDICT -->
+  <div class="verdict">
+    <div class="verdict-tag">✓ Qualifies — Tier T1</div>
+    <p class="verdict-line">Invoice intake runs on the laptops already on your refresh cycle. No new hardware is required to start, and no document leaves your network unless the system knows it needs help.</p>
+    <p class="verdict-sub">Tested across 300 invoices spanning five scan-quality levels and eight layouts. The smallest model that clears the safety threshold is an 8-billion-parameter model — it fits comfortably in a 32GB business laptop.</p>
+  </div>
+
+  <!-- 2 · FOUR NUMBERS -->
+  <div class="tiles">
+    <div class="tile"><div class="tile-k">Cost per 1,000 invoices</div><div class="tile-v">$1.37</div><div class="tile-n">versus $38.81 sending every document to a cloud model — 28× cheaper</div></div>
+    <div class="tile"><div class="tile-k">Wrong &amp; unflagged, per 1,000</div><div class="tile-v crit">14</div><div class="tile-n">posted with a wrong value and nothing caught it. Your current manual-entry rate is the comparison.</div></div>
+    <div class="tile"><div class="tile-k">Never touch a model</div><div class="tile-v">58%</div><div class="tile-n">handled by arithmetic checks alone — no AI, no cost, no risk</div></div>
+    <div class="tile"><div class="tile-k">Machine time needed</div><div class="tile-v">5.8 h</div><div class="tile-n">per night, on one laptop, for 40,000 invoices a month</div></div>
+  </div>
+
+  <!-- 3 · EXHIBIT 1 -->
+  <div class="ex-h"><span class="ex-n">Exhibit 1</span> Where the money goes <span class="pv pv-m">Measured</span></div>
+  <p class="ex-d">Per 1,000 invoices successfully posted. The bar you can barely see is the point.</p>
+  <div class="chartbox">
+    <svg viewBox="0 0 720 200" role="img" aria-label="Cost per thousand successfully posted invoices: cloud-only costs 38 dollars 81 cents, the cascade approach costs 1 dollar 37 cents, about 28 times less.">
+      <g stroke="var(--rule)" stroke-width="1">
+        <line x1="272.5" y1="14" x2="272.5" y2="150"/><line x1="415" y1="14" x2="415" y2="150"/>
+        <line x1="557.5" y1="14" x2="557.5" y2="150"/><line x1="700" y1="14" x2="700" y2="150"/>
+      </g>
+      <line x1="130" y1="14" x2="130" y2="150" stroke="var(--axis)" stroke-width="1.5"/>
+      <text x="118" y="42" text-anchor="end" font-size="13" font-weight="600" fill="var(--ink)">Cloud-only</text>
+      <text x="118" y="58" text-anchor="end" font-size="11" fill="var(--muted)">every doc to a frontier model</text>
+      <rect x="130" y="24" width="553" height="34" rx="4" fill="var(--s1)"><title>Cloud-only: $38.81 per 1,000 successful records</title></rect>
+      <text x="671" y="46" text-anchor="end" font-size="14" font-weight="600" fill="#fff" font-family="ui-monospace,monospace">$38.81</text>
+      <text x="118" y="98" text-anchor="end" font-size="13" font-weight="600" fill="var(--ink)">Local + escalation</text>
+      <text x="118" y="114" text-anchor="end" font-size="11" fill="var(--muted)">cloud only when checks fail</text>
+      <rect x="130" y="80" width="20" height="34" rx="4" fill="var(--s3)"><title>Cascade: $1.37 per 1,000 successful records</title></rect>
+      <text x="162" y="102" font-size="14" font-weight="600" fill="var(--ink)" font-family="ui-monospace,monospace">$1.37</text>
+      <text x="232" y="102" font-size="12" fill="var(--muted)">— 28× less</text>
+      <g font-size="11" fill="var(--muted)" text-anchor="middle" font-family="ui-monospace,monospace">
+        <text x="130" y="168">$0</text><text x="272.5" y="168">$10</text><text x="415" y="168">$20</text>
+        <text x="557.5" y="168">$30</text><text x="700" y="168">$40</text>
+      </g>
+      <text x="415" y="190" text-anchor="middle" font-size="11" fill="var(--muted)">cost per 1,000 invoices successfully posted</text>
+    </svg>
+  </div>
+
+  <p class="ex-d" style="margin-top:18px"><b>The same $1.37 bar, magnified 25×,</b> so its composition is visible:</p>
+  <div class="chartbox">
+    <svg viewBox="0 0 720 108" role="img" aria-label="Breaking down the 1 dollar 37 cent cascade cost: 1 dollar 34 cents is cloud escalation, and under 3 cents is electricity.">
+      <line x1="130" y1="12" x2="130" y2="62" stroke="var(--axis)" stroke-width="1.5"/>
+      <rect x="130" y="20" width="511" height="34" rx="4" fill="var(--s2)"><title>Cloud escalation: $1.344 — 97.9%</title></rect>
+      <rect x="643" y="20" width="11" height="34" rx="2" fill="var(--s3)"><title>Local electricity, modeled: $0.029 — 2.1%</title></rect>
+      <text x="140" y="42" font-size="12.5" font-weight="600" fill="#fff">Cloud escalation · $1.344 · 97.9%</text>
+      <text x="666" y="34" font-size="11.5" font-weight="600" fill="var(--ink)">$0.029</text>
+      <text x="666" y="49" font-size="11" fill="var(--muted)">electricity · 2.1%</text>
+      <text x="130" y="82" font-size="11.5" fill="var(--muted)">The 58% of invoices handled by arithmetic checks alone contribute $0.00 and do not appear on this bar.</text>
+      <text x="130" y="99" font-size="11.5" fill="var(--muted)">Even if the electricity estimate were wrong by 5×, the comparison above moves from 28× to 26×.</text>
+    </svg>
+  </div>
+
+  <!-- 4 · EXHIBIT 2 -->
+  <div class="ex-h"><span class="ex-n">Exhibit 2</span> What happens to 1,000 invoices <span class="pv pv-m">Measured</span></div>
+  <p class="ex-d">The fourth segment is the one that matters. It is small on purpose and shown anyway.</p>
+  <div class="chartbox">
+    <svg viewBox="0 0 720 176" role="img" aria-label="Of 1000 invoices: 842 correct with no escalation, 132 caught and correctly escalated, 12 escalated unnecessarily, and 14 posted wrong with nothing flagging them.">
+      <line x1="694" y1="18" x2="694" y2="44" stroke="var(--st-crit)" stroke-width="1.5"/>
+      <text x="688" y="16" text-anchor="end" font-size="19" font-weight="700" fill="var(--st-crit)" font-family="ui-monospace,monospace">14</text>
+      <text x="688" y="32" text-anchor="end" font-size="10.5" fill="var(--st-crit)">wrong, unflagged</text>
+      <rect x="20" y="48" width="567.5" height="40" rx="4" fill="var(--st-good)"><title>842 correct, no escalation needed</title></rect>
+      <rect x="589.5" y="48" width="89" height="40" fill="var(--st-warn)"><title>132 caught by the checks and correctly escalated</title></rect>
+      <rect x="680.5" y="48" width="8.1" height="40" fill="var(--st-serious)"><title>12 escalated unnecessarily — paid for cloud that was not needed</title></rect>
+      <rect x="690.6" y="48" width="9.4" height="40" rx="2" fill="var(--st-crit)"><title>14 SILENT FAILURES — posted wrong with nothing flagging them</title></rect>
+      <text x="30" y="73" font-size="14" font-weight="600" fill="#fff">842</text>
+      <text x="599" y="73" font-size="13" font-weight="600" fill="#3a2c00">132</text>
+      <g font-size="11.5">
+        <rect x="20" y="106" width="11" height="11" rx="2" fill="var(--st-good)"/>
+        <text x="38" y="116" fill="var(--ink-2)">✓ 842 straight through, correct</text>
+        <rect x="250" y="106" width="11" height="11" rx="2" fill="var(--st-warn)"/>
+        <text x="268" y="116" fill="var(--ink-2)">▲ 132 caught, escalated, correct</text>
+        <rect x="20" y="130" width="11" height="11" rx="2" fill="var(--st-serious)"/>
+        <text x="38" y="140" fill="var(--ink-2)">◆ 12 escalated unnecessarily</text>
+        <rect x="250" y="130" width="11" height="11" rx="2" fill="var(--st-crit)"/>
+        <text x="268" y="140" font-weight="600" fill="var(--st-crit)">✕ 14 wrong and NOT flagged</text>
+      </g>
+      <text x="20" y="167" font-size="11.5" fill="var(--muted)">The 12 unnecessary escalations cost money. The 14 silent failures cost trust — they are the number to hold us to.</text>
+    </svg>
+  </div>
+
+  <!-- 5 · EXHIBIT 3 -->
+  <div class="ex-h"><span class="ex-n">Exhibit 3</span> How many machines you need</div>
+  <p class="ex-d">Throughput per machine at production batch size. Your 40,000 invoices a month is 1,818 a working day.</p>
+  <div class="chartbox">
+    <svg viewBox="0 0 720 214" role="img" aria-label="Documents per hour per machine: a workstation with a discrete GPU does 2480, an edge appliance is projected at 1620, and a business laptop does 312. Forty thousand invoices a month needs one laptop for under six hours a night.">
+      <g stroke="var(--rule)" stroke-width="1">
+        <line x1="255" y1="10" x2="255" y2="140"/><line x1="360" y1="10" x2="360" y2="140"/>
+        <line x1="465" y1="10" x2="465" y2="140"/><line x1="570" y1="10" x2="570" y2="140"/><line x1="675" y1="10" x2="675" y2="140"/>
+      </g>
+      <line x1="150" y1="10" x2="150" y2="140" stroke="var(--axis)" stroke-width="1.5"/>
+      <text x="138" y="32" text-anchor="end" font-size="12.5" font-weight="600" fill="var(--ink)">Workstation</text>
+      <rect x="150" y="18" width="521" height="26" rx="4" fill="var(--s1)"><title>Workstation with discrete GPU: 2,480 docs/hour — measured</title></rect>
+      <text x="661" y="36" text-anchor="end" font-size="12.5" font-weight="600" fill="#fff" font-family="ui-monospace,monospace">2,480</text>
+      <text x="138" y="78" text-anchor="end" font-size="12.5" font-weight="600" fill="var(--ink)">Edge appliance</text>
+      <rect x="150" y="64" width="340" height="26" rx="4" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 3"><title>Edge appliance: 1,620 docs/hour — PROJECTED, not measured</title></rect>
+      <text x="502" y="82" font-size="12.5" font-weight="600" fill="var(--ink-2)" font-family="ui-monospace,monospace">1,620</text>
+      <text x="556" y="82" font-size="10.5" fill="var(--muted)">projected</text>
+      <text x="138" y="124" text-anchor="end" font-size="12.5" font-weight="600" fill="var(--ink)">Business laptop</text>
+      <rect x="150" y="110" width="66" height="26" rx="4" fill="var(--s1)"><title>Business laptop, tier T1: 312 docs/hour — measured</title></rect>
+      <text x="228" y="128" font-size="12.5" font-weight="600" fill="var(--ink)" font-family="ui-monospace,monospace">312</text>
+      <g font-size="11" fill="var(--muted)" text-anchor="middle" font-family="ui-monospace,monospace">
+        <text x="150" y="158">0</text><text x="255" y="158">500</text><text x="360" y="158">1,000</text>
+        <text x="465" y="158">1,500</text><text x="570" y="158">2,000</text><text x="675" y="158">2,500</text>
+      </g>
+      <text x="415" y="177" text-anchor="middle" font-size="11" fill="var(--muted)">invoices processed per hour, per machine</text>
+      <rect x="150" y="188" width="525" height="22" rx="3" fill="var(--paper-2)"/>
+      <text x="162" y="203" font-size="12" fill="var(--ink-2)">40,000 / month = 1,818 / working day = <tspan font-weight="600" fill="var(--ink)">5.8 hours a night on one laptop</tspan></text>
+    </svg>
+    <div class="legend-row">
+      <span class="lg"><span class="sw" style="background:var(--s1)"></span>Measured on hardware</span>
+      <span class="lg"><span class="sw" style="border:1.5px dashed var(--muted);background:none"></span>Projected from the bandwidth model, never measured</span>
+    </div>
+  </div>
+
+  <!-- 6 · EXHIBIT 4 -->
+  <div class="ex-h"><span class="ex-n">Exhibit 4</span> What you would buy</div>
+  <table>
+    <thead><tr><th>Option</th><th>Hardware</th><th class="num">Capex</th><th class="num">Cost / month at 40k</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><b>Do nothing</b></td><td>—</td><td class="num">$0</td><td class="num">current manual cost</td><td>The comparison baseline, not a recommendation</td></tr>
+      <tr><td><b>Existing fleet</b></td><td>Laptops you already own</td><td class="num">$0</td><td class="num">$55</td><td>Runs off-hours on designated machines</td></tr>
+      <tr><td><b>One shared workstation</b></td><td>32GB + discrete GPU</td><td class="num">$2,400</td><td class="num">$121</td><td>Pays for itself in <b>7 weeks</b>; 8× the headroom</td></tr>
+      <tr><td><b>Cloud-only</b></td><td>None</td><td class="num">$0</td><td class="num">$1,552</td><td>Every document leaves your network</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 7 · EXHIBIT 5 -->
+  <div class="ex-h"><span class="ex-n">Exhibit 5</span> "But our scans are worse than that"</div>
+  <p class="ex-d">Escalation rate against scan quality. This is the honest answer to the objection, and where the cost sits if your documents are worse than the test set.</p>
+  <div class="chartbox">
+    <svg viewBox="0 0 720 232" role="img" aria-label="Escalation rate rises with scan degradation: 8 percent for digital-native PDFs, 12 percent for clean scans, 24 percent with skew and noise, 41 percent with compression loss, and 68 percent for heavy noise with occlusion.">
+      <g stroke="var(--rule)" stroke-width="1">
+        <line x1="90" y1="190" x2="690" y2="190"/><line x1="90" y1="152" x2="690" y2="152"/>
+        <line x1="90" y1="115" x2="690" y2="115"/><line x1="90" y1="77" x2="690" y2="77"/><line x1="90" y1="40" x2="690" y2="40"/>
+      </g>
+      <g font-size="10.5" fill="var(--muted)" text-anchor="end" font-family="ui-monospace,monospace">
+        <text x="80" y="194">0%</text><text x="80" y="156">20%</text><text x="80" y="119">40%</text><text x="80" y="81">60%</text><text x="80" y="44">80%</text>
+      </g>
+      <polygon points="90,175 237.5,167.5 385,145 532.5,113 680,62.5 680,190 90,190" fill="var(--s1)" opacity="0.13"/>
+      <polyline points="90,175 237.5,167.5 385,145 532.5,113 680,62.5" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linejoin="round"/>
+      <g fill="var(--s1)">
+        <circle cx="90" cy="175" r="5"><title>Digital-native PDF: 8% escalate</title></circle>
+        <circle cx="237.5" cy="167.5" r="5"><title>Clean scan: 12% escalate</title></circle>
+        <circle cx="385" cy="145" r="5"><title>Skew and scan noise: 24% escalate</title></circle>
+        <circle cx="532.5" cy="113" r="5"><title>Compression artifacts and resolution loss: 41% escalate</title></circle>
+        <circle cx="680" cy="62.5" r="6" stroke="var(--paper)" stroke-width="2"><title>Heavy noise with partial occlusion: 68% escalate</title></circle>
+      </g>
+      <text x="96" y="166" font-size="11.5" font-weight="600" fill="var(--ink)" font-family="ui-monospace,monospace">8%</text>
+      <text x="674" y="52" text-anchor="end" font-size="13" font-weight="600" fill="var(--ink)" font-family="ui-monospace,monospace">68%</text>
+      <g font-size="11" fill="var(--muted)" text-anchor="middle">
+        <text x="90" y="210">Digital PDF</text><text x="237.5" y="210">Clean scan</text><text x="385" y="210">Skew + noise</text>
+        <text x="532.5" y="210">Compressed</text><text x="680" y="210">Heavy damage</text>
+      </g>
+      <text x="385" y="228" text-anchor="middle" font-size="11" fill="var(--muted)">share of invoices that need a cloud model, by scan quality</text>
+    </svg>
+  </div>
+  <p class="ex-d" style="margin-top:14px">Send us 30 of your real invoices and we will place them on this curve before you commit to anything.</p>
+
+  <!-- 8 · METHODOLOGY -->
+  <div class="method">
+    <div class="method-h">How this was measured</div>
+    <div class="method-grid">
+      <div><div class="method-k">sample</div><div class="method-v">300 invoices · 8 layouts · 1–40 line items · 4 currencies · 5 degradation levels</div></div>
+      <div><div class="method-k">ground truth</div><div class="method-v">Generated before rendering, so labels are exact rather than annotated</div></div>
+      <div><div class="method-k">measured</div><div class="method-v">Accuracy, cost, throughput on two machines</div></div>
+      <div><div class="method-k">projected</div><div class="method-v">Edge-appliance throughput only — from a bandwidth model validated within ±15% on both measured machines</div></div>
+      <div><div class="method-k">modeled</div><div class="method-v">Electricity, from spec sheets. 2.1% of local cost; a 5× error moves the headline 28× → 26×</div></div>
+      <div><div class="method-k">not triggered</div><div class="method-v">Three predefined disqualification criteria. Any one would have ended this study with a negative finding</div></div>
+      <div><div class="method-k">reproducible</div><div class="method-v">Seed 12345 · config 4f2a91c · regenerable end to end</div></div>
+      <div><div class="method-k">not tested</div><div class="method-v">Your document types, your volumes, your network. That is what a pilot is for</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="colophon">
+  SPECIMEN · generated by hand as the design reference for analysis/report_executive.py<br>
+  Block order and composition rules: docs/report-composition.md · rationale: docs/decisions/ADR-0012<br>
+  Self-contained by design — no CDN, no external font, no script. Opens offline; prints with the banner intact.
+</div>
+
+</body>
+</html>
