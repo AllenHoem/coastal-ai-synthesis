@@ -1,0 +1,1287 @@
+<title>Open Water</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Public+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F4F7F8;            /* sea mist */
+    --bg-raised: #FFFFFF;
+    --bg-sunken: #E9EFF1;
+    --ink: #10242E;
+    --ink-2: #44575F;
+    --ink-3: #6B7C83;
+    --line: #D5DEE1;
+    --line-soft: #E3EAEC;
+    --accent: #0E7C86;        /* sea teal */
+    --accent-ink: #0A5A62;
+    --accent-soft: #DDEDEE;
+    --coral: #C74A20;
+    --coral-soft: #F8E4DC;
+    --gold-ink: #7A5B00;
+    --gold-soft: #F3EAD2;
+    --indigo-ink: #3A4BAB;
+    --indigo-soft: #E2E5F8;
+    --navy: #0B2A3C;
+    --navy-ink: #F2F7F8;
+    --s1: #00939F; --s2: #E05A2B; --s3: #4A5FC9; --s4: #B07E00;
+    --good: #2E7D4F; --warn: #8A6D0B; --crit: #A83232;
+    --shadow: 0 1px 2px rgba(11,42,60,.06), 0 8px 24px rgba(11,42,60,.07);
+    --radius: 10px;
+    --font-display: "Bricolage Grotesque", "Avenir Next", "Trebuchet MS", sans-serif;
+    --font-body: "Public Sans", "Segoe UI", -apple-system, sans-serif;
+    --font-mono: "Spline Sans Mono", "SF Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0C1E28;
+      --bg-raised: #122935;
+      --bg-sunken: #0A1922;
+      --ink: #E8F0F2;
+      --ink-2: #AFC2C9;
+      --ink-3: #7E939B;
+      --line: #23404E;
+      --line-soft: #1B3543;
+      --accent: #35A9B4;
+      --accent-ink: #7FD1D9;
+      --accent-soft: #123B42;
+      --coral: #E8734A;
+      --coral-soft: #3C2318;
+      --gold-ink: #D9AE45;
+      --gold-soft: #33290F;
+      --indigo-ink: #97A5F0;
+      --indigo-soft: #232B52;
+      --navy: #081821;
+      --navy-ink: #E8F0F2;
+      --s1: #1E9FAE; --s2: #E06030; --s3: #7285E5; --s4: #C08A10;
+      --good: #58B183; --warn: #CBA83E; --crit: #DB7070;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0C1E28;
+    --bg-raised: #122935;
+    --bg-sunken: #0A1922;
+    --ink: #E8F0F2;
+    --ink-2: #AFC2C9;
+    --ink-3: #7E939B;
+    --line: #23404E;
+    --line-soft: #1B3543;
+    --accent: #35A9B4;
+    --accent-ink: #7FD1D9;
+    --accent-soft: #123B42;
+    --coral: #E8734A;
+    --coral-soft: #3C2318;
+    --gold-ink: #D9AE45;
+    --gold-soft: #33290F;
+    --indigo-ink: #97A5F0;
+    --indigo-soft: #232B52;
+    --navy: #081821;
+    --navy-ink: #E8F0F2;
+    --s1: #1E9FAE; --s2: #E06030; --s3: #7285E5; --s4: #C08A10;
+    --good: #58B183; --warn: #CBA83E; --crit: #DB7070;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; }
+  p { margin: 0; max-width: 68ch; }
+  a { color: var(--accent-ink); }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- nav ---------- */
+  .topnav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg-raised); border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 16px; padding: 10px 20px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-display); }
+  .brand .mark { font-weight: 700; letter-spacing: .12em; font-size: 13px; color: var(--ink); }
+  .brand .port { font-weight: 600; font-size: 15px; color: var(--accent-ink); }
+  .navlinks { display: flex; gap: 4px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .navlinks a {
+    font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none;
+    padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+  }
+  .navlinks a:hover, .navlinks a:focus-visible { background: var(--bg-sunken); color: var(--ink); outline: none; }
+  .modeswitch {
+    display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden;
+    font-family: var(--font-mono); font-size: 11.5px; flex: none;
+  }
+  .modeswitch button {
+    border: 0; background: transparent; color: var(--ink-2); padding: 6px 14px;
+    cursor: pointer; font: inherit; letter-spacing: .04em;
+  }
+  .modeswitch button.active { background: var(--navy); color: var(--navy-ink); }
+  .modeswitch button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .internal-banner {
+    background: var(--gold-soft); color: var(--gold-ink);
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .05em;
+    text-align: center; padding: 6px 16px;
+  }
+  body.mode-client .internal-only { display: none !important; }
+  body.mode-internal .client-only { display: none !important; }
+
+  /* ---------- hero ---------- */
+  .hero { background: var(--navy); color: var(--navy-ink); overflow: hidden; position: relative; }
+  .hero .wrap { padding: 72px 24px 64px; position: relative; }
+  .hero .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em;
+    color: #7FC5CC; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero h1 { font-size: clamp(42px, 7vw, 76px); font-weight: 700; letter-spacing: -.015em; }
+  .hero .thesis {
+    margin-top: 22px; font-size: clamp(17px, 2.2vw, 21px); line-height: 1.55;
+    color: #C9DCE1; max-width: 62ch;
+  }
+  .hero .thesis strong { color: #FFFFFF; font-weight: 600; }
+  .hero-verdict {
+    margin-top: 34px; border-left: 3px solid #35A9B4; padding: 4px 0 4px 18px;
+    font-family: var(--font-display); font-size: clamp(18px, 2.4vw, 23px);
+    font-weight: 600; color: #FFFFFF; max-width: 56ch;
+  }
+  .hero-swell { position: absolute; right: -60px; bottom: -40px; opacity: .5; pointer-events: none; }
+
+  /* ---------- sections ---------- */
+  section { padding: 64px 0; }
+  section + section { border-top: 1px solid var(--line-soft); }
+  .kicker {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 10px;
+  }
+  section h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 700; letter-spacing: -.01em; margin-bottom: 14px; }
+  .lede { font-size: 17.5px; color: var(--ink-2); max-width: 68ch; }
+  .lede strong { color: var(--ink); }
+
+  /* provenance badges */
+  .prov {
+    display: inline-block; font-family: var(--font-mono); font-size: 10.5px;
+    letter-spacing: .06em; padding: 2px 8px; border-radius: 4px; vertical-align: middle;
+  }
+  .prov.validated { background: var(--accent-soft); color: var(--accent-ink); border: 1px solid transparent; }
+  .prov.modeled { background: transparent; color: var(--gold-ink); border: 1px dashed var(--gold-ink); }
+  .prov.proposed { background: transparent; color: var(--indigo-ink); border: 1px dotted var(--indigo-ink); }
+
+  /* stat tiles */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 32px 0; }
+  .tile {
+    background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 18px 16px; box-shadow: var(--shadow);
+  }
+  .tile .num { font-family: var(--font-display); font-size: 34px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .tile .lbl { font-size: 13.5px; color: var(--ink-2); margin-top: 4px; line-height: 1.45; }
+  .tile .src { font-size: 11.5px; color: var(--ink-3); margin-top: 8px; }
+
+  /* figures */
+  figure { margin: 36px 0; background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 20px 14px; box-shadow: var(--shadow); }
+  figure > figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  figcaption .ftitle { font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
+  figcaption .fsub { font-size: 12.5px; color: var(--ink-3); flex-basis: 100%; }
+  .fig-scroll { overflow-x: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 2px 2px; font-size: 12.5px; color: var(--ink-2); }
+  .legend .key { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .fignote { font-size: 12px; color: var(--ink-3); margin-top: 10px; max-width: none; }
+  svg text { font-family: var(--font-body); }
+  svg .axis { fill: var(--ink-3); font-size: 11.5px; }
+  svg .dlabel { fill: var(--ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  svg .dlabel-inv { fill: #fff; font-size: 12px; font-weight: 600; }
+  svg .grid { stroke: var(--line-soft); stroke-width: 1; }
+  svg .baseline { stroke: var(--line); stroke-width: 1.5; }
+  svg .bar:hover, svg .seg:hover { filter: brightness(1.12); }
+
+  /* pillar cards */
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 30px; }
+  .pillar {
+    background: var(--bg-raised); border: 1px solid var(--line); border-top: 3px solid var(--accent);
+    border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+  }
+  .pillar h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .pillar p { font-size: 14px; color: var(--ink-2); }
+  .pillar .tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--accent-ink); display: block; margin-bottom: 10px; }
+
+  /* patterns */
+  .patterns { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-top: 30px; }
+  .pattern {
+    background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .pattern summary {
+    list-style: none; cursor: pointer; padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start;
+  }
+  .pattern summary::-webkit-details-marker { display: none; }
+  .pattern summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .pattern .pnum {
+    font-family: var(--font-mono); font-size: 12px; color: var(--accent-ink);
+    background: var(--accent-soft); border-radius: 6px; padding: 3px 8px; flex: none; margin-top: 2px;
+  }
+  .pattern h3 { font-size: 16.5px; font-weight: 600; }
+  .pattern .pq { font-size: 13.5px; color: var(--ink-2); margin-top: 4px; font-style: italic; }
+  .pattern .chev { margin-left: auto; color: var(--ink-3); transition: transform .2s; flex: none; margin-top: 4px; }
+  .pattern[open] .chev { transform: rotate(90deg); }
+  .pattern .pbody { padding: 0 20px 20px; border-top: 1px solid var(--line-soft); }
+  .pattern .pbody > * + * { margin-top: 12px; }
+  .pattern .pbody p, .pattern .pbody li { font-size: 14px; color: var(--ink-2); }
+  .pattern .pbody ul { margin: 0; padding-left: 18px; }
+  .pattern .pbody .kpis { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); background: var(--bg-sunken); border-radius: 6px; padding: 10px 12px; line-height: 1.7; }
+  .pattern .pbody .kpis b { color: var(--ink); font-weight: 600; }
+  .badgerow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chip {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .04em;
+    border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; color: var(--ink-2);
+  }
+  .chip.edge { border-color: var(--accent); color: var(--accent-ink); }
+  .chip.sf { border-color: var(--indigo-ink); color: var(--indigo-ink); }
+
+  /* flow diagrams */
+  .flow { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 16px 4px; }
+  .fstep {
+    flex: none; width: 150px; background: var(--bg-raised); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px 12px; font-size: 12.5px; line-height: 1.45;
+  }
+  .fstep b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 3px; font-weight: 600; }
+  .fstep span { color: var(--ink-2); }
+  .fstep.det { border-left: 4px solid var(--s1); }
+  .fstep.local { border-left: 4px solid var(--s3); }
+  .fstep.cloud { border-left: 4px solid var(--s2); }
+  .fstep.gate { border-left: 4px solid var(--s4); background: var(--bg-sunken); }
+  .farrow { flex: none; align-self: center; padding: 0 6px; color: var(--ink-3); font-size: 15px; }
+  .fnote { font-size: 12.5px; color: var(--ink-3); }
+  .decision {
+    flex: none; width: 170px; align-self: center; background: var(--gold-soft); color: var(--gold-ink);
+    border: 1px dashed var(--gold-ink); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; line-height: 1.45;
+  }
+  .decision b { display: block; font-weight: 600; margin-bottom: 3px; }
+
+  /* engagement ladder */
+  .ladder { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 30px; }
+  .rung {
+    background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow); position: relative;
+  }
+  .rung .stage { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: var(--ink-3); text-transform: uppercase; }
+  .rung h3 { font-size: 22px; font-weight: 700; margin: 6px 0 4px; color: var(--accent-ink); }
+  .rung .dur { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+  .rung p { font-size: 13.5px; color: var(--ink-2); margin-top: 10px; }
+  .rung .price { margin-top: 12px; font-family: var(--font-mono); font-size: 12.5px; color: var(--gold-ink); }
+
+  /* edge tiers */
+  .tiertable { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 8px; min-width: 700px; }
+  .tiertable th, .tiertable td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  .tiertable th { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  .tiertable td:first-child { font-family: var(--font-mono); font-weight: 600; color: var(--accent-ink); white-space: nowrap; }
+  .tiertable td { color: var(--ink-2); }
+  .tiertable .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .partners { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 24px; }
+  .partner { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .partner h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .partner p, .partner li { font-size: 13.5px; color: var(--ink-2); }
+  .partner ul { margin: 8px 0 0; padding-left: 18px; }
+
+  .callout {
+    margin-top: 30px; background: var(--accent-soft); border: 1px solid var(--accent);
+    border-radius: var(--radius); padding: 20px 22px;
+  }
+  .callout h4 { font-size: 16px; font-weight: 600; color: var(--accent-ink); margin-bottom: 8px; }
+  .callout p { font-size: 14.5px; color: var(--ink); max-width: none; }
+
+  /* industries */
+  .indgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 28px; }
+  .ind { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .ind h4 { font-size: 16px; font-weight: 600; }
+  .ind .why { font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
+  .ind .pats { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .matrix { display: grid; grid-template-columns: 24px 1fr 1fr; grid-template-rows: 1fr 1fr 24px; gap: 6px; margin-top: 28px; max-width: 760px; }
+  .quad { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 8px; padding: 14px; min-height: 150px; }
+  .quad h5 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; font-weight: 500; }
+  .quad.hot { border-color: var(--accent); background: var(--accent-soft); }
+  .quad .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .quad .chip { background: var(--bg-raised); }
+  .axislbl { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; color: var(--ink-3); text-transform: uppercase; display: flex; align-items: center; justify-content: center; }
+  .axislbl.v { writing-mode: vertical-rl; transform: rotate(180deg); grid-row: 1 / 3; }
+  .axislbl.h { grid-column: 2 / 4; }
+
+  .profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 28px; }
+  .profile { background: var(--bg-raised); border: 1px solid var(--line); border-left: 4px solid var(--s3); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .profile h4 { font-size: 15.5px; font-weight: 600; }
+  .profile p { font-size: 13.5px; color: var(--ink-2); margin-top: 6px; }
+  .profile .lead { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-ink); margin-top: 10px; }
+
+  /* validation */
+  .claims { display: grid; gap: 14px; margin-top: 28px; }
+  .claim { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); }
+  .claim .verdict { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; padding: 3px 10px; border-radius: 999px; display: inline-block; margin-bottom: 10px; }
+  .verdict.ok { background: var(--accent-soft); color: var(--accent-ink); }
+  .verdict.adj { background: var(--gold-soft); color: var(--gold-ink); }
+  .claim h3 { font-size: 16.5px; font-weight: 600; margin-bottom: 8px; }
+  .claim p, .claim li { font-size: 14px; color: var(--ink-2); }
+  .claim ul { margin: 8px 0 0; padding-left: 18px; }
+  .claim .correction { margin-top: 12px; border-left: 3px solid var(--coral); padding: 2px 0 2px 14px; }
+  .claim .correction b { color: var(--coral); }
+  .claim p.evi { margin-top: 8px; }
+
+  /* org */
+  .orgtree { margin-top: 28px; }
+  .orgroot { background: var(--navy); color: var(--navy-ink); border-radius: var(--radius); padding: 14px 20px; display: inline-block; font-family: var(--font-display); font-weight: 600; }
+  .orgroot small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 11px; letter-spacing: .08em; color: #7FC5CC; margin-top: 2px; }
+  .orgteams { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 14px; padding-top: 14px; border-top: 2px solid var(--accent); }
+  .team { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+  .team h4 { font-size: 14.5px; font-weight: 600; }
+  .team .hc { font-family: var(--font-mono); font-size: 12px; color: var(--accent-ink); margin-top: 3px; }
+  .team ul { margin: 10px 0 0; padding-left: 16px; }
+  .team li { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
+
+  .smetable { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px; }
+  .smetable th, .smetable td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  .smetable th { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  .smetable td { color: var(--ink-2); }
+  .smetable td:first-child { color: var(--ink); font-weight: 600; }
+  .pill { font-family: var(--font-mono); font-size: 10.5px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .pill.rebadge { background: var(--accent-soft); color: var(--accent-ink); }
+  .pill.hire { background: var(--coral-soft); color: var(--coral); }
+
+  /* roadmap */
+  .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 28px; }
+  .qtr { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+  .qtr .q { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; color: var(--accent-ink); }
+  .qtr h4 { font-size: 15.5px; font-weight: 600; margin: 6px 0 8px; }
+  .qtr li { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+  .qtr ul { margin: 0; padding-left: 16px; }
+
+  .risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 28px; }
+  .risk { background: var(--bg-raised); border: 1px solid var(--line); border-top: 3px solid var(--crit); border-radius: var(--radius); padding: 16px 18px; }
+  .risk h4 { font-size: 14.5px; font-weight: 600; }
+  .risk p { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+  .risk .mit { margin-top: 8px; font-size: 13px; }
+  .risk .mit b { color: var(--good); font-weight: 600; }
+
+  /* footer */
+  footer { background: var(--navy); color: var(--navy-ink); padding: 48px 0 56px; margin-top: 40px; }
+  footer h3 { font-size: 18px; margin-bottom: 14px; }
+  footer p, footer li { font-size: 13px; color: #A9C3CA; }
+  footer a { color: #7FC5CC; }
+  footer ul { margin: 8px 0 0; padding-left: 18px; }
+  .provlegend { display: flex; flex-wrap: wrap; gap: 18px; margin: 16px 0 26px; font-size: 13px; color: #C9DCE1; }
+  .provlegend .prov { margin-right: 6px; }
+  footer .fine { margin-top: 28px; padding-top: 18px; border-top: 1px solid #1D3B4A; font-size: 12px; color: #7E99A3; max-width: none; }
+
+  /* ---------- summary mode & infographic ---------- */
+  .summary-only { display: none; }
+  body.mode-summary .summary-only { display: block; }
+  body.mode-summary .hero, body.mode-summary footer,
+  body.mode-summary section:not(.summary-only) { display: none; }
+  body.mode-summary .navlinks { visibility: hidden; }
+  #market { border-top: 0; }
+
+  .sumhero { background: var(--navy); color: var(--navy-ink); border-radius: var(--radius); padding: 32px 34px; }
+  .sumhero .eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .14em; color: #7FC5CC; text-transform: uppercase; margin-bottom: 12px; }
+  .sumhero h2 { color: #FFFFFF; font-size: clamp(26px, 4.5vw, 40px); margin-bottom: 10px; }
+  .sumhero p { color: #C9DCE1; font-size: 16px; max-width: 70ch; }
+  .pillarmini { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 14px; }
+  .pmini { background: var(--bg-raised); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--ink-2); }
+  .pmini b { display: block; color: var(--ink); font-size: 13.5px; margin-bottom: 2px; }
+  .phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 22px; }
+  .phase { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .phase .pdays { font-family: var(--font-display); font-size: 40px; font-weight: 700; color: var(--accent-ink); line-height: 1; font-variant-numeric: tabular-nums; }
+  .phase .pname { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
+  .phase h3 { font-size: 17px; margin: 8px 0; }
+  .phase ul { margin: 0; padding-left: 17px; }
+  .phase li { font-size: 13px; color: var(--ink-2); margin-top: 5px; }
+  .phase .exit { margin-top: 12px; font-size: 12.5px; border-top: 1px dashed var(--line); padding-top: 10px; color: var(--ink-2); }
+  .phase .exit b { color: var(--good); }
+  .sumh { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin: 38px 0 4px; }
+  .sumsub { font-size: 13.5px; color: var(--ink-3); margin-bottom: 14px; }
+
+  .duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 2px solid var(--accent); }
+  .branch { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .branch h4 { font-size: 15px; }
+  .branch .sub { font-family: var(--font-mono); font-size: 11px; color: var(--accent-ink); margin: 2px 0 8px; letter-spacing: .06em; }
+  .branch p { font-size: 13px; color: var(--ink-2); }
+  .branch .pl { margin-top: 10px; background: var(--bg-sunken); border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: var(--ink-2); }
+  .branch .pl b { color: var(--ink); }
+  .lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
+  .lane { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .lane.sf { border-top: 3px solid var(--s3); }
+  .lane.slack { border-top: 3px solid var(--s4); }
+  .lane.agn { border-top: 3px solid var(--s1); }
+  .lane h4 { font-size: 14px; }
+  .lane .cnt { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); margin: 3px 0 6px; }
+  .lane p { font-size: 12.5px; color: var(--ink-2); }
+  .dots { display: flex; gap: 5px; margin: 8px 0 4px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; }
+  .lane.sf .dot { background: var(--s3); }
+  .lane.slack .dot { background: var(--s4); }
+  .lane.agn .dot { background: var(--s1); }
+  .ecosystem { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+  .ecosystem .elbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-right: 4px; }
+
+  .stagegrid td.c { text-align: center; color: var(--accent-ink); font-size: 15px; white-space: nowrap; }
+  .stagegrid tr.hl td { background: var(--accent-soft); }
+  .stagegrid .entry { font-family: var(--font-mono); font-size: 10px; letter-spacing: .05em; background: var(--accent-soft); color: var(--accent-ink); border-radius: 999px; padding: 1px 7px; white-space: nowrap; vertical-align: middle; }
+  .stagegrid tr.hl .entry { background: var(--bg-raised); }
+
+  .rolestable { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 780px; }
+  .rolestable th, .rolestable td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  .rolestable th { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  .rolestable td { color: var(--ink-2); }
+  .rolestable td:first-child { color: var(--ink); font-weight: 600; }
+  .rolestable td.n { font-variant-numeric: tabular-nums; text-align: center; }
+
+  @media (max-width: 640px) {
+    .navlinks { display: none; }
+    section { padding: 48px 0; }
+    .matrix { grid-template-columns: 16px 1fr; grid-template-rows: auto auto auto auto 24px; }
+    .quad { min-height: 0; }
+    .axislbl.h { grid-column: 2 / 3; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="internal-banner internal-only">INTERNAL DRAFT — org design, pricing bands, and validation notes are not for client distribution. Toggle to CLIENT view before presenting.</div>
+
+<nav class="topnav">
+  <div class="brand"><span class="mark">COASTAL</span><span class="port">Open Water</span></div>
+  <div class="navlinks">
+    <a href="#market">Why now</a>
+    <a href="#pillars">Pillars</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#engage">Engagement</a>
+    <a href="#edge">Edge</a>
+    <a href="#industries">Industries</a>
+    <a href="#validation" class="internal-only">Validation</a>
+    <a href="#org" class="internal-only">Org &amp; SMEs</a>
+    <a href="#roadmap" class="internal-only">Roadmap</a>
+  </div>
+  <div class="modeswitch" role="group" aria-label="View mode">
+    <button id="btn-internal" type="button">INTERNAL</button>
+    <button id="btn-client" type="button">CLIENT</button>
+    <button id="btn-summary" type="button">SUMMARY</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Coastal · 2027 AI Offer Portfolio <span class="internal-only">· Draft v1 for ELT review</span></div>
+    <h1>Open Water</h1>
+    <p class="thesis">The outcome we need in 2027 is simple to state: <strong>AI revenue that compounds regardless of any single vendor's roadmap.</strong> The market has already moved — enterprise model spend doubled to $8.4B in six months and split across three providers, and the workloads our clients care most about are moving onto hardware they own. Coastal earned its position in the Salesforce harbor; this portfolio takes that same delivery discipline into open water, without abandoning the harbor that built us.</p>
+    <div class="hero-verdict">We sell outcomes measured in your business units — powered by whichever model earns the workload, running on infrastructure you already own where privacy, compliance, or cost demand it.</div>
+    <svg class="hero-swell" width="520" height="220" viewBox="0 0 520 220" aria-hidden="true">
+      <path d="M0 170 Q 65 130 130 170 T 260 170 T 390 170 T 520 170" fill="none" stroke="#35A9B4" stroke-width="2"/>
+      <path d="M0 195 Q 65 160 130 195 T 260 195 T 390 195 T 520 195" fill="none" stroke="#35A9B4" stroke-width="1.5" opacity=".55"/>
+      <path d="M0 145 Q 65 110 130 145 T 260 145 T 390 145 T 520 145" fill="none" stroke="#35A9B4" stroke-width="1" opacity=".3"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ================= SUMMARY (infographic) ================= -->
+<section id="summary" class="summary-only">
+  <div class="wrap">
+    <div class="sumhero">
+      <div class="eyebrow">Open Water · The First 90 Days · VP, AI Delivery</div>
+      <h2>Measure first. Ship patterns. Stay agnostic.</h2>
+      <p>Ninety days to a working AI delivery practice: a baseline of everything we already do, a two-team structure that keeps Salesforce as a governed channel while the agnostic bench becomes the growth engine, and the first measured proof in front of clients.</p>
+    </div>
+
+    <div class="pillarmini">
+      <div class="pmini"><b>Model &amp; platform agnostic</b>The best model and agentic framework per workload, chosen by evals — Agentforce is one platform among several we deliver on.</div>
+      <div class="pmini"><b>AI @ the Edge</b>Private, low-cost inference on hardware clients already own, sized by measurement.</div>
+      <div class="pmini"><b>Patterns, not platforms</b>Seven repeatable offer shapes with KPIs; deterministic first, frontier model only when earned.</div>
+      <div class="pmini"><b>ML &amp; evaluation</b>The accuracy layer that keeps our clients out of Gartner's 40% canceled-project statistic.</div>
+    </div>
+
+    <div class="sumh">Three moves, thirty days each</div>
+    <div class="phases">
+      <div class="phase">
+        <div class="pdays">1–30</div>
+        <div class="pname">Phase 1</div>
+        <h3>Take the bearings</h3>
+        <ul>
+          <li>Baseline every AI engagement, pipeline, and revenue line across the markets</li>
+          <li>Sign the delivery operating agreement with market leaders</li>
+          <li>Confirm both Sr. Directors and Technical PLs; open the agnostic FDE seats</li>
+          <li>Brief the Salesforce alliance and TCS sponsors on portfolio posture</li>
+          <li>Pick 3 lighthouse accounts — one regulated, one ops-heavy, one mid-market</li>
+        </ul>
+        <div class="exit"><b>Done when:</b> team charter signed · lighthouse list agreed · baseline dashboard live</div>
+      </div>
+      <div class="phase">
+        <div class="pdays">31–60</div>
+        <div class="pname">Phase 2</div>
+        <h3>Set the crew</h3>
+        <ul>
+          <li>Both teams operational — Headless 360/Agentforce, Slack, and Agnostic lanes staffed</li>
+          <li>Chart (assessment) offer GA across all seven patterns</li>
+          <li>Edge Lab stood up; the measurement harness makes its first runs</li>
+          <li>Partner enrollments filed: AMD, NVIDIA, Intel, plus model providers</li>
+        </ul>
+        <div class="exit"><b>Done when:</b> 2 paid Charts in delivery · eval harness v1 running</div>
+      </div>
+      <div class="phase">
+        <div class="pdays">61–90</div>
+        <div class="pname">Phase 3</div>
+        <h3>Open water</h3>
+        <ul>
+          <li>Convert Charts into the first 2 Pilots, each with measured accuracy gates</li>
+          <li>Publish the first measured evidence file — the flagship case-study draft</li>
+          <li>Design the Waves managed-service extension beyond Agentforce</li>
+          <li>90-day readout to leadership: metrics shown, FY27 targets locked</li>
+        </ul>
+        <div class="exit"><b>Done when:</b> ELT signs the FY27 portfolio plan</div>
+      </div>
+    </div>
+
+    <div class="sumh">The team: two lanes, one deliberate cap</div>
+    <div class="sumsub">AI &amp; Platform Delivery · 11 seats day-1 · FDE = forward-deployed engineer · delivered in partnership with the markets <span class="prov proposed">proposed</span></div>
+    <div class="orgroot">VP, AI Delivery<small>PORTFOLIO P&amp;L · PARTNERSHIPS · ALLIANCE POSTURE · GO/NO-GO GATES</small></div>
+    <div class="duo">
+      <div class="branch">
+        <h4>Sr. Director, Data &amp; AI — GTM</h4>
+        <div class="sub">HEADLESS 360 / AGENTFORCE · SLACK</div>
+        <p>Market-facing: co-owns pipeline with the markets, presales solutioning, Salesforce &amp; Slack alliance management.</p>
+        <div class="pl"><b>Technical PL (Salesforce AI):</b> delivery quality, methodology, and utilization for both Salesforce-side lanes</div>
+      </div>
+      <div class="branch">
+        <h4>Sr. Director, AI Platforms — Technology</h4>
+        <div class="sub">AGNOSTIC ENGINEERING · EDGE LAB · EVALS</div>
+        <p>Engineering-facing: agnostic reference architectures, the Edge Lab and measurement harness, model evaluation across providers.</p>
+        <div class="pl"><b>Technical PL (AI Platforms):</b> runs harness-based Charts, eval CI, and agnostic delivery standards</div>
+      </div>
+    </div>
+    <div class="lanes">
+      <div class="lane sf"><h4>Headless 360 / Agentforce</h4><div class="cnt">2 FDEs · capped by design</div><div class="dots"><span class="dot"></span><span class="dot"></span></div><p>Governed CRM-native agents; Claude inside the Salesforce trust boundary. Extra demand flows to the markets, not this team.</p></div>
+      <div class="lane slack"><h4>Slack</h4><div class="cnt">1 FDE · bridges both teams</div><div class="dots"><span class="dot"></span></div><p>Slack as the agent surface — for Agentforce and for agnostic backends alike.</p></div>
+      <div class="lane agn"><h4>Agnostic</h4><div class="cnt">3 FDEs · the growth engine</div><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><p>Multi-model builds, edge deployments, evals — where net-new capability compounds and new hires land first.</p></div>
+    </div>
+    <div class="ecosystem">
+      <span class="elbl">Works with</span>
+      <span class="chip">Snowflake GTM · Henry</span>
+      <span class="chip">Market Strategy · Tara</span>
+      <span class="chip">True North · Chris</span>
+      <span class="chip">AI Toolkit · Sam</span>
+      <span class="elbl" style="margin-left:10px">Sponsors</span>
+      <span class="chip">JP Owens · CGO</span>
+      <span class="chip">Brian Gannuscio · CDPO</span>
+      <span class="chip">Aimee Cubbage · CXO</span>
+    </div>
+
+    <div class="sumh">The 90-day scoreboard</div>
+    <div class="sumsub">What "on track" means, in numbers <span class="prov proposed">proposed</span></div>
+    <div class="tiles">
+      <div class="tile"><div class="num">3</div><div class="lbl">Lighthouse accounts engaged</div></div>
+      <div class="tile"><div class="num">4</div><div class="lbl">Chart assessments sold</div></div>
+      <div class="tile"><div class="num">2</div><div class="lbl">Pilots in flight with accuracy gates</div></div>
+      <div class="tile"><div class="num">1</div><div class="lbl">Measured evidence file published</div></div>
+      <div class="tile"><div class="num">2+</div><div class="lbl">Silicon partner programs joined</div></div>
+      <div class="tile"><div class="num">11/11</div><div class="lbl">Team seats filled</div></div>
+    </div>
+    <p class="fignote">This is the distilled view for business leaders. Toggle INTERNAL for the full portfolio: patterns, edge practice, market validation, role scopes, and risks.</p>
+  </div>
+</section>
+
+<!-- ================= MARKET ================= -->
+<section id="market">
+  <div class="wrap">
+    <div class="kicker">Why now</div>
+    <h2>The tide has turned multi-model</h2>
+    <p class="lede">Enterprise AI budgets doubled in six months and consolidated around <strong>workload-fit model choice</strong> — Claude for reasoning and regulated work, OpenAI for breadth, Gemini for scale economics, open-weight models where data cannot leave the building. No single vendor's agent platform is the AI strategy anymore — it is one governed surface inside a larger system. We will meet this market where it is already buying: with the model that earns each workload, proven by evaluation. <span class="internal-only">That is the polite version of my thesis 1 — the evidence version, including where it needed correcting, is in <a href="#validation">Validation</a>.</span></p>
+
+    <div class="tiles">
+      <div class="tile">
+        <div class="num">$8.4B</div>
+        <div class="lbl">Enterprise LLM API spend in 1H 2025 — more than doubled in six months <span class="prov validated">validated</span></div>
+        <div class="src">Menlo Ventures, Mid-Year LLM Market Update</div>
+      </div>
+      <div class="tile">
+        <div class="num">40%</div>
+        <div class="lbl">Anthropic's share of enterprise LLM spend, up from 12% in 2023 — no vendor is safe to bet on alone <span class="prov validated">validated</span></div>
+        <div class="src">Menlo Ventures, 2025 State of GenAI in the Enterprise</div>
+      </div>
+      <div class="tile">
+        <div class="num">&gt;40%</div>
+        <div class="lbl">Agentic AI projects Gartner predicts will be canceled by end of 2027 — cost, unclear value, weak risk controls <span class="prov validated">validated</span></div>
+        <div class="src">Gartner, June 2025</div>
+      </div>
+      <div class="tile">
+        <div class="num">30%</div>
+        <div class="lbl">CAGR of small-language-model edge deployment through 2030, driven by privacy and cost <span class="prov validated">validated</span></div>
+        <div class="src">Marqstats SLM Edge Deployment, 2025</div>
+      </div>
+    </div>
+
+    <figure>
+      <figcaption>
+        <span class="ftitle">Who won the enterprise model budget</span>
+        <span class="prov validated">validated</span>
+        <span class="fsub">Share of enterprise LLM API spend/usage, 2023 vs mid-2025 · Menlo Ventures surveys of 150+ technical leaders</span>
+      </figcaption>
+      <div class="fig-scroll">
+        <svg width="640" height="250" viewBox="0 0 640 250" role="img" aria-label="Bar chart: OpenAI fell from 50% to 27%, Anthropic rose from 12% to 40%, Google rose from 7% to 21%">
+          <line class="grid" x1="90" y1="40" x2="90" y2="200"/>
+          <line class="baseline" x1="90" y1="200" x2="620" y2="200"/>
+          <!-- OpenAI -->
+          <text class="axis" x="120" y="218">OpenAI</text>
+          <rect class="bar" x="110" y="60" width="42" height="140" rx="4" fill="var(--ink-3)" opacity=".45"><title>OpenAI, 2023: 50% of enterprise LLM spend</title></rect>
+          <rect class="bar" x="158" y="124.4" width="42" height="75.6" rx="4" fill="var(--s1)"><title>OpenAI, mid-2025: 27% of enterprise LLM spend</title></rect>
+          <text class="dlabel" x="131" y="52" text-anchor="middle">50%</text>
+          <text class="dlabel" x="179" y="117" text-anchor="middle">27%</text>
+          <!-- Anthropic -->
+          <text class="axis" x="290" y="218">Anthropic</text>
+          <rect class="bar" x="285" y="166.4" width="42" height="33.6" rx="4" fill="var(--ink-3)" opacity=".45"><title>Anthropic, 2023: 12% of enterprise LLM spend</title></rect>
+          <rect class="bar" x="333" y="88" width="42" height="112" rx="4" fill="var(--s1)"><title>Anthropic, mid-2025: 40% of enterprise LLM spend — the market leader</title></rect>
+          <text class="dlabel" x="306" y="159" text-anchor="middle">12%</text>
+          <text class="dlabel" x="354" y="80" text-anchor="middle">40%</text>
+          <!-- Google -->
+          <text class="axis" x="475" y="218">Google</text>
+          <rect class="bar" x="460" y="180.4" width="42" height="19.6" rx="4" fill="var(--ink-3)" opacity=".45"><title>Google, 2023: 7% of enterprise LLM spend</title></rect>
+          <rect class="bar" x="508" y="141.2" width="42" height="58.8" rx="4" fill="var(--s1)"><title>Google, mid-2025: 21% of enterprise LLM spend</title></rect>
+          <text class="dlabel" x="481" y="173" text-anchor="middle">7%</text>
+          <text class="dlabel" x="529" y="134" text-anchor="middle">21%</text>
+        </svg>
+      </div>
+      <div class="legend">
+        <span class="key"><span class="swatch" style="background:var(--ink-3);opacity:.45"></span>2023</span>
+        <span class="key"><span class="swatch" style="background:var(--s1)"></span>Mid-2025</span>
+      </div>
+      <div class="fignote">Open-weight models hold roughly a tenth of enterprise <em>API-style</em> spend and that share is flat-to-declining — their enterprise growth is happening in self-hosted, edge, and sovereign deployments instead, which is exactly the market our Edge practice addresses. Source: Menlo Ventures 2025 reports.</div>
+    </figure>
+
+    <p class="lede">Salesforce itself confirms the multi-model reality: <strong>Claude now runs inside the Salesforce trust boundary as the preferred model for regulated industries</strong>, and Agentforce supports customer-supplied models. Agentforce's value is governance, data proximity, and CRM-native actions — a surface we will keep winning on — not the reasoning engine itself. <span class="internal-only">Agentforce ARR reached roughly $800M growing 169% YoY — it is a real, growing channel and we should say so out loud even while we diversify. Dismissing it publicly would be both wrong and commercially reckless given the TCS thesis for acquiring us.</span></p>
+  </div>
+</section>
+
+<!-- ================= PILLARS ================= -->
+<section id="pillars">
+  <div class="wrap">
+    <div class="kicker">The portfolio</div>
+    <h2>Four pillars, one operating idea</h2>
+    <p class="lede">Every offer answers the question a buyer is actually asking — <strong>"what is the cheapest, safest system that does this job to a measurable standard?"</strong> — not "which platform should I license?" We will grow by executing against four strategic themes:</p>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="tag">PILLAR A</span>
+        <h3>Model- &amp; Platform-Agnostic Engineering</h3>
+        <p>Eval-driven model selection across Claude, OpenAI, Gemini, and open-weight models — and the same discipline one level up: Agentforce and Headless 360 are two agentic platforms among several we deliver on, alongside open frameworks and client-standardized stacks. Model and platform are components with scorecards, not allegiances.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">PILLAR B</span>
+        <h3>AI @ the Edge</h3>
+        <p>Private, low-cost inference on hardware clients already own or can buy — sized by measurement, not vendor spec sheets. For workloads that cannot go to the cloud for privacy, compliance, latency, or cost reasons.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">PILLAR C</span>
+        <h3>Operational AI Patterns</h3>
+        <p>Offers packaged as functional patterns — document exception handling, next-best-action, governed agents — each with a defined anatomy, KPIs, and price. Buyers purchase an outcome shape, not a platform project.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">PILLAR D</span>
+        <h3>Applied ML &amp; Evaluation</h3>
+        <p>The accuracy layer: classical machine learning, evaluation harnesses, routing, calibration, and drift monitoring. This is what separates production AI from a demo — and what keeps clients out of Gartner's 40%.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PATTERNS ================= -->
+<section id="patterns">
+  <div class="wrap">
+    <div class="kicker">Pillar C in detail</div>
+    <h2>Patterns, not platforms</h2>
+    <p class="lede">Each pattern is named for the question it answers. Each ships with an anatomy, the KPIs it is accountable to, and its model and platform posture — <strong>deterministic first, smallest viable model second, frontier model only when earned</strong>, on whichever agentic framework fits the client. Expand any pattern for its anatomy.</p>
+
+    <div class="patterns">
+      <details class="pattern" open>
+        <summary>
+          <span class="pnum">P1</span>
+          <span><h3>Document Intake &amp; Exception Handling</h3><span class="pq">"How do we process invoices, claims, and orders without hiring — and without silent errors?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>Ingesting, validating, and posting structured documents does not need inference at the front door. Typed validation and business rules absorb the majority of volume deterministically; a language model is invoked only on exceptions, and escalates through a ladder of increasing capability — local small model, sampled consensus, cloud field-level fix, cloud full-document — with an independent verification gate at every rung.</p>
+          <div class="flow" aria-label="Escalation ladder flow">
+            <div class="fstep det"><b>Deterministic tier</b><span>Typed checks, arithmetic rules, schema validation — no model call</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep local"><b>R0 · Local SLM</b><span>Grammar-constrained extraction, temp 0, on-prem</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep local"><b>R1 · Consensus</b><span>k=3 sampled, majority vote, still local</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep cloud"><b>R2 · Cloud field</b><span>Escalate only the failing field to a frontier model</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep cloud"><b>R3 · Cloud doc</b><span>Full-document frontier pass — last resort</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep gate"><b>Verifier gate</b><span>Independent of the model. Gate decision and correctness are never collapsed</span></div>
+          </div>
+          <p class="fnote">The headline metric is the <strong>silent-failure rate</strong> — documents the gate passed with wrong values. It is reported standalone, never averaged into success, because it is the number a CFO actually fears.</p>
+          <div class="kpis"><b>KPIs:</b> straight-through %, silent-failure rate (&lt;2% threshold), cost per 1,000 documents, docs/hour/machine</div>
+          <div class="badgerow"><span class="chip edge">edge-ready</span><span class="chip">healthcare claims</span><span class="chip">AP/AR</span><span class="chip">public sector forms</span></div>
+        </div>
+      </details>
+
+      <details class="pattern" open>
+        <summary>
+          <span class="pnum">P2</span>
+          <span><h3>Decision Intelligence &amp; Next Best Action</h3><span class="pq">"Our data knows what to do next — how do we get it to say so, reliably?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>Cross-dataset recommendations — marketing next-best-action, sales prioritization, service triage — are a <em>compound system</em>: data access, context assembly, reasoning, and learned ranking each do a different job. The architecture decision most teams get wrong is the first one: how the data arrives.</p>
+          <div class="flow" aria-label="Decision intelligence flow">
+            <div class="fstep det"><b>Data sources</b><span>CRM, warehouse, product, martech</span></div>
+            <span class="farrow">→</span>
+            <div class="decision"><b>MCP or pipeline?</b>Known schema, batch cadence → standard ELT / semantic layer. Agent must choose tools at runtime → MCP. MCP is a runtime protocol, not a data strategy.</div>
+            <span class="farrow">→</span>
+            <div class="fstep det"><b>Context assembly</b><span>Retrieval, reranking, grounding</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep local"><b>Inference</b><span>Reasoning + explanation — model chosen by eval</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep gate"><b>ML ranking</b><span>Propensity &amp; uplift models supply the weights; the LLM supplies the words</span></div>
+            <span class="farrow">→</span>
+            <div class="fstep det"><b>Action + feedback</b><span>Outcomes retrain the ranker</span></div>
+          </div>
+          <div class="kpis"><b>KPIs:</b> conversion/uplift vs holdout, precision@k of recommendations, analyst acceptance rate, latency</div>
+          <div class="badgerow"><span class="chip">marketing ops</span><span class="chip">revenue ops</span><span class="chip sf">Data 360 native</span></div>
+        </div>
+      </details>
+
+      <details class="pattern">
+        <summary>
+          <span class="pnum">P3</span>
+          <span><h3>Governed Customer-Facing Agents</h3><span class="pq">"How do we put an agent in front of the public without putting the brand at risk?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>Where the data is Salesforce-first, the audience is external, and governance is the binding constraint, <strong>Agentforce is the right chassis</strong> — now with Claude available inside the Salesforce trust boundary for regulated industries. This is our existing 90-day Agentforce program and Waves for Agentic Ops, repositioned honestly: the best governed agent surface on CRM data, one pattern among six rather than the portfolio itself. Where data is not Salesforce-first, we build the same pattern on the client's model and stack of choice.</p>
+          <div class="kpis"><b>KPIs:</b> containment rate, escalation quality, CSAT delta, policy-violation rate (target zero)</div>
+          <div class="badgerow"><span class="chip sf">Agentforce</span><span class="chip">Claude in trust boundary</span><span class="chip">service &amp; CX</span></div>
+        </div>
+      </details>
+
+      <details class="pattern">
+        <summary>
+          <span class="pnum">P4</span>
+          <span><h3>Agentic Back-Office Automation</h3><span class="pq">"Which internal workflows can agents run end-to-end — and which should stay scripts?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>Case triage, order management, employee service, IT ops. We decompose each workflow into deterministic steps (scripts, RPA, rules — cheap, auditable) and judgment steps (agents with tool access), instead of "agentifying" the whole thing. This is the direct antidote to the agent-washing failure mode Gartner is warning buyers about.</p>
+          <div class="kpis"><b>KPIs:</b> cycle-time reduction, touchless completion %, exception queue depth, rework rate</div>
+          <div class="badgerow"><span class="chip">shared services</span><span class="chip">ITSM</span><span class="chip edge">edge-capable</span></div>
+        </div>
+      </details>
+
+      <details class="pattern">
+        <summary>
+          <span class="pnum">P5</span>
+          <span><h3>Edge &amp; Sovereign Inference</h3><span class="pq">"What can we run on hardware we own — and what does it actually cost?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>For workloads that cannot leave the building: on-prem and on-device small language models, sized by measurement against a hardware tier ladder, with cloud escalation only where the numbers justify it. The full practice is below — this pattern is its delivery vehicle.</p>
+          <div class="kpis"><b>KPIs:</b> silent-failure rate at the chosen model size, docs/hour/machine, cost per 1,000 records vs cloud baseline, compliance attestation</div>
+          <div class="badgerow"><span class="chip edge">edge-native</span><span class="chip">HIPAA / FedRAMP</span><span class="chip">air-gap capable</span></div>
+        </div>
+      </details>
+
+      <details class="pattern">
+        <summary>
+          <span class="pnum">P6</span>
+          <span><h3>Evaluation, ML &amp; AI Operations</h3><span class="pq">"How do we know it still works — next week, on real data, at scale?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>The layer under every other pattern: evaluation harnesses as CI for AI behavior, learned routers that send each request to the cheapest capable model, confidence calibration, drift and cost monitoring, and the classical ML models (propensity, forecasting, anomaly, entity resolution) that give agents numerical judgment. Sold standalone as an AI assurance engagement, and embedded in every Voyage and Waves engagement.</p>
+          <div class="kpis"><b>KPIs:</b> eval coverage of critical behaviors, router savings %, calibration error, mean time to detect regression</div>
+          <div class="badgerow"><span class="chip">AI assurance</span><span class="chip">MLOps</span><span class="chip">model risk</span></div>
+        </div>
+      </details>
+
+      <details class="pattern">
+        <summary>
+          <span class="pnum">P7</span>
+          <span><h3>Enterprise Agent Platform &amp; Marketplace</h3><span class="pq">"How does any team in the company launch, share, and govern its own agents?"</span></span>
+          <span class="chev">▸</span>
+        </summary>
+        <div class="pbody">
+          <p>For clients ready to scale past one-off builds: we stand up a <strong>standardized agentic framework</strong> as shared infrastructure — platform-agnostic by design, running Agentforce, open frameworks, or the client's own stack side by side. Teams get <strong>1-click agent launching</strong> with follow-up conversations out of the box, and a <strong>company-internal marketplace</strong> where agents built in one engagement are published, discovered, and reused across departments. The P6 evaluation gates and a governance registry sit in the publishing path, so reuse never outruns oversight.</p>
+          <div class="kpis"><b>KPIs:</b> time-to-launch for a new agent, agents published &amp; reuse rate, active teams on the platform, governance-gate pass rate</div>
+          <div class="badgerow"><span class="chip">platform engineering</span><span class="chip">agent marketplace</span><span class="chip">1-click launch</span><span class="chip">works with any pattern</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ENGAGEMENT ================= -->
+<section id="engage">
+  <div class="wrap">
+    <div class="kicker">How it is sold</div>
+    <h2>One engagement architecture, every pattern</h2>
+    <p class="lede">Every pattern is sold through the same four stages, so a client always knows where they are and what the next commitment costs. Stage one is deliberately small: <strong>measurement before commitment</strong> is how our clients stay out of the canceled-project statistics.</p>
+    <div class="ladder">
+      <div class="rung">
+        <span class="stage">Stage 1 · Assess</span>
+        <h3>Chart</h3>
+        <span class="dur">2–4 weeks</span>
+        <p>Workload-to-pattern mapping, data readiness, model-fit evals on your documents, ROI model with a go/no-go gate. You get a defensible answer before you spend real money.</p>
+        <div class="price internal-only">$25–45k fixed <span class="prov proposed">proposed</span></div>
+      </div>
+      <div class="rung">
+        <span class="stage">Stage 2 · Prove</span>
+        <h3>Pilot</h3>
+        <span class="dur">6–10 weeks</span>
+        <p>One workload, production-shaped: real data, evaluation gates, silent-failure measurement, and a Return-on-AI (ROAI) readout your CFO can repeat from memory.</p>
+        <div class="price internal-only">$75–150k <span class="prov proposed">proposed</span></div>
+      </div>
+      <div class="rung">
+        <span class="stage">Stage 3 · Scale</span>
+        <h3>Voyage</h3>
+        <span class="dur">Quarterly programs</span>
+        <p>Production hardening, integration, enablement of your team, expansion to adjacent workloads — governed by the True North business-impact methodology.</p>
+        <div class="price internal-only">$250k+/quarter <span class="prov proposed">proposed</span></div>
+      </div>
+      <div class="rung">
+        <span class="stage">Stage 4 · Operate</span>
+        <h3>Waves</h3>
+        <span class="dur">Managed, ongoing</span>
+        <p>Our existing Waves managed service, extended beyond Agentforce to every pattern: monitoring, evals, model updates, cost optimization, and quarterly ROAI reviews — and the operating home of the P7 marketplace: agent curation, governance gates, and lifecycle management.</p>
+        <div class="price internal-only">$15–40k/month <span class="prov proposed">proposed</span></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:20px;margin:40px 0 4px">Where each pattern meets each stage</h3>
+    <div class="sumsub">Every pattern sells through the four stages; marked cells are the common entry points, and the Waves column is what "operate" means for that pattern <span class="prov proposed">proposed</span></div>
+    <div class="fig-scroll">
+      <table class="tiertable stagegrid">
+        <tr><th>Pattern</th><th>Chart</th><th>Pilot</th><th>Voyage</th><th>Waves (managed)</th></tr>
+        <tr><td>P1 · Document Intake</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td class="c">●</td><td>Silent-failure monitoring, eval refresh, cost tuning</td></tr>
+        <tr><td>P2 · Decision Intelligence</td><td class="c">●</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td>Ranker retraining, drift watch, uplift reporting</td></tr>
+        <tr><td>P3 · Governed Agents</td><td class="c">●</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td>Waves for Agentic Ops — today's offer, unchanged</td></tr>
+        <tr><td>P4 · Back-Office Automation</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td>Runbook ownership, exception-queue operations</td></tr>
+        <tr><td>P5 · Edge &amp; Sovereign</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td class="c">●</td><td>Fleet health, model &amp; quantization updates, re-measurement</td></tr>
+        <tr><td>P6 · Eval, ML &amp; AI Ops</td><td class="c">●</td><td class="c" colspan="2">embedded in every Pilot &amp; Voyage</td><td>Eval CI as a service — the assurance layer under every row</td></tr>
+        <tr class="hl"><td>P7 · Agent Platform &amp; Marketplace</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td><strong>Waves-native:</strong> marketplace curation, governance gates, agent lifecycle &amp; retirement — a marketplace is never "done"</td></tr>
+      </table>
+    </div>
+    <p class="fignote">P7 typically begins after a first pattern is in production — the marketplace scales what an engagement already proved. Its Chart is a platform-readiness assessment; its natural commercial shape is Voyage into Waves.</p>
+
+    <p class="fignote internal-only" style="margin-top:16px">Price bands are placeholders for ELT pricing review — anchored to current Chart/Pilot-equivalent engagements and mid-market tolerance. Existing Salesforce implementation offers continue unchanged underneath this architecture; this portfolio wraps them, it does not retire them.</p>
+  </div>
+</section>
+
+<!-- ================= EDGE ================= -->
+<section id="edge">
+  <div class="wrap">
+    <div class="kicker">Pillar B in detail</div>
+    <h2>AI @ the Edge: measure, don't guess</h2>
+    <p class="lede">The edge pitch is simple: <strong>most enterprise AI workloads don't need a frontier model, and many aren't allowed to use one.</strong> The hard question is which model is small enough to be cheap and big enough to be safe — and that is a measurement question. Our answer is a harness, not an opinion: find the smallest model that clears the silent-failure threshold for the client's workload, and that determines the hardware tier they need.</p>
+
+    <figure>
+      <figcaption>
+        <span class="ftitle">The edge AI market Coastal is early to</span>
+        <span class="prov validated">validated</span>
+        <span class="fsub">Edge AI market size, USD billions, 2026–2033 · 21.7% CAGR · Grand View Research</span>
+      </figcaption>
+      <div class="fig-scroll">
+        <svg width="640" height="240" viewBox="0 0 640 240" role="img" aria-label="Area chart of edge AI market growing from 30 billion dollars in 2026 to 118.7 billion in 2033">
+          <line class="grid" x1="70" y1="150" x2="610" y2="150"/>
+          <line class="grid" x1="70" y1="100" x2="610" y2="100"/>
+          <line class="grid" x1="70" y1="50" x2="610" y2="50"/>
+          <text class="axis" x="60" y="204" text-anchor="end">$0B</text>
+          <text class="axis" x="60" y="154" text-anchor="end">$40B</text>
+          <text class="axis" x="60" y="104" text-anchor="end">$80B</text>
+          <text class="axis" x="60" y="54" text-anchor="end">$120B</text>
+          <line class="baseline" x1="70" y1="200" x2="610" y2="200"/>
+          <path d="M85 162.5 L160 154.4 L235 144.5 L310 132.4 L385 117.8 L460 99.9 L535 78.1 L610 51.6 L610 200 L85 200 Z" fill="var(--s1)" opacity=".16"/>
+          <path d="M85 162.5 L160 154.4 L235 144.5 L310 132.4 L385 117.8 L460 99.9 L535 78.1 L610 51.6" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="85" cy="162.5" r="4.5" fill="var(--s1)"><title>2026: $30.0B</title></circle>
+          <circle cx="610" cy="51.6" r="5.5" fill="var(--s1)" stroke="var(--bg-raised)" stroke-width="2"><title>2033: $118.7B</title></circle>
+          <text class="dlabel" x="92" y="150">$30B · 2026</text>
+          <text class="dlabel" x="600" y="40" text-anchor="end">$118.7B · 2033</text>
+          <text class="axis" x="85" y="218" text-anchor="middle">2026</text>
+          <text class="axis" x="235" y="218" text-anchor="middle">2028</text>
+          <text class="axis" x="385" y="218" text-anchor="middle">2030</text>
+          <text class="axis" x="535" y="218" text-anchor="middle">2032</text>
+        </svg>
+      </div>
+      <div class="fignote">Intermediate years interpolated at the reported 21.7% CAGR. The SLM-specific edge segment grows faster still: $3.4B (2025) → $12.9B (2030), ~30% CAGR (Marqstats). GDPR, HIPAA, and the European Health Data Space effectively mandate local inference for classes of sensitive workloads.</div>
+    </figure>
+
+    <h3 style="font-size:20px;margin:36px 0 6px">The hardware tier ladder</h3>
+    <p class="lede" style="font-size:15px">Clients don't buy "edge AI" — they buy a decision about hardware they mostly already own. We size workloads against four tiers: <span class="prov proposed">proposed</span></p>
+    <div class="fig-scroll">
+      <table class="tiertable">
+        <tr><th>Tier</th><th>What it is</th><th>Model memory</th><th>Bandwidth</th><th>Deployment shape</th><th>Typical fit</th></tr>
+        <tr><td>T0</td><td>Installed business fleet — 16GB desktop/laptop, integrated graphics</td><td class="num">4–8 GB</td><td class="num">60–90 GB/s</td><td>Per-user, existing asset ($0 capex)</td><td>Deterministic tiers + 1–4B assist models</td></tr>
+        <tr><td>T1</td><td>Refresh-cycle AI PC — 32GB, NPU</td><td class="num">12–16 GB</td><td class="num">110–135 GB/s</td><td>Per-user, planned capex</td><td>4–8B models; most P1/P4 workloads</td></tr>
+        <tr><td>T2</td><td>Workstation with discrete GPU</td><td class="num">16–24 GB</td><td class="num">500–960 GB/s</td><td>Per-team or shared</td><td>8–30B models; high-volume document ops</td></tr>
+        <tr><td>T3</td><td>Edge appliance — Strix Halo / DGX Spark class</td><td class="num">96–120 GB</td><td class="num">212–273 GB/s</td><td>Per-site or department</td><td>30–70B models; departmental inference service</td></tr>
+      </table>
+    </div>
+
+    <figure>
+      <figcaption>
+        <span class="ftitle">What edge-first economics look like</span>
+        <span class="prov modeled">modeled</span>
+        <span class="fsub">Cost per 1,000 documents processed, cascade (edge-first with cloud escalation) vs cloud-only frontier — modeled from our measurement-harness design targets, not yet field-measured</span>
+      </figcaption>
+      <div class="fig-scroll">
+        <svg width="640" height="170" viewBox="0 0 640 170" role="img" aria-label="Bar chart: cloud-only costs 38.81 dollars per thousand documents; edge-first cascade costs 1.37 dollars — roughly 28 times cheaper">
+          <line class="baseline" x1="150" y1="20" x2="150" y2="130"/>
+          <text class="axis" x="140" y="52" text-anchor="end">Cloud-only</text>
+          <rect class="bar" x="150" y="34" width="440" height="30" rx="4" fill="var(--s2)"><title>Cloud-only frontier model: $38.81 per 1,000 documents (modeled)</title></rect>
+          <text class="dlabel" x="598" y="54">$38.81</text>
+          <text class="axis" x="140" y="112" text-anchor="end">Cascade</text>
+          <rect class="bar" x="150" y="94" width="16" height="30" rx="3" fill="var(--s1)"><title>Edge-first cascade: $1.37 per 1,000 documents (modeled) — deterministic + local SLM absorb most volume; cloud used only on escalation</title></rect>
+          <text class="dlabel" x="174" y="114">$1.37 — ~28× cheaper</text>
+          <text class="axis" x="150" y="152">Electricity is ~2% of the cascade's cost. Even a 5× error in the power model leaves the advantage at ~26×.</text>
+        </svg>
+      </div>
+    </figure>
+
+    <figure>
+      <figcaption>
+        <span class="ftitle">Where 100 documents actually go</span>
+        <span class="prov modeled">modeled</span>
+        <span class="fsub">Escalation mix per 100 documents in the P1 pattern, cascade arm — design-target model pending first field measurement</span>
+      </figcaption>
+      <div class="fig-scroll">
+        <svg width="640" height="120" viewBox="0 0 640 120" role="img" aria-label="Stacked bar: of 100 documents, 58 are handled deterministically with no model call, 33 by a local small model, 7 by a cloud field fix, 2 by a full cloud document pass">
+          <rect class="seg" x="20"    y="30" width="345.1" height="34" rx="4" fill="var(--s1)"><title>58 of 100: deterministic tier only — no AI model invoked at all</title></rect>
+          <rect class="seg" x="367.1" y="30" width="194.3" height="34" rx="4" fill="var(--s3)"><title>33 of 100: resolved by the local small model (R0/R1)</title></rect>
+          <rect class="seg" x="563.4" y="30" width="39.2"  height="34" rx="4" fill="var(--s4)"><title>7 of 100: one field escalated to a cloud model (R2)</title></rect>
+          <rect class="seg" x="604.6" y="30" width="9.4"   height="34" rx="4" fill="var(--s2)"><title>2 of 100: full document escalated to a frontier model (R3)</title></rect>
+          <text class="dlabel-inv" x="30" y="52">58 never touch a model</text>
+          <text class="dlabel-inv" x="377" y="52">33 local SLM</text>
+          <text class="dlabel" x="563" y="86">7 cloud field</text>
+          <text class="dlabel" x="606" y="104" text-anchor="end">2 full cloud doc</text>
+        </svg>
+      </div>
+      <div class="legend">
+        <span class="key"><span class="swatch" style="background:var(--s1)"></span>Deterministic</span>
+        <span class="key"><span class="swatch" style="background:var(--s3)"></span>Local SLM (R0/R1)</span>
+        <span class="key"><span class="swatch" style="background:var(--s4)"></span>Cloud field (R2)</span>
+        <span class="key"><span class="swatch" style="background:var(--s2)"></span>Cloud doc (R3)</span>
+      </div>
+      <div class="fignote">This is the executive translation that sells the pattern: <strong>58 of every 100 invoices never touch an AI model at all</strong> — which is why the economics hold and the risk surface stays small.</div>
+    </figure>
+
+    <div class="callout">
+      <h4>The measurement harness behind the practice</h4>
+      <p>Coastal AI Synthesis — our internal edge-first measurement harness — runs a client-representative corpus through every model size and hardware tier and reports three things per configuration: silent-failure rate, throughput per machine, and cost per 1,000 records, with every number badged <em>measured</em>, <em>modeled</em>, or <em>projected</em>. It is the engine inside the Edge Chart offer: clients get an evidence file, not a slideware recommendation. Architecture is complete; first measured runs are the Q1 milestone on the roadmap.</p>
+    </div>
+
+    <h3 style="font-size:20px;margin:40px 0 6px">Silicon partnerships to pursue</h3>
+    <p class="lede" style="font-size:15px">All three vendors are actively building partner ecosystems for exactly the practice we're launching. Recommended posture: <strong>AMD first</strong> (open ecosystem, best price/performance story for our tiers, active recruitment), NVIDIA for the appliance tier, Intel for the installed-fleet story. <span class="prov proposed">proposed</span></p>
+    <div class="partners">
+      <div class="partner">
+        <h4>AMD — lead partner</h4>
+        <p>Ryzen AI 400 series (60 TOPS NPU) shipping Q1 2026 covers T1; Instinct covers datacenter. New Robotics/Physical-AI Partner Network opened enrollment mid-2026 with a no-cost registered tier.</p>
+        <ul>
+          <li>Join partner network at registered tier; pursue eval hardware for the Edge Lab</li>
+          <li>Co-marketing angle: "AI on the fleet you already own"</li>
+        </ul>
+      </div>
+      <div class="partner">
+        <h4>NVIDIA — appliance &amp; vertical edge</h4>
+        <p>Jetson/IGX for industrial and clinical edge; DGX Spark class devices define our T3 tier. NVIDIA's own research argues small language models are the future of agentic AI — useful air cover for the whole practice.</p>
+        <ul>
+          <li>NVIDIA Partner Network (solutions/consulting track)</li>
+          <li>Target: healthcare and manufacturing edge reference architectures</li>
+        </ul>
+      </div>
+      <div class="partner">
+        <h4>Intel — the installed fleet</h4>
+        <p>Core Ultra AI PCs and OpenVINO give us the T0/T1 story for clients who refresh on Intel. OpenVINO's CPU/NPU optimization is the cheapest possible deployment tier — the "$0 capex" pitch.</p>
+        <ul>
+          <li>Intel Partner Alliance + OpenVINO ecosystem</li>
+          <li>Angle: deterministic tier + small models on existing corporate laptops</li>
+        </ul>
+      </div>
+    </div>
+    <p class="fignote">Also monitor: Qualcomm (Snapdragon X in the AI PC refresh cycle) and Apple silicon (unified memory makes Mac minis a quietly excellent T1/T2 inference node for SMB).</p>
+  </div>
+</section>
+
+<!-- ================= INDUSTRIES ================= -->
+<section id="industries">
+  <div class="wrap">
+    <div class="kicker">Go-to-market</div>
+    <h2>Where we pitch first</h2>
+    <p class="lede">Priority follows two forces: <strong>how sensitive the data is</strong> (privacy, compliance, sovereignty — pushes toward edge and model choice) and <strong>how hard the cost pressure is</strong> (pushes toward deterministic-first patterns and small models). Where both are high, this portfolio has no credible competitor among Salesforce pure-plays.</p>
+
+    <div class="matrix">
+      <div class="axislbl v">Data sensitivity →</div>
+      <div class="quad hot">
+        <h5>Sensitive + cost-pressured · lead market</h5>
+        <div class="chips"><span class="chip">Healthcare &amp; Life Sciences</span><span class="chip">Public Sector</span><span class="chip">Nonprofit (grant-funded)</span></div>
+      </div>
+      <div class="quad">
+        <h5>Sensitive + budget-rich</h5>
+        <div class="chips"><span class="chip">Financial Services</span><span class="chip">Insurance</span></div>
+      </div>
+      <div class="quad">
+        <h5>Open data + cost-pressured</h5>
+        <div class="chips"><span class="chip">Manufacturing &amp; Field Ops</span><span class="chip">Consumer &amp; Business Services</span></div>
+      </div>
+      <div class="quad">
+        <h5>Open data + budget-rich</h5>
+        <div class="chips"><span class="chip">High Tech</span><span class="chip">Private Equity portfolios</span></div>
+      </div>
+      <div class="axislbl h">← Cost pressure</div>
+    </div>
+
+    <div class="indgrid">
+      <div class="ind"><h4>Healthcare &amp; Life Sciences</h4><p class="why">PHI cannot casually leave the building; HIPAA and EHDS-class rules increasingly mandate local inference. Claims and prior-auth documents are the canonical P1 workload. Existing Coastal practice to build from.</p><div class="pats"><span class="chip">P1</span><span class="chip">P5</span><span class="chip">P6</span></div></div>
+      <div class="ind"><h4>Public Sector</h4><p class="why">Sovereignty, FedRAMP, and air-gapped environments make cloud-only AI a non-starter for whole agencies — edge is not a preference, it's the requirement. Forms processing and case management fit P1/P4. Existing Coastal practice.</p><div class="pats"><span class="chip">P1</span><span class="chip">P4</span><span class="chip">P5</span></div></div>
+      <div class="ind"><h4>Financial Services</h4><p class="why">Model-risk governance culture buys evaluation and assurance (P6) on its own. Claude-in-Salesforce-trust-boundary is purpose-built for this vertical, and our new FinServ practice gives us the bench.</p><div class="pats"><span class="chip">P1</span><span class="chip">P2</span><span class="chip">P6</span></div></div>
+      <div class="ind"><h4>Manufacturing &amp; Field Operations</h4><p class="why">OT networks, intermittent connectivity, and latency make edge natural; quality-inspection and maintenance workflows fit P4/P5. Silicon-partner co-sell territory (NVIDIA IGX, AMD embedded).</p><div class="pats"><span class="chip">P4</span><span class="chip">P5</span></div></div>
+      <div class="ind"><h4>Consumer &amp; Business Services</h4><p class="why">Mid-market, Salesforce-installed, cost-sensitive: the natural home of P2 next-best-action and P3 governed agents on the existing CRM investment, graduating to a P7 agent platform as adoption spreads.</p><div class="pats"><span class="chip">P2</span><span class="chip">P3</span><span class="chip">P7</span></div></div>
+      <div class="ind"><h4>Nonprofit</h4><p class="why">Coastal's heritage vertical. Grant-funded budgets can't absorb per-token cloud economics at scale — edge on donated or refresh hardware is genuinely enabling, and the story is exceptional.</p><div class="pats"><span class="chip">P1</span><span class="chip">P3</span><span class="chip">P5</span></div></div>
+    </div>
+
+    <h3 style="font-size:20px;margin:44px 0 4px">Four buyer profiles</h3>
+    <div class="profiles">
+      <div class="profile"><h4>The Regulated Enterprise</h4><p>Healthcare system, agency, bank. Data cannot leave; auditors are in the room. Buys measurement, sovereignty, and assurance.</p><div class="lead">Entry: Edge Chart → P5/P1 Pilot</div></div>
+      <div class="profile"><h4>The Ops-Heavy Enterprise</h4><p>High document volume, thin margins: claims, AP, logistics. Buys straight-through rate and cost per 1,000.</p><div class="lead">Entry: P1 Chart → Pilot → Waves</div></div>
+      <div class="profile"><h4>The Data-Rich Mid-Market</h4><p>Salesforce-installed, revenue-focused, no AI staff. Buys next-best-action uplift and a governed customer agent.</p><div class="lead">Entry: P2/P3 Pilot on existing CRM</div></div>
+      <div class="profile"><h4>The Cost-Bound SMB &amp; Nonprofit</h4><p>Wants AI, cannot fund cloud economics or headcount. Buys productized Chart + T0/T1 edge deployment.</p><div class="lead">Entry: fixed-price Chart, packaged patterns</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VALIDATION (internal) ================= -->
+<section id="validation" class="internal-only">
+  <div class="wrap">
+    <div class="kicker">Internal · evidence check</div>
+    <h2>Validating the thesis</h2>
+    <p class="lede">I asked for a proof-check on my own positions, and the evidence pushed back in two places worth owning out loud. Verdicts against market data and vendor/analyst sources (August 2026): <strong>three validated with sharpening, one reframed.</strong> Where the evidence disagreed with my original framing, the portfolio copy above already reflects the corrected version — evidence before assertion applies to us too.</p>
+
+    <div class="claims">
+      <div class="claim">
+        <span class="verdict ok">VALIDATED — with a commercial caution</span>
+        <h3>1 · "Agentforce is not a comprehensive AI solution; it's best for high-governance, Salesforce-first data and public-facing agents"</h3>
+        <p class="evi"><b>Evidence for:</b></p>
+        <ul>
+          <li>Salesforce itself now positions the LLM as pluggable: Claude is a <em>preferred model</em> for regulated industries running inside the Salesforce trust boundary, and customers can bring their own models — Agentforce's differentiation is governance and CRM-native data/actions, not reasoning capability (Anthropic–Salesforce partnership announcements, 2025–26).</li>
+          <li>Gartner predicts &gt;40% of agentic AI projects canceled by end-2027 and calls out "agent washing"; buying an agent platform is not an AI strategy.</li>
+          <li>Enterprise budgets flow to model APIs and compound systems (Menlo: $8.4B 1H-2025), of which CRM-attached agents are one surface among many.</li>
+        </ul>
+        <div class="correction"><b>Caution:</b> Agentforce is nonetheless growing fast — roughly $800M ARR, +169% YoY, ~29,000 deals by early FY26 reporting. TCS paid $700M for us substantially <em>because</em> of this motion. The portfolio therefore keeps Agentforce as the honest best-fit chassis for P3 and keeps Waves attached to it. "Lead agnostic" means the portfolio's front door is pattern-first — it must never read as "we're leaving Salesforce."</div>
+      </div>
+
+      <div class="claim">
+        <span class="verdict adj">VALIDATED — two corrections</span>
+        <h3>2 · "Claude, OpenAI, and open-source models are the future and where all segments are leaning"</h3>
+        <p class="evi"><b>Evidence for:</b> Menlo Ventures (surveying 150+ enterprise technical leaders): Anthropic leads enterprise LLM spend at ~40% (from 12% in 2023), OpenAI 27% (from 50%), with spend itself doubling every ~6 months. Your field observation — Agentforce as a small function of the overall AI ecosystem in enterprise accounts — matches the spend data.</p>
+        <div class="correction"><b>Correction 1:</b> Google/Gemini is the omission — 21% of enterprise share and the fastest riser after Anthropic. An "agnostic" portfolio that names Claude and OpenAI but not Gemini reads as dated in 2026; the portfolio pillar copy includes it.</div>
+        <div class="correction"><b>Correction 2:</b> Open-source is <em>not</em> winning the enterprise API workload — its share of API-style spend is roughly stable-to-declining (~11–13%). Where open-weight models genuinely win is self-hosted, sovereign, and edge deployment — cost- and privacy-bound inference. That reframing moves open-source from Pillar A (model menu) to the engine of Pillar B (edge), which is a stronger and more defensible story.</div>
+      </div>
+
+      <div class="claim">
+        <span class="verdict ok">VALIDATED — with one architectural sharpening</span>
+        <h3>3 · "AI @ the Edge is high-value / low-risk for customers who can't operate in the cloud due to cost, privacy, compliance"</h3>
+        <p class="evi"><b>Evidence for:</b> Edge AI market $30B (2026) → $118.7B (2033), 21.7% CAGR (Grand View Research); SLM edge deployment $3.4B → $12.9B by 2030, ~30% CAGR, explicitly driven by privacy-first demand (Marqstats); GDPR/HIPAA/EHDS-class regulation effectively mandating local inference for sensitive workloads; NVIDIA research position that small language models are the future of agentic AI; AMD/Intel/NVIDIA all actively recruiting edge-AI partners in 2026.</p>
+        <div class="correction"><b>Sharpening:</b> Edge is rarely all-or-nothing. The winning architecture in the evidence — and in our own harness design — is the <em>cascade</em>: deterministic + local small model absorbing ~90% of volume, cloud escalation for the hard residue. Pitching "edge instead of cloud" invites a religion argument; pitching "the smallest model that clears your accuracy threshold, wherever it runs cheapest and most legally" wins on math. Also honest: "low risk" is earned only with measurement — silent-failure rates of small models on degraded real-world documents are exactly the thing to test per client, which is what the Edge Chart offer does.</div>
+      </div>
+
+      <div class="claim">
+        <span class="verdict adj">REFRAMED — right instinct, wrong mechanism</span>
+        <h3>4 · "Without machine learning, inference alone will always risk a degree of hallucination"</h3>
+        <p class="evi"><b>What the evidence says:</b> hallucination is intrinsic to LLM inference, and classical ML does not remove it. What actually reduces error in production systems is the <em>compound-systems</em> toolkit: retrieval grounding, independent verification gates, best-of-N reranking with factuality scoring (shown in ACL 2025 findings to significantly lower error rates), and evaluation harnesses run continuously. Classical ML is critical — but as the system's <em>numerical judgment</em>, not as a hallucination cure.</p>
+        <p class="evi"><b>Where ML is genuinely load-bearing (the examples you asked for):</b></p>
+        <ul>
+          <li><b>Learned routers &amp; cascades</b> — a small classifier decides which model (or no model) gets each request; FrugalGPT-style routing cuts cost 60–90% at equal quality.</li>
+          <li><b>Rerankers</b> — cross-encoders ordering retrieved context; the single highest-leverage accuracy upgrade in RAG systems.</li>
+          <li><b>Propensity &amp; uplift models</b> — the "weights" in next-best-action; the LLM explains, the ML model scores.</li>
+          <li><b>Confidence calibration</b> — mapping model logprobs to real error rates so escalation triggers fire at the right threshold (noting grammar-constrained outputs are systematically over-confident and must be segmented).</li>
+          <li><b>Anomaly &amp; fraud detection</b> — gating agent autonomy: the agent drafts, the anomaly model decides whether a human sees it first.</li>
+          <li><b>Forecasting</b> — demand/pipeline forecasts as structured context for agent planning.</li>
+          <li><b>Entity resolution &amp; dedupe</b> — embedding-based matching that fixes the data before any reasoning happens.</li>
+          <li><b>Drift monitors</b> — distribution-shift detectors that page a human before quality decays, not after.</li>
+        </ul>
+        <div class="correction"><b>Portfolio consequence:</b> this becomes Pillar D / Pattern P6 — "Evaluation, ML &amp; AI Operations" — positioned as the accuracy-and-assurance layer under every other pattern, rather than an anti-hallucination claim we can't defend to a technical buyer.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ORG (internal) ================= -->
+<section id="org" class="internal-only">
+  <div class="wrap">
+    <div class="kicker">Internal · the practice</div>
+    <h2>The AI &amp; Platform Delivery team</h2>
+    <p class="lede">Day-1 structure follows the AI &amp; Platform Delivery framework: <strong>11 seats — a leadership spine of five plus six forward-deployed engineers (FDEs)</strong> in two teams under two Sr. Directors, delivering in partnership with the markets. The split <em>is</em> the strategy: Salesforce-side capacity is deliberately capped so the alliance stays healthy without re-centering the practice on one vendor, while the agnostic bench is where net-new capability compounds. Roughly 8 of 11 seats rebadge from the existing bench. <span class="prov proposed">proposed</span></p>
+
+    <div class="orgtree">
+      <div class="orgroot">VP, AI Delivery<small>PORTFOLIO P&amp;L · PARTNERSHIPS · ALLIANCE POSTURE · GO/NO-GO GATES</small></div>
+      <div class="duo">
+        <div class="branch">
+          <h4>Sr. Director, Data &amp; AI — GTM</h4>
+          <div class="sub">HEADLESS 360 / AGENTFORCE · SLACK</div>
+          <p>Market-facing: co-owns pipeline with the markets, presales solutioning, and the Salesforce &amp; Slack alliance relationships. Owns the P3 pattern and Agentforce Waves.</p>
+          <div class="pl"><b>Technical PL (Salesforce AI):</b> delivery quality, methodology, and utilization for both Salesforce-side lanes; certifies FDEs</div>
+        </div>
+        <div class="branch">
+          <h4>Sr. Director, AI Platforms — Technology</h4>
+          <div class="sub">AGNOSTIC ENGINEERING · EDGE LAB · EVALS</div>
+          <p>Engineering-facing: agnostic reference architectures, the Edge Lab and measurement harness, eval/routing assets, and model evaluation across Claude, OpenAI, Gemini, and open-weight providers.</p>
+          <div class="pl"><b>Technical PL (AI Platforms):</b> runs harness-based Chart engagements, eval CI, and agnostic delivery standards</div>
+        </div>
+      </div>
+      <div class="lanes">
+        <div class="lane sf"><h4>Headless 360 / Agentforce</h4><div class="cnt">2 FDEs · 1 Architect + 1 Consultant</div><div class="dots"><span class="dot"></span><span class="dot"></span></div><p>Governed CRM-native agents, Claude in the Salesforce trust boundary, headless Data 360 patterns. Capped at 2 by design — enough to honor the alliance and serve P3 demand without re-centering the practice on a single vendor.</p></div>
+        <div class="lane slack"><h4>Slack</h4><div class="cnt">1 FDE · reports into GTM, pairs with Agnostic</div><div class="dots"><span class="dot"></span></div><p>Slack as the agent surface for both stacks: Agentforce-in-Slack for CRM workflows, and agnostic backends surfaced in Slack everywhere else. The connective tissue between the two teams.</p></div>
+        <div class="lane agn"><h4>Agnostic</h4><div class="cnt">3 FDEs · 1 Architect + 2 Consultants</div><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><p>Multi-model builds, edge deployments, evals — delivery of P1/P2/P4/P5. The remainder of the bench lands here, and every incremental hire lands here first.</p></div>
+      </div>
+    </div>
+
+    <figure>
+      <figcaption>
+        <span class="ftitle">FDE allocation: the cap is the strategy</span>
+        <span class="prov proposed">proposed</span>
+        <span class="fsub">6 forward-deployed engineers · Salesforce-side capacity capped at 2 plus 1 Slack · remainder to the agnostic bench, which grows first</span>
+      </figcaption>
+      <div class="fig-scroll">
+        <svg width="640" height="106" viewBox="0 0 640 106" role="img" aria-label="Stacked bar: of six FDEs, two on Headless 360 and Agentforce, one on Slack, three agnostic">
+          <rect class="seg" x="20" y="24" width="198" height="34" rx="4" fill="var(--s3)"><title>Headless 360 / Agentforce: 2 FDEs — capped by design; extra demand goes to the markets</title></rect>
+          <rect class="seg" x="220" y="24" width="98" height="34" rx="4" fill="var(--s4)"><title>Slack: 1 FDE — bridges both teams</title></rect>
+          <rect class="seg" x="320" y="24" width="300" height="34" rx="4" fill="var(--s1)"><title>Agnostic: 3 FDEs — the growth engine; new hires land here first</title></rect>
+          <text class="dlabel-inv" x="30" y="46">2 · Headless 360/AF</text>
+          <text class="dlabel-inv" x="230" y="46">1 · Slack</text>
+          <text class="dlabel-inv" x="330" y="46">3 · Agnostic</text>
+          <text class="axis" x="20" y="84">Growth rule: incremental Salesforce demand is met by the markets; incremental hires land on the agnostic bench.</text>
+        </svg>
+      </div>
+    </figure>
+
+    <h3 style="font-size:20px;margin:36px 0 10px">Role scopes</h3>
+    <div class="fig-scroll">
+      <table class="rolestable">
+        <tr><th>Role</th><th>Owns</th><th>Seats</th><th>Fill</th></tr>
+        <tr><td>VP, AI Delivery</td><td>Portfolio P&amp;L; model &amp; silicon partnerships; Salesforce/TCS alliance posture; final go/no-go on every Chart→Pilot conversion</td><td class="n">1</td><td><span class="pill rebadge">Allen</span></td></tr>
+        <tr><td>Sr. Director, Data &amp; AI (GTM)</td><td>Pipeline co-owned with the markets; presales solutioning; Agentforce &amp; Slack alliance management; P3 pattern and Agentforce Waves</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>Sr. Director, AI Platforms (Technology)</td><td>Agnostic reference architectures; Edge Lab &amp; measurement harness; eval/routing assets; provider evaluations across Claude, OpenAI, Gemini, open-weights</td><td class="n">1</td><td><span class="pill hire">hire or senior rebadge</span></td></tr>
+        <tr><td>Technical PL (Salesforce AI)</td><td>Delivery quality, methodology, utilization for the Headless 360/Agentforce and Slack lanes; FDE certification</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>Technical PL (AI Platforms)</td><td>Agnostic delivery standards; runs harness-based Chart engagements; owns eval CI</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>FDE Architect — Headless 360/Agentforce</td><td>Governed CRM-native agent design; Claude in the Salesforce trust boundary; headless Data 360 patterns</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>FDE Consultant — Headless 360/Agentforce</td><td>Build, integrate, and enable on Agentforce engagements</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>FDE — Slack</td><td>Slack agent surfaces for both stacks; workflow automation; reports into GTM and pairs weekly with the agnostic team</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>FDE Architect — Agnostic</td><td>Multi-model and edge solution design; eval-driven model selection; leads P1/P5 builds</td><td class="n">1</td><td><span class="pill hire">external hire</span></td></tr>
+        <tr><td>FDE Consultants — Agnostic</td><td>Pattern delivery across P1/P2/P4/P5; first Academy cohort trainers</td><td class="n">2</td><td><span class="pill rebadge">1 rebadge</span> <span class="pill hire">1 hire</span></td></tr>
+      </table>
+    </div>
+
+    <div class="ecosystem">
+      <span class="elbl">Dotted lines</span>
+      <span class="chip">Snowflake GTM · Henry's team</span>
+      <span class="chip">Market Strategy · Tara's team</span>
+      <span class="chip">True North · Chris's team</span>
+      <span class="chip">AI Toolkit · Sam's team</span>
+    </div>
+    <div class="ecosystem">
+      <span class="elbl">Exec sponsors</span>
+      <span class="chip">JP Owens · Chief Growth Officer (Alliances, Data &amp; AI GTM)</span>
+      <span class="chip">Brian Gannuscio · Chief Data &amp; Practices Officer (Data &amp; AI)</span>
+      <span class="chip">Aimee Cubbage · Chief Experience Officer (True North, Delivery Toolkit)</span>
+    </div>
+
+    <p class="lede" style="font-size:15px;margin-top:26px">Scale path: this 11-seat structure is the keel of the ~40-person practice modeled for FY28 — pattern pods, Edge Lab, ML &amp; Evaluation Lab, and an Enablement Academy certifying the wider 400-person bench — with growth gated on FY27 measured win rates, not ambition.</p>
+
+    <h3 style="font-size:20px;margin:40px 0 4px">SME map: what we need and where it comes from</h3>
+    <div class="sumsub">Counts are at-scale (FY28) capability needs; day-1 fills come from the role-scope table above.</div>
+    <div class="fig-scroll">
+      <table class="smetable">
+        <tr><th>SME type</th><th>Why the portfolio needs it</th><th>Count</th><th>Source</th></tr>
+        <tr><td>Multi-model AI architect</td><td>Eval-driven model selection; compound-system design; owns Pillar A credibility</td><td>2</td><td><span class="pill rebadge">rebadge CTA + upskill</span></td></tr>
+        <tr><td>Edge inference engineer</td><td>Quantization, llama.cpp/vLLM/OpenVINO, NPU/GPU sizing; runs the harness</td><td>2</td><td><span class="pill hire">external hire</span></td></tr>
+        <tr><td>ML engineer / data scientist</td><td>Routers, rerankers, propensity models, calibration — the P6 asset base</td><td>3</td><td><span class="pill hire">external hire</span></td></tr>
+        <tr><td>Data engineer</td><td>Pipelines and semantic layers that feed P2; MCP-vs-pipeline judgment</td><td>3</td><td><span class="pill rebadge">rebadge (MuleSoft/Data 360)</span></td></tr>
+        <tr><td>AI governance &amp; compliance</td><td>HIPAA, FedRAMP, EU AI Act, model-risk documentation; unlocks regulated verticals</td><td>1–2</td><td><span class="pill rebadge">rebadge + certify</span></td></tr>
+        <tr><td>AI economist / FinOps</td><td>ROAI models, rate cards, cost-per-outcome pricing of our own offers</td><td>1</td><td><span class="pill hire">external hire</span></td></tr>
+        <tr><td>Agentforce architects</td><td>P3 chassis — existing house strength, no gap</td><td>GTM team</td><td><span class="pill rebadge">existing bench</span></td></tr>
+        <tr><td>Industry SMEs (HLS, PubSec, FinServ)</td><td>Pattern-to-workload translation per vertical; embedded one per pod</td><td>3</td><td><span class="pill rebadge">existing practices</span></td></tr>
+        <tr><td>Hardware partnerships lead</td><td>AMD/Intel/NVIDIA programs, eval hardware, co-sell motions</td><td>1</td><td><span class="pill hire">hire or senior rebadge</span></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP (internal) ================= -->
+<section id="roadmap" class="internal-only">
+  <div class="wrap">
+    <div class="kicker">Internal · sequence</div>
+    <h2>2027 rollout and the risks worth naming</h2>
+    <div class="roadmap">
+      <div class="qtr"><span class="q">Q1 2027</span><h4>Launch &amp; measure</h4><ul><li>Portfolio launch; Chart offers GA for all seven patterns</li><li>Edge Lab stood up; first harness field measurement</li><li>AMD partner enrollment; NVIDIA/Intel applications</li><li>First pilot cohort: 3 clients from existing base</li><li><em>Owner: VP, AI Delivery</em></li></ul></div>
+      <div class="qtr"><span class="q">Q2 2027</span><h4>Prove &amp; publish</h4><ul><li>First measured edge evidence file → flagship case study</li><li>Academy cohort 1: 12 engineers certified</li><li>P1 + P2 Pilot offers productized with fixed pricing</li><li><em>Owners: Sr. Dir AI Platforms (evidence file) · Technical PLs (Academy)</em></li></ul></div>
+      <div class="qtr"><span class="q">Q3 2027</span><h4>Scale &amp; extend</h4><ul><li>Waves extended beyond Agentforce to P1/P2/P5 + P7 marketplace operations</li><li>Industry editions: HLS claims, PubSec forms</li><li>Second silicon partnership signed with co-marketing</li><li><em>Owners: Sr. Dir Data &amp; AI GTM (Waves, industries) · VP (partnerships)</em></li></ul></div>
+      <div class="qtr"><span class="q">Q4 2027</span><h4>Compound</h4><ul><li>Target: 12 Charts, 8 Pilots, 4 Voyages, 3 Waves conversions</li><li>≥30% of AI revenue not attached to a Salesforce SKU</li><li>FY28 plan sized from measured win rates, not hope</li><li><em>Owner: VP, AI Delivery — readout to ELT and TCS sponsors</em></li></ul></div>
+    </div>
+
+    <div class="risks">
+      <div class="risk"><h4>Salesforce channel friction</h4><p>"Lead agnostic" can be read in San Francisco as defection, chilling co-sell.</p><p class="mit"><b>Mitigation:</b> P3 keeps Agentforce as the named best-fit chassis; the Claude-in-trust-boundary story lets us be agnostic <em>inside</em> Salesforce's own narrative. Brief the alliance team before any public launch.</p></div>
+      <div class="risk"><h4>TCS overlap</h4><p>TCS has its own AI practices; a Coastal AI portfolio could look duplicative to the new parent.</p><p class="mit"><b>Mitigation:</b> position as the North America mid-market/regulated speedboat with productized patterns — a motion TCS's global delivery model doesn't serve. Get ELT + TCS sponsor alignment in the Q1 launch gate.</p></div>
+      <div class="risk"><h4>Talent for the 9 hires</h4><p>Edge inference and applied-ML engineers are the market's scarcest profiles.</p><p class="mit"><b>Mitigation:</b> the Edge Lab + published measurement work is the recruiting magnet; Academy pipeline reduces dependence to 9 seats; TCS global bench as surge capacity.</p></div>
+      <div class="risk"><h4>Becoming the 40%</h4><p>Gartner's canceled-projects prediction applies to our clients' engagements too — a failed pilot cohort would kill the launch story.</p><p class="mit"><b>Mitigation:</b> the Chart stage is a real go/no-go gate with measured accuracy thresholds; we decline pilots the evidence doesn't support. Saying no is the brand.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h3>Methodology &amp; provenance</h3>
+    <div class="provlegend">
+      <span><span class="prov validated">validated</span> sourced from named external research or vendor announcements</span>
+      <span><span class="prov modeled">modeled</span> derived from our harness design targets; not yet field-measured</span>
+      <span><span class="prov proposed">proposed</span> a strategy choice for ELT decision, not a market fact</span>
+    </div>
+    <div class="internal-only">
+      <p>Primary sources used in validation:</p>
+      <ul>
+        <li>Menlo Ventures — 2025 Mid-Year LLM Market Update &amp; State of Generative AI in the Enterprise (enterprise share, $8.4B spend)</li>
+        <li>Gartner press release, June 2025 — &gt;40% agentic AI project cancellations by 2027; "agent washing"</li>
+        <li>Anthropic × Salesforce partnership announcements — Claude as preferred model for regulated industries inside the Salesforce trust boundary</li>
+        <li>Salesforce FY26 reporting via analyst coverage — Agentforce ~$800M ARR, +169% YoY, ~29k deals</li>
+        <li>Grand View Research — Edge AI market 2026–2033; Marqstats — SLM edge deployment 2025–2030</li>
+        <li>AMD CES/Advancing AI 2026 announcements — Ryzen AI 400 (60 TOPS), Robotics Partner Network; NVIDIA GTC 2026; Intel AI PC / OpenVINO ecosystem</li>
+        <li>NVIDIA Research — "Small Language Models are the Future of Agentic AI"; compound-AI-systems literature (Berkeley BAIR lineage, ACL 2025 reranking findings)</li>
+        <li>Coastal AI Synthesis measurement harness — internal; architecture complete, sourcing the modeled figures above</li>
+      </ul>
+    </div>
+    <p class="fine">Open Water · Coastal 2027 AI offer portfolio — working draft prepared with AI assistance for Allen Hoem, VP of AI Delivery. Figures badged <em>modeled</em> or <em>proposed</em> are illustrative and must not be quoted to clients as measurements. Design language is Coastal-inspired placeholder; swap tokens to brand-guide values before external use.</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var KEY = "openwater-mode";
+    var body = document.body;
+    var btns = {
+      internal: document.getElementById("btn-internal"),
+      client: document.getElementById("btn-client"),
+      summary: document.getElementById("btn-summary")
+    };
+    function apply(mode) {
+      if (!btns[mode]) mode = "internal";
+      body.classList.toggle("mode-internal", mode === "internal");
+      body.classList.toggle("mode-client", mode === "client");
+      body.classList.toggle("mode-summary", mode === "summary");
+      for (var k in btns) {
+        btns[k].classList.toggle("active", k === mode);
+        btns[k].setAttribute("aria-pressed", String(k === mode));
+      }
+      try { localStorage.setItem(KEY, mode); } catch (e) {}
+      if (mode === "summary") { window.scrollTo(0, 0); }
+    }
+    var saved = "internal";
+    try { saved = localStorage.getItem(KEY) || "internal"; } catch (e) {}
+    apply(saved);
+    btns.internal.addEventListener("click", function () { apply("internal"); });
+    btns.client.addEventListener("click", function () { apply("client"); });
+    btns.summary.addEventListener("click", function () { apply("summary"); });
+  })();
+</script>
