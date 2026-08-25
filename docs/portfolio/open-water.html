@@ -443,7 +443,7 @@
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
-<div class="internal-banner internal-only">INTERNAL DRAFT — org design, pricing bands, and validation notes are not for client distribution. Toggle to CLIENT view before presenting.</div>
+<div class="internal-banner internal-only">INTERNAL DRAFT — org design, pricing bands, and validation notes are not for client distribution. CLIENT view hides them visually only: every word remains readable in the page source and in git history. Host this file privately and share externally only via a separately sanitized export.</div>
 
 <nav class="topnav">
   <div class="brand"><span class="mark">COASTAL</span><span class="port">Open Water</span></div>
@@ -516,18 +516,18 @@
         <h3>Set the crew</h3>
         <ul>
           <li>Both teams operational — Headless 360/Agentforce, Slack, and Agnostic lanes staffed</li>
-          <li>Chart (assessment) offer GA across all seven patterns</li>
+          <li>AI Pathfinder (assessment + evals) GA for the three lead motions; Edge Pathfinder incubating with lighthouse clients</li>
           <li>Edge Lab stood up; the measurement harness makes its first runs</li>
           <li>Partner enrollments filed: AMD, NVIDIA, Intel, plus model providers</li>
         </ul>
-        <div class="exit"><b>Done when:</b> 2 paid Charts in delivery · eval harness v1 running</div>
+        <div class="exit"><b>Done when:</b> 2 paid Pathfinders in delivery · eval harness v1 running</div>
       </div>
       <div class="phase">
         <div class="pdays">61–90</div>
         <div class="pname">Phase 3</div>
         <h3>Open water</h3>
         <ul>
-          <li>Convert Charts into the first 2 Pilots, each with measured accuracy gates</li>
+          <li>Convert Pathfinders into the first 2 Pilots, each with measured accuracy gates</li>
           <li>Publish the first measured evidence file — the flagship case-study draft</li>
           <li>Design the Waves managed-service extension beyond Agentforce</li>
           <li>90-day readout to leadership: metrics shown, FY27 targets locked</li>
@@ -550,7 +550,7 @@
         <h4>Sr. Director, AI Platforms — Technology</h4>
         <div class="sub">AGNOSTIC ENGINEERING · EDGE LAB · EVALS</div>
         <p>Engineering-facing: agnostic reference architectures, the Edge Lab and measurement harness, model evaluation across providers.</p>
-        <div class="pl"><b>Technical PL (AI Platforms):</b> runs harness-based Charts, eval CI, and agnostic delivery standards</div>
+        <div class="pl"><b>Technical PL (AI Platforms):</b> runs harness-based Pathfinders, eval CI, and agnostic delivery standards</div>
       </div>
     </div>
     <div class="lanes">
@@ -566,7 +566,7 @@
       <span class="chip">AI Toolkit · Sam</span>
       <span class="elbl" style="margin-left:10px">Sponsors</span>
       <span class="chip">JP Owens · CGO</span>
-      <span class="chip">Brian Gannuscio · CDPO</span>
+      <span class="chip">Brian Gannuscio · CDO</span>
       <span class="chip">Aimee Cubbage · CXO</span>
     </div>
 
@@ -574,11 +574,11 @@
     <div class="sumsub">What "on track" means, in numbers <span class="prov proposed">proposed</span></div>
     <div class="tiles">
       <div class="tile"><div class="num">3</div><div class="lbl">Lighthouse accounts engaged</div></div>
-      <div class="tile"><div class="num">4</div><div class="lbl">Chart assessments sold</div></div>
+      <div class="tile"><div class="num">4</div><div class="lbl">AI Pathfinder assessments sold</div></div>
       <div class="tile"><div class="num">2</div><div class="lbl">Pilots in flight with accuracy gates</div></div>
       <div class="tile"><div class="num">1</div><div class="lbl">Measured evidence file published</div></div>
       <div class="tile"><div class="num">2+</div><div class="lbl">Silicon partner programs joined</div></div>
-      <div class="tile"><div class="num">11/11</div><div class="lbl">Team seats filled</div></div>
+      <div class="tile"><div class="num">11/11</div><div class="lbl">Seats filled or offers accepted — 8 rebadge, 3 external</div></div>
     </div>
     <p class="fignote">This is the distilled view for business leaders. Toggle INTERNAL for the full portfolio: patterns, edge practice, market validation, role scopes, and risks.</p>
   </div>
@@ -618,7 +618,7 @@
       <figcaption>
         <span class="ftitle">Who won the enterprise model budget</span>
         <span class="prov validated">validated</span>
-        <span class="fsub">Share of enterprise LLM API spend/usage, 2023 vs mid-2025 · Menlo Ventures surveys of 150+ technical leaders</span>
+        <span class="fsub">Share of enterprise LLM API spend/usage, 2023 vs full-year 2025 survey · Menlo Ventures surveys of 150+ technical leaders (the mid-year interim shares were 32/25/20)</span>
       </figcaption>
       <div class="fig-scroll">
         <svg width="640" height="250" viewBox="0 0 640 250" role="img" aria-label="Bar chart: OpenAI fell from 50% to 27%, Anthropic rose from 12% to 40%, Google rose from 7% to 21%">
@@ -627,31 +627,31 @@
           <!-- OpenAI -->
           <text class="axis" x="120" y="218">OpenAI</text>
           <rect class="bar" x="110" y="60" width="42" height="140" rx="4" fill="var(--ink-3)" opacity=".45"><title>OpenAI, 2023: 50% of enterprise LLM spend</title></rect>
-          <rect class="bar" x="158" y="124.4" width="42" height="75.6" rx="4" fill="var(--s1)"><title>OpenAI, mid-2025: 27% of enterprise LLM spend</title></rect>
+          <rect class="bar" x="158" y="124.4" width="42" height="75.6" rx="4" fill="var(--s1)"><title>OpenAI, full-year 2025 survey: 27% of enterprise LLM spend</title></rect>
           <text class="dlabel" x="131" y="52" text-anchor="middle">50%</text>
           <text class="dlabel" x="179" y="117" text-anchor="middle">27%</text>
           <!-- Anthropic -->
           <text class="axis" x="290" y="218">Anthropic</text>
           <rect class="bar" x="285" y="166.4" width="42" height="33.6" rx="4" fill="var(--ink-3)" opacity=".45"><title>Anthropic, 2023: 12% of enterprise LLM spend</title></rect>
-          <rect class="bar" x="333" y="88" width="42" height="112" rx="4" fill="var(--s1)"><title>Anthropic, mid-2025: 40% of enterprise LLM spend — the market leader</title></rect>
+          <rect class="bar" x="333" y="88" width="42" height="112" rx="4" fill="var(--s1)"><title>Anthropic, full-year 2025 survey: 40% of enterprise LLM spend — the market leader</title></rect>
           <text class="dlabel" x="306" y="159" text-anchor="middle">12%</text>
           <text class="dlabel" x="354" y="80" text-anchor="middle">40%</text>
           <!-- Google -->
           <text class="axis" x="475" y="218">Google</text>
           <rect class="bar" x="460" y="180.4" width="42" height="19.6" rx="4" fill="var(--ink-3)" opacity=".45"><title>Google, 2023: 7% of enterprise LLM spend</title></rect>
-          <rect class="bar" x="508" y="141.2" width="42" height="58.8" rx="4" fill="var(--s1)"><title>Google, mid-2025: 21% of enterprise LLM spend</title></rect>
+          <rect class="bar" x="508" y="141.2" width="42" height="58.8" rx="4" fill="var(--s1)"><title>Google, full-year 2025 survey: 21% of enterprise LLM spend</title></rect>
           <text class="dlabel" x="481" y="173" text-anchor="middle">7%</text>
           <text class="dlabel" x="529" y="134" text-anchor="middle">21%</text>
         </svg>
       </div>
       <div class="legend">
         <span class="key"><span class="swatch" style="background:var(--ink-3);opacity:.45"></span>2023</span>
-        <span class="key"><span class="swatch" style="background:var(--s1)"></span>Mid-2025</span>
+        <span class="key"><span class="swatch" style="background:var(--s1)"></span>2025 (full-year survey)</span>
       </div>
       <div class="fignote">Open-weight models hold roughly a tenth of enterprise <em>API-style</em> spend and that share is flat-to-declining — their enterprise growth is happening in self-hosted, edge, and sovereign deployments instead, which is exactly the market our Edge practice addresses. Source: Menlo Ventures 2025 reports.</div>
     </figure>
 
-    <p class="lede">Salesforce itself confirms the multi-model reality: <strong>Claude now runs inside the Salesforce trust boundary as the preferred model for regulated industries</strong>, and Agentforce supports customer-supplied models. Agentforce's value is governance, data proximity, and CRM-native actions — a surface we will keep winning on — not the reasoning engine itself. <span class="internal-only">Agentforce ARR reached roughly $800M growing 169% YoY — it is a real, growing channel and we should say so out loud even while we diversify. Dismissing it publicly would be both wrong and commercially reckless given the TCS thesis for acquiring us.</span></p>
+    <p class="lede">Salesforce itself confirms the multi-model reality: <strong>Claude now runs inside the Salesforce trust boundary as the preferred model for regulated industries</strong>, and Agentforce supports customer-supplied models. Agentforce's value is governance, data proximity, and CRM-native actions — a surface we will keep winning on — not the reasoning engine itself. <span class="internal-only">Agentforce ARR reached $1.2B growing 205% YoY per Salesforce's FY27 Q1 reporting (May 2026) — it is a real, growing channel and we should say so out loud even while we diversify. Dismissing it publicly would be both wrong and commercially reckless given the TCS thesis for acquiring us.</span></p>
   </div>
 </section>
 
@@ -692,6 +692,7 @@
     <div class="kicker">Pillar C in detail</div>
     <h2>Patterns, not platforms</h2>
     <p class="lede">Each pattern is named for the question it answers. Each ships with an anatomy, the KPIs it is accountable to, and its model and platform posture — <strong>deterministic first, smallest viable model second, frontier model only when earned</strong>, on whichever agentic framework fits the client. Expand any pattern for its anatomy.</p>
+    <p class="lede" style="margin-top:14px"><strong>Commercially, we launch three motions, not seven:</strong> AI Pathfinder with evaluation, governed Agentforce/Headless 360 delivery, and Evaluation &amp; Agentic Ops through Waves. The seven patterns are the taxonomy those motions sell from. Edge (P5) incubates with lighthouse clients as the differentiated bet, and the P7 marketplace is deliberately deferred — seven simultaneous GA offers from an eleven-person practice is exactly the overreach we counsel clients against.</p>
 
     <div class="patterns">
       <details class="pattern" open>
@@ -820,13 +821,13 @@
   <div class="wrap">
     <div class="kicker">How it is sold</div>
     <h2>One engagement architecture, every pattern</h2>
-    <p class="lede">Every pattern is sold through the same four stages, so a client always knows where they are and what the next commitment costs. Stage one is deliberately small: <strong>measurement before commitment</strong> is how our clients stay out of the canceled-project statistics.</p>
+    <p class="lede">Every pattern is sold through the same four stages, so a client always knows where they are and what the next commitment costs. The ladder extends offers the market already knows — <strong>AI Pathfinder and Waves are today's Coastal offers, deepened with evaluation</strong>, not new brands competing with our own marketing. Stage one is deliberately small: <strong>measurement before commitment</strong> is how our clients stay out of the canceled-project statistics.</p>
     <div class="ladder">
       <div class="rung">
         <span class="stage">Stage 1 · Assess</span>
-        <h3>Chart</h3>
+        <h3>AI Pathfinder</h3>
         <span class="dur">2–4 weeks</span>
-        <p>Workload-to-pattern mapping, data readiness, model-fit evals on your documents, ROI model with a go/no-go gate. You get a defensible answer before you spend real money.</p>
+        <p>Our marketed AI Pathfinder assessment, extended with evaluation: workload-to-pattern mapping, data readiness, model-fit evals on your documents, ROI model with a go/no-go gate. You get a defensible answer before you spend real money.</p>
         <div class="price internal-only">$25–45k fixed <span class="prov proposed">proposed</span></div>
       </div>
       <div class="rung">
@@ -856,7 +857,7 @@
     <div class="sumsub">Every pattern sells through the four stages; marked cells are the common entry points, and the Waves column is what "operate" means for that pattern <span class="prov proposed">proposed</span></div>
     <div class="fig-scroll">
       <table class="tiertable stagegrid">
-        <tr><th>Pattern</th><th>Chart</th><th>Pilot</th><th>Voyage</th><th>Waves (managed)</th></tr>
+        <tr><th>Pattern</th><th>AI Pathfinder</th><th>Pilot</th><th>Voyage</th><th>Waves (managed)</th></tr>
         <tr><td>P1 · Document Intake</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td class="c">●</td><td>Silent-failure monitoring, eval refresh, cost tuning</td></tr>
         <tr><td>P2 · Decision Intelligence</td><td class="c">●</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td>Ranker retraining, drift watch, uplift reporting</td></tr>
         <tr><td>P3 · Governed Agents</td><td class="c">●</td><td class="c">● <span class="entry">entry</span></td><td class="c">●</td><td>Waves for Agentic Ops — today's offer, unchanged</td></tr>
@@ -866,9 +867,9 @@
         <tr class="hl"><td>P7 · Agent Platform &amp; Marketplace</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td><strong>Waves-native:</strong> marketplace curation, governance gates, agent lifecycle &amp; retirement — a marketplace is never "done"</td></tr>
       </table>
     </div>
-    <p class="fignote">P7 typically begins after a first pattern is in production — the marketplace scales what an engagement already proved. Its Chart is a platform-readiness assessment; its natural commercial shape is Voyage into Waves.</p>
+    <p class="fignote">P7 is deliberately deferred — it overlaps Salesforce AgentExchange and TCS platform assets, and it begins only after a first pattern in production proves reuse demand. Its Pathfinder is a platform-readiness assessment; its natural commercial shape is Voyage into Waves.</p>
 
-    <p class="fignote internal-only" style="margin-top:16px">Price bands are placeholders for ELT pricing review — anchored to current Chart/Pilot-equivalent engagements and mid-market tolerance. Existing Salesforce implementation offers continue unchanged underneath this architecture; this portfolio wraps them, it does not retire them.</p>
+    <p class="fignote internal-only" style="margin-top:16px">Price bands are placeholders for ELT pricing review — anchored to current Pathfinder/Pilot-equivalent engagements and mid-market tolerance. Existing Salesforce implementation offers continue unchanged underneath this architecture; this portfolio wraps them, it does not retire them.</p>
   </div>
 </section>
 
@@ -907,7 +908,7 @@
           <text class="axis" x="535" y="218" text-anchor="middle">2032</text>
         </svg>
       </div>
-      <div class="fignote">Intermediate years interpolated at the reported 21.7% CAGR. The SLM-specific edge segment grows faster still: $3.4B (2025) → $12.9B (2030), ~30% CAGR (Marqstats). GDPR, HIPAA, and the European Health Data Space effectively mandate local inference for classes of sensitive workloads.</div>
+      <div class="fignote">Intermediate years interpolated at the reported 21.7% CAGR. The SLM-specific edge segment grows faster still: $3.4B (2025) → $12.9B (2030), ~30% CAGR (Marqstats). GDPR, HIPAA, and EHDS-class regimes do not mandate local inference — compliant cloud paths exist — but their authorization, transfer, and audit burden often makes local inference the cheapest compliant architecture, and sovereignty or air-gap requirements make it the only one.</div>
     </figure>
 
     <h3 style="font-size:20px;margin:36px 0 6px">The hardware tier ladder</h3>
@@ -971,7 +972,7 @@
 
     <div class="callout">
       <h4>The measurement harness behind the practice</h4>
-      <p>Coastal AI Synthesis — our internal edge-first measurement harness — runs a client-representative corpus through every model size and hardware tier and reports three things per configuration: silent-failure rate, throughput per machine, and cost per 1,000 records, with every number badged <em>measured</em>, <em>modeled</em>, or <em>projected</em>. It is the engine inside the Edge Chart offer: clients get an evidence file, not a slideware recommendation. Architecture is complete; first measured runs are the Q1 milestone on the roadmap.</p>
+      <p>Coastal AI Synthesis — our internal edge-first measurement harness — runs a client-representative corpus through every model size and hardware tier and reports three things per configuration: silent-failure rate, throughput per machine, and cost per 1,000 records, with every number badged <em>measured</em>, <em>modeled</em>, or <em>projected</em>. It is the engine inside the Edge AI Pathfinder offer: clients get an evidence file, not a slideware recommendation. Architecture is complete; first measured runs are the Q1 milestone on the roadmap.</p>
     </div>
 
     <h3 style="font-size:20px;margin:40px 0 6px">Silicon partnerships to pursue</h3>
@@ -1035,8 +1036,8 @@
     </div>
 
     <div class="indgrid">
-      <div class="ind"><h4>Healthcare &amp; Life Sciences</h4><p class="why">PHI cannot casually leave the building; HIPAA and EHDS-class rules increasingly mandate local inference. Claims and prior-auth documents are the canonical P1 workload. Existing Coastal practice to build from.</p><div class="pats"><span class="chip">P1</span><span class="chip">P5</span><span class="chip">P6</span></div></div>
-      <div class="ind"><h4>Public Sector</h4><p class="why">Sovereignty, FedRAMP, and air-gapped environments make cloud-only AI a non-starter for whole agencies — edge is not a preference, it's the requirement. Forms processing and case management fit P1/P4. Existing Coastal practice.</p><div class="pats"><span class="chip">P1</span><span class="chip">P4</span><span class="chip">P5</span></div></div>
+      <div class="ind"><h4>Healthcare &amp; Life Sciences</h4><p class="why">PHI can go to the cloud only under BAAs and an audit burden many workloads can't justify — local inference is often the cheapest compliant path. Claims and prior-auth documents are the canonical P1 workload. Existing Coastal practice to build from.</p><div class="pats"><span class="chip">P1</span><span class="chip">P5</span><span class="chip">P6</span></div></div>
+      <div class="ind"><h4>Public Sector</h4><p class="why">Air-gapped and sovereignty-constrained environments genuinely require local inference; elsewhere FedRAMP authorization narrows model choice and adds procurement friction that edge sidesteps. Forms processing and case management fit P1/P4. Existing Coastal practice.</p><div class="pats"><span class="chip">P1</span><span class="chip">P4</span><span class="chip">P5</span></div></div>
       <div class="ind"><h4>Financial Services</h4><p class="why">Model-risk governance culture buys evaluation and assurance (P6) on its own. Claude-in-Salesforce-trust-boundary is purpose-built for this vertical, and our new FinServ practice gives us the bench.</p><div class="pats"><span class="chip">P1</span><span class="chip">P2</span><span class="chip">P6</span></div></div>
       <div class="ind"><h4>Manufacturing &amp; Field Operations</h4><p class="why">OT networks, intermittent connectivity, and latency make edge natural; quality-inspection and maintenance workflows fit P4/P5. Silicon-partner co-sell territory (NVIDIA IGX, AMD embedded).</p><div class="pats"><span class="chip">P4</span><span class="chip">P5</span></div></div>
       <div class="ind"><h4>Consumer &amp; Business Services</h4><p class="why">Mid-market, Salesforce-installed, cost-sensitive: the natural home of P2 next-best-action and P3 governed agents on the existing CRM investment, graduating to a P7 agent platform as adoption spreads.</p><div class="pats"><span class="chip">P2</span><span class="chip">P3</span><span class="chip">P7</span></div></div>
@@ -1045,10 +1046,10 @@
 
     <h3 style="font-size:20px;margin:44px 0 4px">Four buyer profiles</h3>
     <div class="profiles">
-      <div class="profile"><h4>The Regulated Enterprise</h4><p>Healthcare system, agency, bank. Data cannot leave; auditors are in the room. Buys measurement, sovereignty, and assurance.</p><div class="lead">Entry: Edge Chart → P5/P1 Pilot</div></div>
-      <div class="profile"><h4>The Ops-Heavy Enterprise</h4><p>High document volume, thin margins: claims, AP, logistics. Buys straight-through rate and cost per 1,000.</p><div class="lead">Entry: P1 Chart → Pilot → Waves</div></div>
+      <div class="profile"><h4>The Regulated Enterprise</h4><p>Healthcare system, agency, bank. Data cannot leave; auditors are in the room. Buys measurement, sovereignty, and assurance.</p><div class="lead">Entry: Edge Pathfinder → P5/P1 Pilot</div></div>
+      <div class="profile"><h4>The Ops-Heavy Enterprise</h4><p>High document volume, thin margins: claims, AP, logistics. Buys straight-through rate and cost per 1,000.</p><div class="lead">Entry: P1 Pathfinder → Pilot → Waves</div></div>
       <div class="profile"><h4>The Data-Rich Mid-Market</h4><p>Salesforce-installed, revenue-focused, no AI staff. Buys next-best-action uplift and a governed customer agent.</p><div class="lead">Entry: P2/P3 Pilot on existing CRM</div></div>
-      <div class="profile"><h4>The Cost-Bound SMB &amp; Nonprofit</h4><p>Wants AI, cannot fund cloud economics or headcount. Buys productized Chart + T0/T1 edge deployment.</p><div class="lead">Entry: fixed-price Chart, packaged patterns</div></div>
+      <div class="profile"><h4>The Cost-Bound SMB &amp; Nonprofit</h4><p>Wants AI, cannot fund cloud economics or headcount. Buys productized Pathfinder + T0/T1 edge deployment.</p><div class="lead">Entry: fixed-price Pathfinder, packaged patterns</div></div>
     </div>
   </div>
 </section>
@@ -1058,7 +1059,7 @@
   <div class="wrap">
     <div class="kicker">Internal · evidence check</div>
     <h2>Validating the thesis</h2>
-    <p class="lede">I asked for a proof-check on my own positions, and the evidence pushed back in two places worth owning out loud. Verdicts against market data and vendor/analyst sources (August 2026): <strong>three validated with sharpening, one reframed.</strong> Where the evidence disagreed with my original framing, the portfolio copy above already reflects the corrected version — evidence before assertion applies to us too.</p>
+    <p class="lede">I asked for a proof-check on my own positions, and the evidence pushed back in two places worth owning out loud. Verdicts against market data and vendor/analyst sources (August 2026): <strong>three validated with sharpening, one reframed — and a second, external red-team pass logged as claim 5.</strong> Where the evidence disagreed with my original framing, the portfolio copy above already reflects the corrected version — evidence before assertion applies to us too.</p>
 
     <div class="claims">
       <div class="claim">
@@ -1070,7 +1071,7 @@
           <li>Gartner predicts &gt;40% of agentic AI projects canceled by end-2027 and calls out "agent washing"; buying an agent platform is not an AI strategy.</li>
           <li>Enterprise budgets flow to model APIs and compound systems (Menlo: $8.4B 1H-2025), of which CRM-attached agents are one surface among many.</li>
         </ul>
-        <div class="correction"><b>Caution:</b> Agentforce is nonetheless growing fast — roughly $800M ARR, +169% YoY, ~29,000 deals by early FY26 reporting. TCS paid $700M for us substantially <em>because</em> of this motion. The portfolio therefore keeps Agentforce as the honest best-fit chassis for P3 and keeps Waves attached to it. "Lead agnostic" means the portfolio's front door is pattern-first — it must never read as "we're leaving Salesforce."</div>
+        <div class="correction"><b>Caution:</b> Agentforce is nonetheless growing fast — $1.2B ARR, +205% YoY per Salesforce's FY27 Q1 reporting (May 2026), up from the ~$800M/+169% this draft first cited. TCS paid $700M for us substantially <em>because</em> of this motion, and TCS has since signed its own major partnership with Anthropic — our parent is betting on the same multi-model world this portfolio describes. The portfolio therefore keeps Agentforce as the honest best-fit chassis for P3, keeps Waves attached to it, and positions Open Water as TCS's fast, productized execution layer rather than a diversification away from the parent. "Lead agnostic" means the portfolio's front door is pattern-first — it must never read as "we're leaving Salesforce," and never as a market TCS cannot serve.</div>
       </div>
 
       <div class="claim">
@@ -1079,13 +1080,14 @@
         <p class="evi"><b>Evidence for:</b> Menlo Ventures (surveying 150+ enterprise technical leaders): Anthropic leads enterprise LLM spend at ~40% (from 12% in 2023), OpenAI 27% (from 50%), with spend itself doubling every ~6 months. Your field observation — Agentforce as a small function of the overall AI ecosystem in enterprise accounts — matches the spend data.</p>
         <div class="correction"><b>Correction 1:</b> Google/Gemini is the omission — 21% of enterprise share and the fastest riser after Anthropic. An "agnostic" portfolio that names Claude and OpenAI but not Gemini reads as dated in 2026; the portfolio pillar copy includes it.</div>
         <div class="correction"><b>Correction 2:</b> Open-source is <em>not</em> winning the enterprise API workload — its share of API-style spend is roughly stable-to-declining (~11–13%). Where open-weight models genuinely win is self-hosted, sovereign, and edge deployment — cost- and privacy-bound inference. That reframing moves open-source from Pillar A (model menu) to the engine of Pillar B (edge), which is a stronger and more defensible story.</div>
+        <div class="correction"><b>Correction 3 (Aug 2026 red-team):</b> the 40/27/21 shares belong to Menlo's later full-year 2025 survey; the mid-year update that reported the $8.4B 1H spend carried interim shares of 32/25/20. The market chart above is now labeled to the full-year survey so the two Menlo reports are never blended into one citation.</div>
       </div>
 
       <div class="claim">
         <span class="verdict ok">VALIDATED — with one architectural sharpening</span>
         <h3>3 · "AI @ the Edge is high-value / low-risk for customers who can't operate in the cloud due to cost, privacy, compliance"</h3>
-        <p class="evi"><b>Evidence for:</b> Edge AI market $30B (2026) → $118.7B (2033), 21.7% CAGR (Grand View Research); SLM edge deployment $3.4B → $12.9B by 2030, ~30% CAGR, explicitly driven by privacy-first demand (Marqstats); GDPR/HIPAA/EHDS-class regulation effectively mandating local inference for sensitive workloads; NVIDIA research position that small language models are the future of agentic AI; AMD/Intel/NVIDIA all actively recruiting edge-AI partners in 2026.</p>
-        <div class="correction"><b>Sharpening:</b> Edge is rarely all-or-nothing. The winning architecture in the evidence — and in our own harness design — is the <em>cascade</em>: deterministic + local small model absorbing ~90% of volume, cloud escalation for the hard residue. Pitching "edge instead of cloud" invites a religion argument; pitching "the smallest model that clears your accuracy threshold, wherever it runs cheapest and most legally" wins on math. Also honest: "low risk" is earned only with measurement — silent-failure rates of small models on degraded real-world documents are exactly the thing to test per client, which is what the Edge Chart offer does.</div>
+        <p class="evi"><b>Evidence for:</b> Edge AI market $30B (2026) → $118.7B (2033), 21.7% CAGR (Grand View Research); SLM edge deployment $3.4B → $12.9B by 2030, ~30% CAGR, explicitly driven by privacy-first demand (Marqstats); GDPR/HIPAA/EHDS-class regulation adding authorization, transfer, and audit burden that frequently makes local inference the cheapest compliant architecture (these regimes do not mandate it outright — compliant cloud paths exist, and the copy above now says so); NVIDIA research position that small language models are the future of agentic AI; AMD/Intel/NVIDIA all actively recruiting edge-AI partners in 2026.</p>
+        <div class="correction"><b>Sharpening:</b> Edge is rarely all-or-nothing. The winning architecture in the evidence — and in our own harness design — is the <em>cascade</em>: deterministic + local small model absorbing ~90% of volume, cloud escalation for the hard residue. Pitching "edge instead of cloud" invites a religion argument; pitching "the smallest model that clears your accuracy threshold, wherever it runs cheapest and most legally" wins on math. Also honest: "low risk" is earned only with measurement — silent-failure rates of small models on degraded real-world documents are exactly the thing to test per client, which is what the Edge Pathfinder offer does.</div>
       </div>
 
       <div class="claim">
@@ -1105,6 +1107,21 @@
         </ul>
         <div class="correction"><b>Portfolio consequence:</b> this becomes Pillar D / Pattern P6 — "Evaluation, ML &amp; AI Operations" — positioned as the accuracy-and-assurance layer under every other pattern, rather than an anti-hallucination claim we can't defend to a technical buyer.</div>
       </div>
+
+      <div class="claim">
+        <span class="verdict adj">RED-TEAMED — external pass, August 2026, six findings applied</span>
+        <h3>5 · Second proof-check: what an outside reviewer caught before Brian did</h3>
+        <p class="evi">I ran the draft through an independent external review (OpenAI Sol 5.6) before circulating it. Its verdict — conditional go for a working conversation, no-go for presenting as finished — held up, and six findings survived scrutiny:</p>
+        <ul>
+          <li><b>Exposure:</b> CLIENT mode is cosmetic. The hosting repository must be private — internal pricing, org design, and alliance posture remain readable in page source and git history regardless of the toggle. Banner updated; repository being made private.</li>
+          <li><b>Positioning:</b> anything readable as diversification <em>away from</em> TCS/Salesforce is softened. TCS's own Anthropic partnership makes Open Water the parent's productized execution layer, not a divergence; the FY-end revenue target is reframed as net-new pattern-led revenue.</li>
+          <li><b>Naming:</b> Stage 1 is our already-marketed AI Pathfinder extended with evaluation — the invented "Chart" brand competed with our own marketing and is retired throughout.</li>
+          <li><b>Facts:</b> Menlo survey labeling separated (mid-year $8.4B/32-25-20 vs full-year 40-27-21); Agentforce updated to $1.2B/+205% (FY27 Q1); Brian's title corrected to CDO; regulatory "mandate" claims softened to the defensible cost-of-compliance version.</li>
+          <li><b>Sequencing:</b> three GA motions at launch, edge incubating with lighthouse clients, P7 deferred (AgentExchange/TCS overlap). Seven simultaneous GAs from eleven people was not credible.</li>
+          <li><b>Economics:</b> the delivery P&amp;L block in the org section now shows utilization, margin, funnel, and escalation mechanics — "can this run profitably through other leaders" is answered with mechanisms, not asserted.</li>
+        </ul>
+        <div class="correction"><b>Perspective retained against the review:</b> the reviewer would demote edge to a side bet and re-center the portfolio on evaluation/Waves. We kept the multi-model diversification thesis and the edge practice as the differentiated asset — the harness is real, ours, and the recruiting magnet — while adopting the reviewer's sequencing so its commercial claims stay inside what eleven people can deliver.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1114,7 +1131,7 @@
   <div class="wrap">
     <div class="kicker">Internal · the practice</div>
     <h2>The AI &amp; Platform Delivery team</h2>
-    <p class="lede">Day-1 structure follows the AI &amp; Platform Delivery framework: <strong>11 seats — a leadership spine of five plus six forward-deployed engineers (FDEs)</strong> in two teams under two Sr. Directors, delivering in partnership with the markets. The split <em>is</em> the strategy: Salesforce-side capacity is deliberately capped so the alliance stays healthy without re-centering the practice on one vendor, while the agnostic bench is where net-new capability compounds. Roughly 8 of 11 seats rebadge from the existing bench. <span class="prov proposed">proposed</span></p>
+    <p class="lede">Day-1 structure follows the AI &amp; Platform Delivery framework: <strong>11 seats — a leadership spine of five plus six forward-deployed engineers (FDEs)</strong> in two teams under two Sr. Directors, delivering in partnership with the markets. The split <em>is</em> the strategy: Salesforce-side capacity is deliberately capped so the alliance stays healthy without re-centering the practice on one vendor, while the agnostic bench is where net-new capability compounds. Roughly 8 of 11 seats rebadge from the existing bench — <strong>three external fills at day-1</strong>; the ~9 specialist profiles in the SME map below are the FY28 at-scale need, not the day-1 ask. <span class="prov proposed">proposed</span></p>
 
     <div class="orgtree">
       <div class="orgroot">VP, AI Delivery<small>PORTFOLIO P&amp;L · PARTNERSHIPS · ALLIANCE POSTURE · GO/NO-GO GATES</small></div>
@@ -1129,7 +1146,7 @@
           <h4>Sr. Director, AI Platforms — Technology</h4>
           <div class="sub">AGNOSTIC ENGINEERING · EDGE LAB · EVALS</div>
           <p>Engineering-facing: agnostic reference architectures, the Edge Lab and measurement harness, eval/routing assets, and model evaluation across Claude, OpenAI, Gemini, and open-weight providers.</p>
-          <div class="pl"><b>Technical PL (AI Platforms):</b> runs harness-based Chart engagements, eval CI, and agnostic delivery standards</div>
+          <div class="pl"><b>Technical PL (AI Platforms):</b> runs harness-based Pathfinder engagements, eval CI, and agnostic delivery standards</div>
         </div>
       </div>
       <div class="lanes">
@@ -1162,11 +1179,11 @@
     <div class="fig-scroll">
       <table class="rolestable">
         <tr><th>Role</th><th>Owns</th><th>Seats</th><th>Fill</th></tr>
-        <tr><td>VP, AI Delivery</td><td>Portfolio P&amp;L; model &amp; silicon partnerships; Salesforce/TCS alliance posture; final go/no-go on every Chart→Pilot conversion</td><td class="n">1</td><td><span class="pill rebadge">Allen</span></td></tr>
+        <tr><td>VP, AI Delivery</td><td>Portfolio P&amp;L; model &amp; silicon partnerships; Salesforce/TCS alliance posture; final go/no-go on every Pathfinder→Pilot conversion</td><td class="n">1</td><td><span class="pill rebadge">Allen</span></td></tr>
         <tr><td>Sr. Director, Data &amp; AI (GTM)</td><td>Pipeline co-owned with the markets; presales solutioning; Agentforce &amp; Slack alliance management; P3 pattern and Agentforce Waves</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
         <tr><td>Sr. Director, AI Platforms (Technology)</td><td>Agnostic reference architectures; Edge Lab &amp; measurement harness; eval/routing assets; provider evaluations across Claude, OpenAI, Gemini, open-weights</td><td class="n">1</td><td><span class="pill hire">hire or senior rebadge</span></td></tr>
         <tr><td>Technical PL (Salesforce AI)</td><td>Delivery quality, methodology, utilization for the Headless 360/Agentforce and Slack lanes; FDE certification</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
-        <tr><td>Technical PL (AI Platforms)</td><td>Agnostic delivery standards; runs harness-based Chart engagements; owns eval CI</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
+        <tr><td>Technical PL (AI Platforms)</td><td>Agnostic delivery standards; runs harness-based Pathfinder engagements; owns eval CI</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
         <tr><td>FDE Architect — Headless 360/Agentforce</td><td>Governed CRM-native agent design; Claude in the Salesforce trust boundary; headless Data 360 patterns</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
         <tr><td>FDE Consultant — Headless 360/Agentforce</td><td>Build, integrate, and enable on Agentforce engagements</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
         <tr><td>FDE — Slack</td><td>Slack agent surfaces for both stacks; workflow automation; reports into GTM and pairs weekly with the agnostic team</td><td class="n">1</td><td><span class="pill rebadge">rebadge</span></td></tr>
@@ -1185,11 +1202,26 @@
     <div class="ecosystem">
       <span class="elbl">Exec sponsors</span>
       <span class="chip">JP Owens · Chief Growth Officer (Alliances, Data &amp; AI GTM)</span>
-      <span class="chip">Brian Gannuscio · Chief Data &amp; Practices Officer (Data &amp; AI)</span>
+      <span class="chip">Brian Gannuscio · Chief Digital Officer (Data &amp; AI)</span>
       <span class="chip">Aimee Cubbage · Chief Experience Officer (True North, Delivery Toolkit)</span>
     </div>
 
     <p class="lede" style="font-size:15px;margin-top:26px">Scale path: this 11-seat structure is the keel of the ~40-person practice modeled for FY28 — pattern pods, Edge Lab, ML &amp; Evaluation Lab, and an Enablement Academy certifying the wider 400-person bench — with growth gated on FY27 measured win rates, not ambition.</p>
+
+    <h3 style="font-size:20px;margin:40px 0 4px">The delivery P&amp;L this practice runs on</h3>
+    <div class="sumsub">The numbers I expect to be measured on — targets for ELT calibration, not commitments <span class="prov proposed">proposed</span></div>
+    <div class="fig-scroll">
+      <table class="smetable">
+        <tr><th>Mechanism</th><th>Target</th><th>How it's governed</th></tr>
+        <tr><td>FDE billable utilization</td><td>70–75%</td><td>Weekly delivery-health review; two consecutive weeks below 60% triggers pipeline escalation to the Sr. Directors</td></tr>
+        <tr><td>Seller-doer mix</td><td>Sr. Directors ≥40% billable · Technical PLs ≥60%</td><td>Leadership carries delivery, not just pipeline — an 11-person practice cannot fund pure overhead</td></tr>
+        <tr><td>Gross margin</td><td>≥50% on fixed-price Pathfinders · ≥42% blended</td><td>Fixed-price scope guarded by the go/no-go gate; margin reviewed per engagement at close</td></tr>
+        <tr><td>Funnel conversion</td><td>Pathfinder→Pilot ≥50% · Pilot→Voyage ≥50% · Waves attach ≥1 in 3 Voyages</td><td>Below-threshold conversion is a portfolio signal, not a sales failure — patterns that don't convert get re-scoped or cut</td></tr>
+        <tr><td>Recurring revenue</td><td>≥20% of AI revenue recurring (Waves) exiting FY27</td><td>Quarterly ROAI reviews are the renewal mechanism</td></tr>
+        <tr><td>Account escalation</td><td>Any red delivery-health flag reaches the VP within 48 hours</td><td>Escalation ladder named per account at kickoff; markets co-own the relationship and see the same flags</td></tr>
+        <tr><td>Talent calibration</td><td>Quarterly, both teams together</td><td>One bar across Salesforce-side and agnostic lanes; Academy certification is the promotion currency</td></tr>
+      </table>
+    </div>
 
     <h3 style="font-size:20px;margin:40px 0 4px">SME map: what we need and where it comes from</h3>
     <div class="sumsub">Counts are at-scale (FY28) capability needs; day-1 fills come from the role-scope table above.</div>
@@ -1216,17 +1248,17 @@
     <div class="kicker">Internal · sequence</div>
     <h2>2027 rollout and the risks worth naming</h2>
     <div class="roadmap">
-      <div class="qtr"><span class="q">Q1 2027</span><h4>Launch &amp; measure</h4><ul><li>Portfolio launch; Chart offers GA for all seven patterns</li><li>Edge Lab stood up; first harness field measurement</li><li>AMD partner enrollment; NVIDIA/Intel applications</li><li>First pilot cohort: 3 clients from existing base</li><li><em>Owner: VP, AI Delivery</em></li></ul></div>
+      <div class="qtr"><span class="q">Q1 2027</span><h4>Launch &amp; measure</h4><ul><li>Portfolio launch; three lead motions GA — AI Pathfinder with evals, governed Agentforce/Headless 360, Eval &amp; Agentic Ops via Waves</li><li>Edge Lab stood up; first harness field measurement</li><li>AMD partner enrollment; NVIDIA/Intel applications</li><li>First pilot cohort: 3 clients from existing base</li><li><em>Owner: VP, AI Delivery</em></li></ul></div>
       <div class="qtr"><span class="q">Q2 2027</span><h4>Prove &amp; publish</h4><ul><li>First measured edge evidence file → flagship case study</li><li>Academy cohort 1: 12 engineers certified</li><li>P1 + P2 Pilot offers productized with fixed pricing</li><li><em>Owners: Sr. Dir AI Platforms (evidence file) · Technical PLs (Academy)</em></li></ul></div>
       <div class="qtr"><span class="q">Q3 2027</span><h4>Scale &amp; extend</h4><ul><li>Waves extended beyond Agentforce to P1/P2/P5 + P7 marketplace operations</li><li>Industry editions: HLS claims, PubSec forms</li><li>Second silicon partnership signed with co-marketing</li><li><em>Owners: Sr. Dir Data &amp; AI GTM (Waves, industries) · VP (partnerships)</em></li></ul></div>
-      <div class="qtr"><span class="q">Q4 2027</span><h4>Compound</h4><ul><li>Target: 12 Charts, 8 Pilots, 4 Voyages, 3 Waves conversions</li><li>≥30% of AI revenue not attached to a Salesforce SKU</li><li>FY28 plan sized from measured win rates, not hope</li><li><em>Owner: VP, AI Delivery — readout to ELT and TCS sponsors</em></li></ul></div>
+      <div class="qtr"><span class="q">Q4 2027</span><h4>Compound</h4><ul><li>Target: 12 Pathfinders, 8 Pilots, 4 Voyages, 3 Waves conversions</li><li>≥30% of AI revenue from net-new pattern-led offers — grown alongside the Salesforce-attached base, not out of it</li><li>FY28 plan sized from measured win rates, not hope</li><li><em>Owner: VP, AI Delivery — readout to ELT and TCS sponsors</em></li></ul></div>
     </div>
 
     <div class="risks">
       <div class="risk"><h4>Salesforce channel friction</h4><p>"Lead agnostic" can be read in San Francisco as defection, chilling co-sell.</p><p class="mit"><b>Mitigation:</b> P3 keeps Agentforce as the named best-fit chassis; the Claude-in-trust-boundary story lets us be agnostic <em>inside</em> Salesforce's own narrative. Brief the alliance team before any public launch.</p></div>
-      <div class="risk"><h4>TCS overlap</h4><p>TCS has its own AI practices; a Coastal AI portfolio could look duplicative to the new parent.</p><p class="mit"><b>Mitigation:</b> position as the North America mid-market/regulated speedboat with productized patterns — a motion TCS's global delivery model doesn't serve. Get ELT + TCS sponsor alignment in the Q1 launch gate.</p></div>
-      <div class="risk"><h4>Talent for the 9 hires</h4><p>Edge inference and applied-ML engineers are the market's scarcest profiles.</p><p class="mit"><b>Mitigation:</b> the Edge Lab + published measurement work is the recruiting magnet; Academy pipeline reduces dependence to 9 seats; TCS global bench as surge capacity.</p></div>
-      <div class="risk"><h4>Becoming the 40%</h4><p>Gartner's canceled-projects prediction applies to our clients' engagements too — a failed pilot cohort would kill the launch story.</p><p class="mit"><b>Mitigation:</b> the Chart stage is a real go/no-go gate with measured accuracy thresholds; we decline pilots the evidence doesn't support. Saying no is the brand.</p></div>
+      <div class="risk"><h4>TCS overlap</h4><p>TCS has its own AI practices; a Coastal AI portfolio could look duplicative to the new parent.</p><p class="mit"><b>Mitigation:</b> position Open Water as TCS's fast, productized execution layer for North America mid-market and regulated accounts — the speedboat that complements TCS's global scale and aligns with TCS's own Anthropic partnership. Get ELT + TCS sponsor alignment in the Q1 launch gate.</p></div>
+      <div class="risk"><h4>Specialist talent</h4><p>Edge inference and applied-ML engineers are the market's scarcest profiles — 3 external fills at day-1, roughly 9 by FY28 scale.</p><p class="mit"><b>Mitigation:</b> the Edge Lab + published measurement work is the recruiting magnet; the Academy pipeline caps external dependence; TCS global bench as surge capacity.</p></div>
+      <div class="risk"><h4>Becoming the 40%</h4><p>Gartner's canceled-projects prediction applies to our clients' engagements too — a failed pilot cohort would kill the launch story.</p><p class="mit"><b>Mitigation:</b> the Pathfinder stage is a real go/no-go gate with measured accuracy thresholds; we decline pilots the evidence doesn't support. Saying no is the brand.</p></div>
     </div>
   </div>
 </section>
@@ -1242,10 +1274,12 @@
     <div class="internal-only">
       <p>Primary sources used in validation:</p>
       <ul>
-        <li>Menlo Ventures — 2025 Mid-Year LLM Market Update &amp; State of Generative AI in the Enterprise (enterprise share, $8.4B spend)</li>
+        <li>Menlo Ventures — Mid-Year LLM Market Update ($8.4B 1H-2025 spend; interim shares 32/25/20) and full-year State of Generative AI in the Enterprise (40/27/21 shares)</li>
         <li>Gartner press release, June 2025 — &gt;40% agentic AI project cancellations by 2027; "agent washing"</li>
         <li>Anthropic × Salesforce partnership announcements — Claude as preferred model for regulated industries inside the Salesforce trust boundary</li>
-        <li>Salesforce FY26 reporting via analyst coverage — Agentforce ~$800M ARR, +169% YoY, ~29k deals</li>
+        <li>Salesforce FY27 Q1 press release (May 2026) — Agentforce $1.2B ARR, +205% YoY</li>
+        <li>TCS — Coastal Cloud acquisition announcement; TCS × Anthropic partnership announcement</li>
+        <li>External red-team review of this draft, August 2026 (OpenAI Sol 5.6) — findings logged in Validation claim 5</li>
         <li>Grand View Research — Edge AI market 2026–2033; Marqstats — SLM edge deployment 2025–2030</li>
         <li>AMD CES/Advancing AI 2026 announcements — Ryzen AI 400 (60 TOPS), Robotics Partner Network; NVIDIA GTC 2026; Intel AI PC / OpenVINO ecosystem</li>
         <li>NVIDIA Research — "Small Language Models are the Future of Agentic AI"; compound-AI-systems literature (Berkeley BAIR lineage, ACL 2025 reranking findings)</li>
