@@ -454,8 +454,8 @@
     <a href="#industries">Industries</a>
   </div>
   <div class="modeswitch" role="group" aria-label="View mode">
-    <button id="btn-portfolio" type="button">PORTFOLIO</button>
     <button id="btn-execution" type="button">EXECUTION</button>
+    <button id="btn-portfolio" type="button">PORTFOLIO</button>
   </div>
 </nav>
 
@@ -1249,9 +1249,9 @@
       try { localStorage.setItem(KEY, mode); } catch (e) {}
       window.scrollTo(0, 0);
     }
-    var saved = "portfolio";
-    try { saved = localStorage.getItem(KEY) || "portfolio"; } catch (e) {}
-    if (saved !== "execution") saved = "portfolio";
+    var saved = "execution";
+    try { saved = localStorage.getItem(KEY) || "execution"; } catch (e) {}
+    if (saved !== "portfolio") saved = "execution";
     apply(saved);
     btns.portfolio.addEventListener("click", function () { apply("portfolio"); });
     btns.execution.addEventListener("click", function () { apply("execution"); });
